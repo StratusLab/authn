@@ -54,7 +54,7 @@ public class GridTrustManagerFactorySpiImpl extends TrustManagerFactorySpi {
 	private TrustManager createTrustManager() throws InitializationException {
 
 		try {
-			return new OpensslTrustmanager("/etc/grid/dummy", true);
+			return new OpensslTrustmanager("/etc/grid-security/certificates", true);
 		} catch (CertificateException e) {
 			throw new InitializationException(e.getMessage());
 		} catch (NoSuchProviderException e) {
