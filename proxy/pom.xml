@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>eu.stratuslab.authn</groupId>
-  <artifactId>proxy</artifactId>
+  <artifactId>authn-proxy</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>StratusLab OpenNebula Proxy</name>
 
