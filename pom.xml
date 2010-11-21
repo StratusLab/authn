@@ -12,6 +12,7 @@
   <modules>
     <module>ssl</module>
     <module>proxy</module>
+    <module>client</module>
   </modules>
 
   <repositories>
@@ -129,6 +130,11 @@
 	    <source>1.5</source>
 	  </configuration>
 	</plugin>
+	<plugin>
+	  <groupId>org.apache.maven.plugins</groupId>
+	  <artifactId>maven-assembly-plugin</artifactId>
+	  <version>2.2</version>
+	</plugin>
 
 	<plugin>
 	  <groupId>org.mortbay.jetty</groupId>
@@ -136,7 +142,14 @@
 	  <version>7.2.0.v20101020</version>
 	</plugin>
 
+	<plugin>
+	  <groupId>org.codehaus.mojo</groupId>
+	  <artifactId>exec-maven-plugin</artifactId>
+	  <version>1.2</version>
+	</plugin>
+
       </plugins>
+
     </pluginManagement>
 
   </build>

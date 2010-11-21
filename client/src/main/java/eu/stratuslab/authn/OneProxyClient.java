@@ -21,7 +21,7 @@ public class OneProxyClient {
 		System.setProperty("javax.net.ssl.keyStoreType", "pkcs12");
 		System.setProperty("javax.net.ssl.keyStorePassword", "jettycred");
 
-		System.setProperty("javax.net.ssl.trustStore", "jetty.jks");
+		System.setProperty("javax.net.ssl.trustStore", "src/main/certs/jetty.jks");
 		System.setProperty("javax.net.ssl.trustStoreType", "jks");
 		System.setProperty("javax.net.ssl.trustStorePassword", "jettycred");
 
