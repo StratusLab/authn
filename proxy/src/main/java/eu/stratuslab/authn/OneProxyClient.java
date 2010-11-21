@@ -1,11 +1,13 @@
 package eu.stratuslab.authn;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-import java.security.Provider;
-import java.security.Security;
+import java.util.Vector;
 
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.TrustManagerFactorySpi;
+import org.apache.xmlrpc.XmlRpcException;
+import org.apache.xmlrpc.client.XmlRpcClient;
+import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
 public class OneProxyClient {
 
@@ -23,42 +25,29 @@ public class OneProxyClient {
 		System.setProperty("javax.net.ssl.trustStoreType", "jks");
 		System.setProperty("javax.net.ssl.trustStorePassword", "jettycred");
 
-		// System.setProperty("javax.net.debug", "ssl");
+		System.setProperty("javax.net.debug", "ssl");
 
-		Provider provider = new eu.stratuslab.ssl.GridTrustManagerProvider();
+		XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+		try {
+			config.setServerURL(new URL("https://localhost:8443/xmlrpc"));
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e.getMessage());
+		}
 
-		Security.addProvider(provider);
+		XmlRpcClient client = new XmlRpcClient();
+		client.setConfig(config);
 
-		Provider p = Security.getProvider("StratusLabTrustProvider");
+		Vector<Object> params = new Vector<Object>();
 
-		System.out.println("My provider name is " + p.getName());
-		System.out.println("My provider version # is " + p.getVersion());
-		System.out.println("My provider info is " + p.getInfo());
+		params.addElement("tutorial:djdjdjdjd");
+		params.addElement(Integer.valueOf(-1));
 
-		TrustManagerFactorySpi tmspi = new eu.stratuslab.ssl.GridTrustManagerFactorySpiImpl();
-		TrustManagerFactory factory = TrustManagerFactory.getInstance("GridTM");
-
-		// XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-		// try {
-		// config.setServerURL(new URL("https://localhost:8443/xmlrpc"));
-		// } catch (MalformedURLException e) {
-		// throw new RuntimeException(e.getMessage());
-		// }
-
-		// XmlRpcClient client = new XmlRpcClient();
-		// client.setConfig(config);
-
-		// Vector<Object> params = new Vector<Object>();
-
-		// params.addElement("tutorial:djdjdjdjd");
-		// params.addElement(Integer.valueOf(-1));
-
-		// try {
-		// Object result = client.execute("one.vmpool.info", params);
-		// System.err.println(result.toString());
-		// } catch (XmlRpcException e) {
-		// throw new RuntimeException(e.getMessage());
-		// }
+		try {
+			Object result = client.execute("one.vmpool.info", params);
+			System.err.println(result.toString());
+		} catch (XmlRpcException e) {
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 
 }

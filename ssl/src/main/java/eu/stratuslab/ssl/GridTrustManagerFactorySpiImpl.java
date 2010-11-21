@@ -21,7 +21,6 @@ public class GridTrustManagerFactorySpiImpl extends TrustManagerFactorySpi {
 
 	@Override
 	protected TrustManager[] engineGetTrustManagers() {
-
 		return new TrustManager[] { ref.get() };
 	}
 

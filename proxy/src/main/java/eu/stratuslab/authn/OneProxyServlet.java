@@ -2,8 +2,6 @@ package eu.stratuslab.authn;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.Provider;
-import java.security.Security;
 import java.util.List;
 import java.util.Vector;
 
@@ -22,8 +20,6 @@ import org.apache.xmlrpc.server.XmlRpcHandlerMapping;
 import org.apache.xmlrpc.webserver.XmlRpcServlet;
 import org.apache.xmlrpc.webserver.XmlRpcServletServer;
 
-import eu.stratuslab.ssl.*;
-
 @SuppressWarnings("serial")
 public class OneProxyServlet extends XmlRpcServlet {
 
@@ -35,15 +31,6 @@ public class OneProxyServlet extends XmlRpcServlet {
 	@Override
 	public void init(ServletConfig pConfig) throws ServletException {
 		super.init(pConfig);
-
-		Provider provider = new eu.stratuslab.ssl.GridTrustManagerProvider();
-		Security.addProvider(provider);
-
-		Provider p = Security.getProvider("StratusLabTrustProvider");
-
-		System.out.println("My provider name is " + p.getName());
-		System.out.println("My provider version # is " + p.getVersion());
-		System.out.println("My provider info is " + p.getInfo());
 
 		proxyUrl = extractProxyUrl(pConfig);
 	}
