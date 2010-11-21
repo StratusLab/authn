@@ -1,0 +1,132 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>eu.stratuslab.authn</groupId>
+  <artifactId>proxy</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>StratusLab OpenNebula Proxy</name>
+
+  <packaging>war</packaging>
+
+  <parent>
+    <groupId>eu.stratuslab.authn</groupId>
+    <artifactId>authn</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.xmlrpc</groupId>
+      <artifactId>xmlrpc-client</artifactId>
+      <version>3.1.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.xmlrpc</groupId>
+      <artifactId>xmlrpc-server</artifactId>
+      <version>3.1.3</version>
+    </dependency>
+    <dependency>
+      <groupId>bouncycastle</groupId>
+      <artifactId>bcprov-jdk16</artifactId>
+      <version>140</version>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.8</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glite.security</groupId>
+      <artifactId>trustmanager</artifactId>
+      <version>2.5.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glite.security</groupId>
+      <artifactId>util</artifactId>
+      <version>2.8.0</version>
+    </dependency>
+    <dependency>
+      <groupId>eu.stratuslab.ssl</groupId>
+      <artifactId>grid-certs-ssl</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+
+    <plugins>
+      <plugin>
+	<groupId>org.mortbay.jetty</groupId>
+	<artifactId>jetty-maven-plugin</artifactId>
+
+	<dependencies>
+	  <dependency>
+	    <groupId>bouncycastle</groupId>
+	    <artifactId>bcprov-jdk16</artifactId>
+	    <version>140</version>
+	  </dependency>
+	  <dependency>
+	    <groupId>log4j</groupId>
+	    <artifactId>log4j</artifactId>
+	    <version>1.2.8</version>
+	  </dependency>
+	  <dependency>
+	    <groupId>org.glite.security</groupId>
+	    <artifactId>util</artifactId>
+	    <version>2.8.0</version>
+	  </dependency>
+	  <dependency>
+	    <groupId>eu.stratuslab.ssl</groupId>
+	    <artifactId>grid-certs-ssl</artifactId>
+	    <version>0.0.1-SNAPSHOT</version>
+	  </dependency>
+	</dependencies>
+
+	<configuration>
+	  <systemProperties>
+	    <systemProperty>
+	      <name>sSLImplementation</name>
+	      <value>org.glite.security.trustmanager.tomcat.TMSSLImplementation</value>
+	    </systemProperty>
+	    <systemProperty>
+	      <name>sslCAFiles</name>
+	      <value>/etc/grid-security/certificates/*.0</value>
+	    </systemProperty>
+	    <systemProperty>
+	      <name>crlFiles</name>
+	      <value>/etc/grid-security/certificates*.r0</value>
+	    </systemProperty>
+	    <systemProperty>
+	      <name>sslCertFile</name>
+	      <value>/etc/grid-security/hostcert.pem</value>
+	    </systemProperty>
+	    <systemProperty>
+	      <name>sslKey</name>
+	      <value>/etc/grid-security/hostkey.pem</value>
+	    </systemProperty>
+	    <systemProperty>
+	      <name>log4jConfFile</name>
+	      <value>/var/log4j-trustmanager.properties</value>
+	    </systemProperty>
+	  </systemProperties>
+	  <connectors>
+	    <connector implementation="eu.stratuslab.ssl.GridSslSelectChannelConnector">
+	      <SslTrustManagerFactoryAlgorithm>GridTM</SslTrustManagerFactoryAlgorithm>
+	      <port>8443</port>
+	      <maxIdleTime>30000</maxIdleTime>
+	      <keystore>jetty.jks</keystore>
+	      <password>jettycred</password>
+	      <keyPassword>jettycred</keyPassword>
+	      <truststore>jetty.jks</truststore>
+	      <trustPassword>jettycred</trustPassword>
+	      <needClientAuth>true</needClientAuth>
+	    </connector>
+	  </connectors>
+	</configuration>
+      </plugin>
+    </plugins>
+
+  </build>
+
+</project>
