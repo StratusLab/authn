@@ -107,7 +107,7 @@
 	  <connectors>
 	    <connector implementation="eu.stratuslab.ssl.GridSslSelectChannelConnector">
 	      <SslTrustManagerFactoryAlgorithm>GridTM</SslTrustManagerFactoryAlgorithm>
-	      <port>8443</port>
+	      <port>8444</port>
 	      <maxIdleTime>30000</maxIdleTime>
 	      <keystore>${basedir}/src/main/certs/jetty.jks</keystore>
 	      <password>jettycred</password>

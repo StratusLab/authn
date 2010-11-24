@@ -29,7 +29,7 @@ public class OneProxyClient {
 
 		XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 		try {
-			config.setServerURL(new URL("https://localhost:8443/xmlrpc"));
+			config.setServerURL(new URL("https://localhost:8444/xmlrpc"));
 		} catch (MalformedURLException e) {
 			throw new RuntimeException(e.getMessage());
 		}
@@ -44,7 +44,12 @@ public class OneProxyClient {
 
 		try {
 			Object result = client.execute("one.vmpool.info", params);
-			System.err.println(result.toString());
+			Object[] values = (Object[]) result;
+			int i = 0;
+			for (Object o : values) {
+			    System.err.println(i++);
+			    System.err.println(o.toString());
+			}
 		} catch (XmlRpcException e) {
 			throw new RuntimeException(e.getMessage());
 		}
