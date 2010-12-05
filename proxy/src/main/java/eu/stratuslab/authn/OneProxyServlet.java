@@ -69,7 +69,7 @@ public class OneProxyServlet extends XmlRpcServlet {
 		}
 	}
 
-	private class ProxyHandler implements XmlRpcHandler {
+	private static class ProxyHandler implements XmlRpcHandler {
 
 		final private URL proxyUrl;
 
