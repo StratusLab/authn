@@ -21,7 +21,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>OneProxyServlet</servlet-name>
-		<url-pattern>/xmlrpc</url-pattern>
+		<url-pattern>/cloud</url-pattern>
 	</servlet-mapping>
 
 </web-app>
