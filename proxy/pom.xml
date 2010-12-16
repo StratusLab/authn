@@ -93,6 +93,9 @@
 	</dependencies>
 
 	<configuration>
+	  <webAppConfig>
+	    <contextPath>/authn_proxy</contextPath>
+	  </webAppConfig>
 	  <systemProperties>
 	    <systemProperty>
 	      <name>sSLImplementation</name>
@@ -122,7 +125,7 @@
 	  <connectors>
 	    <connector implementation="eu.stratuslab.ssl.GridSslSelectChannelConnector">
 	      <SslTrustManagerFactoryAlgorithm>GridTM</SslTrustManagerFactoryAlgorithm>
-	      <port>8444</port>
+	      <port>8443</port>
 	      <maxIdleTime>30000</maxIdleTime>
 	      <keystore>${basedir}/src/main/certs/jetty.jks</keystore>
 	      <password>jettycred</password>
