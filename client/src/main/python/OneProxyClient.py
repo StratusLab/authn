@@ -14,7 +14,8 @@ class SafeTransportWithCert(xmlrpclib.SafeTransport):
     
 
 #server_url = "http://localhost:2633/RPC2"
-server_url = "https://onehost-172:8444/xmlrpc"
+#server_url = "https://onehost-172:8444/xmlrpc"
+server_url = "https://localhost:8444/xmlrpc"
 
 transport = SafeTransportWithCert()
 

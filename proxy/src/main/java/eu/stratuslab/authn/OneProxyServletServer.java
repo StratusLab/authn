@@ -21,10 +21,15 @@
 
 package eu.stratuslab.authn;
 
+import java.io.IOException;
 import java.security.cert.X509Certificate;
+import java.util.Enumeration;
 
 import javax.security.auth.x500.X500Principal;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Cookie;
 
 import org.apache.xmlrpc.common.XmlRpcHttpRequestConfigImpl;
 import org.apache.xmlrpc.webserver.XmlRpcServletServer;
@@ -51,5 +56,59 @@ public class OneProxyServletServer extends XmlRpcServletServer {
 		return "";
 
 	}
+
+    @Override
+    public void execute(HttpServletRequest request, HttpServletResponse response) 
+	throws ServletException, IOException {
+
+	super.execute(request, response);
+
+	printRequest(request);
+    }
+
+    public static void printRequest(HttpServletRequest request) {
+	
+	StringBuilder sb = new StringBuilder();
+	
+        sb.append("session=" + request.getSession(true).getId() + "\n");
+        sb.append("authtype=" + request.getAuthType() + "\n");
+        sb.append("contextpath=" + request.getContextPath() + "\n");
+        sb.append("principal=" + request.getUserPrincipal() + "\n");
+	
+        sb.append("cookies\n");
+        Cookie[] cookies = request.getCookies();
+        if (cookies!=null) {
+            for (Cookie cookie : cookies) {
+                sb.append(" -- " + formatCookie(cookie));
+            }
+        }
+        sb.append("\n");
+        sb.append(formatHeaders(request));
+	
+	System.err.println(sb.toString());
+    }
+    
+    public static String formatCookie(Cookie cookie) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(cookie.getName() + " : ");
+        sb.append(cookie.getDomain() + " : ");
+        sb.append(cookie.getMaxAge() + " : ");
+        sb.append(cookie.getSecure() + " : ");
+        sb.append(cookie.getValue() + " : ");
+        return sb.toString();
+    }
+    
+    public static String formatHeaders(HttpServletRequest request) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("headers\n");
+        Enumeration<String> names = request.getHeaderNames();
+        while (names.hasMoreElements()) {
+            String name = names.nextElement();
+            String value = request.getHeader(name);
+            sb.append(" -- " + name + " = " + value + "\n");
+        }
+        sb.append("\n");
+        return sb.toString();
+    }
 
 }
