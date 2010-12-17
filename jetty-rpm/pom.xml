@@ -35,7 +35,7 @@
 		<artifactItem>
 		  <groupId>org.eclipse.jetty</groupId>
 		  <artifactId>jetty-distribution</artifactId>
-		  <version>7.2.1.v20101111</version>
+		  <version>${jetty.version}</version>
 		  <type>tar.gz</type>
 		</artifactItem>
 	      </artifactItems>
@@ -124,7 +124,7 @@ Jetty packaging that includes StratusLab authentication proxy.
 	      <directoryIncluded>false</directoryIncluded>
 	      <sources>
 		<source>
-		  <location>target/dependency/jetty-distribution-7.2.1.v20101111/</location>
+		  <location>target/dependency/jetty-distribution-${jetty.version}/</location>
 		  <includes>
 		    <include>*.txt</include>
 		    <include>*.html</include>
