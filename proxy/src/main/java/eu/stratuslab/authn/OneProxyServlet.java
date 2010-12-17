@@ -139,21 +139,26 @@ public class OneProxyServlet extends XmlRpcServlet {
 				throws XmlRpcNotAuthorizedException {
 
 		    String passwd = "c5c9b9371be52dbb3d838aa5d687057c71966dc8";
-
-			XmlRpcRequestConfig config = request.getConfig();
-
-			if (config instanceof OneProxyRequestConfigImpl) {
-				OneProxyRequestConfigImpl opconfig = (OneProxyRequestConfigImpl) config;
-				return opconfig.getUserDn() + ":" + passwd;
-			}
-
-			if (config instanceof XmlRpcHttpRequestConfigImpl) {
-				XmlRpcHttpRequestConfigImpl hconfig = (XmlRpcHttpRequestConfigImpl) config;
-				return hconfig.getBasicUserName() + ":" + passwd;
-			}
-
-			throw new XmlRpcNotAuthorizedException(
-					"certificate DN or username not provided");
+		    
+		    XmlRpcRequestConfig config = request.getConfig();
+		    
+		    String user = "";
+		    
+		    if (config instanceof OneProxyRequestConfigImpl) {
+			OneProxyRequestConfigImpl opconfig = (OneProxyRequestConfigImpl) config;
+			user = opconfig.getUserDn();
+		    }
+		    
+		    if ("".equals(user) && config instanceof XmlRpcHttpRequestConfigImpl) {
+			XmlRpcHttpRequestConfigImpl hconfig = (XmlRpcHttpRequestConfigImpl) config;
+			user =  hconfig.getBasicUserName();
+		    }
+		    
+		    if (!"".equals(user)) {
+			return user + ":" + passwd;
+		    } else {
+			throw new XmlRpcNotAuthorizedException("certificate DN or username not provided");
+		    }
 		}
 
 	}

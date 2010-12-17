@@ -45,6 +45,10 @@
       <artifactId>authn-ssl</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
@@ -93,9 +97,7 @@
 	</dependencies>
 
 	<configuration>
-	  <webAppConfig>
-	    <contextPath>/authn_proxy</contextPath>
-	  </webAppConfig>
+
 	  <systemProperties>
 	    <systemProperty>
 	      <name>sSLImplementation</name>
@@ -121,7 +123,33 @@
 	      <name>log4jConfFile</name>
 	      <value>/var/log4j-trustmanager.properties</value>
 	    </systemProperty>
+
+	    <!-- This is for convenience so that the src/etc/login.conf file
+                 can stay unmodified when copied to $jetty.home/etc directory -->
+	    <systemProperty>
+	      <name>jetty.home</name>
+	      <value>${basedir}/src/main/config</value>
+	    </systemProperty>
+
+	    <!-- Mandatory. This system property tells JAAS where to find
+                 the login module configuration file -->
+	    <systemProperty>
+	      <name>java.security.auth.login.config</name>
+	      <value>${basedir}/src/main/config/etc/login.conf</value>
+	    </systemProperty>
+
 	  </systemProperties>
+
+	  <webAppConfig>
+	    <contextPath>/authn_proxy</contextPath>
+	    <securityHandler implementation="org.eclipse.jetty.security.ConstraintSecurityHandler">
+	      <loginService implementation="org.eclipse.jetty.plus.jaas.JAASLoginService">
+		<name>Test JAAS Realm</name>
+		<loginModuleName>xyz</loginModuleName>
+	      </loginService>
+	    </securityHandler>
+	  </webAppConfig>
+	  
 	  <connectors>
 	    <connector implementation="eu.stratuslab.ssl.GridSslSelectChannelConnector">
 	      <SslTrustManagerFactoryAlgorithm>GridTM</SslTrustManagerFactoryAlgorithm>
@@ -132,9 +160,11 @@
 	      <keyPassword>jettycred</keyPassword>
 	      <truststore>${basedir}/src/main/certs/jetty.jks</truststore>
 	      <trustPassword>jettycred</trustPassword>
-	      <needClientAuth>true</needClientAuth>
+	      <!-- <needClientAuth>true</needClientAuth> -->
+	      <wantClientAuth>true</wantClientAuth>
 	    </connector>
 	  </connectors>
+
 	</configuration>
       </plugin>
     </plugins>

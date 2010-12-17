@@ -1,4 +1,4 @@
-package org.example;
+package eu.stratuslab.authn;
  
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Cookie;
  
-public class HelloServlet extends HttpServlet
+public class DebugServlet extends HttpServlet
 {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -17,11 +17,14 @@ public class HelloServlet extends HttpServlet
         response.setStatus(HttpServletResponse.SC_OK);
 
 	PrintWriter writer = response.getWriter();
-        writer.println("<h1>Hello Servlet</h1>");
+        writer.println("<h1>DebugServlet</h1>");
         writer.println("<p>session=" + request.getSession(true).getId());
 	writer.println("<p>authtype=" + request.getAuthType());
 	writer.println("<p>contextpath=" + request.getContextPath());
 	writer.println("<p>principal=" + request.getUserPrincipal());
+        writer.println("<p>remoteuser=" + request.getRemoteUser());
+	writer.println("<p>cloud-access=" + request.isUserInRole("cloud-access"));
+
 	writer.println("<p>cookies\n<ul>");
 	Cookie[] cookies = request.getCookies();
 	if (cookies!=null) {
@@ -30,7 +33,9 @@ public class HelloServlet extends HttpServlet
 	    }
 	}
 	writer.println("</ul>");
+
 	writer.println(formatHeaders(request));
+	writer.println(formatAttributes(request));
     }
 
     public static String formatCookie(Cookie cookie) {
@@ -51,6 +56,20 @@ public class HelloServlet extends HttpServlet
 	    String name = names.nextElement();
 	    String value = request.getHeader(name);
 	    sb.append("<li> " + name + " = " + value + "\n");
+	}
+	sb.append("</ul>");
+	return sb.toString();
+    }
+
+    public static String formatAttributes(HttpServletRequest request) {
+	StringBuilder sb = new StringBuilder();
+	sb.append("<p>attributes\n<ul>\n");
+	Enumeration<String> names = request.getAttributeNames();
+	while (names.hasMoreElements()) {
+	    String name = names.nextElement();
+	    Object value = request.getAttribute(name);
+	    value = (value!=null) ? value : "null";
+	    sb.append("<li> " + name + " = " + value.toString() + "\n");
 	}
 	sb.append("</ul>");
 	return sb.toString();
