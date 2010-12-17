@@ -50,8 +50,8 @@ public class OneProxyClient {
 
 		XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 		try {
-		    //config.setServerURL(new URL("https://onehost-172:8444/xmlrpc"));
-			config.setServerURL(new URL("https://localhost:8444/xmlrpc"));
+		    //config.setServerURL(new URL("https://onehost-172:8443/xmlrpc"));
+			config.setServerURL(new URL("https://localhost:8443/authn_proxy/xmlrpc"));
 		} catch (MalformedURLException e) {
 			throw new RuntimeException(e.getMessage());
 		}
