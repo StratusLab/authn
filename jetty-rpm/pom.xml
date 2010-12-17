@@ -3,9 +3,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>eu.stratuslab.authn</groupId>
-  <artifactId>jetty-rpm</artifactId>
+  <artifactId>stratuslab-cloud-proxy-rpm</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>StratusLab Jetty Packaging</name>
+  <name>StratusLab Cloud Proxy (Jetty) Packaging</name>
 
   <packaging>rpm</packaging>
 
@@ -103,8 +103,8 @@
 	<extensions>true</extensions>
 	<configuration>
 	  <release>${RELEASE}</release>
-	  <summary>StratusLab Jetty Package</summary>
-	  <name>${artifactId}</name>
+	  <summary>StratusLab Cloud Proxy (Jetty) Package</summary>
+	  <name>stratuslab-cloud-proxy</name>
 	  <group>System</group>
 	  <vendor>StratusLab</vendor>
 	  <packager>StratusLab</packager>
