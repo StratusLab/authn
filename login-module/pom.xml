@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>eu.stratuslab.authn</groupId>
-  <artifactId>jaas-login-module</artifactId>
+  <artifactId>authn-login-module</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>JAAS Login Module for Certificates</name>
 

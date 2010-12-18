@@ -71,6 +71,11 @@
 		  <artifactId>authn-ssl</artifactId>
 		  <version>0.0.1-SNAPSHOT</version>
 		</artifactItem>
+		<artifactItem>
+		  <groupId>eu.stratuslab.authn</groupId>
+		  <artifactId>authn-login-module</artifactId>
+		  <version>0.0.1-SNAPSHOT</version>
+		</artifactItem>
 	      </artifactItems>
 	    </configuration>
 	  </execution>
