@@ -144,8 +144,8 @@
 	    <contextPath>/authn_proxy</contextPath>
 	    <securityHandler implementation="org.eclipse.jetty.security.ConstraintSecurityHandler">
 	      <loginService implementation="org.eclipse.jetty.plus.jaas.JAASLoginService">
-		<name>Test JAAS Realm</name>
-		<loginModuleName>xyz</loginModuleName>
+		<name>StratusLab Password Realm</name>
+		<loginModuleName>stratuslab-pswd</loginModuleName>
 	      </loginService>
 	    </securityHandler>
 	  </webAppConfig>

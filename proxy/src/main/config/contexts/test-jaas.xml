@@ -1,9 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
 
-<!-- =============================================================== -->
-<!-- Configure the test-jndi webapp                                  -->
-<!-- =============================================================== -->
 <Configure id='wac' class="org.eclipse.jetty.webapp.WebAppContext">
 
   <Set name="contextPath">/test-jaas</Set>
@@ -13,8 +10,8 @@
     <New class="org.eclipse.jetty.security.ConstraintSecurityHandler">
      <Set name="loginService">
        <New class="org.eclipse.jetty.plus.jaas.JAASLoginService">
-         <Set name="name">Test JAAS Realm</Set>
-         <Set name="loginModuleName">xyz</Set>
+         <Set name="name">StratusLab Password Realm</Set>
+         <Set name="loginModuleName">stratuslab-pswd</Set>
        </New>
      </Set>
     </New>
