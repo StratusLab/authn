@@ -13,6 +13,7 @@
     <module>ssl</module>
     <module>proxy</module>
     <module>client</module>
+    <module>jaas-login-module</module>
   </modules>
 
   <properties>
@@ -91,6 +92,11 @@
       <dependency>
 	<groupId>org.eclipse.jetty</groupId>
 	<artifactId>jetty-server</artifactId>
+	<version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+	<groupId>org.eclipse.jetty</groupId>
+	<artifactId>jetty-plus</artifactId>
 	<version>${jetty.version}</version>
       </dependency>
     </dependencies>
