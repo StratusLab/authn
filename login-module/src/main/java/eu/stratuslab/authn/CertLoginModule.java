@@ -1,56 +1,40 @@
 package eu.stratuslab.authn;
 
-import java.security.Principal;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.security.auth.Subject;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.spi.LoginModule;
+import org.eclipse.jetty.http.security.Credential;
+import org.eclipse.jetty.plus.jaas.spi.AbstractLoginModule;
+import org.eclipse.jetty.plus.jaas.spi.UserInfo;
 
-import org.eclipse.jetty.plus.jaas.JAASRole;
+public class CertLoginModule extends AbstractLoginModule {
 
-public class CertLoginModule implements LoginModule {
+    @Override
+    public UserInfo getUserInfo(String username) throws Exception {
 
-    public boolean abort() {
-        return true;
+        Credential credential = new AlwaysValidCredential();
+
+        List<String> roles = new ArrayList<String>(1);
+        roles.add("cloud-access");
+
+        return new UserInfo(username, credential, roles);
     }
 
-    public boolean commit() {
-        return true;
-    }
+    /**
+     * With a certificate, the validity checking has always been done at the
+     * transport layer. Return a credential that always evaluates to being
+     * valid.
+     * 
+     * @author loomis
+     * 
+     */
+    @SuppressWarnings("serial")
+    private static class AlwaysValidCredential extends Credential {
 
-    public void initialize(Subject subject, CallbackHandler callbackHandler,
-            Map<String, ?> sharedState, Map<String, ?> options) {
-
-        System.err.println("Adding 'cloud-access' role...");
-        JAASRole role = new JAASRole("cloud-access");
-        subject.getPrincipals().add(role);
-
-        System.err.println("Principals:");
-        for (Principal p : subject.getPrincipals()) {
-            System.err.println(p.getName());
+        @Override
+        public boolean check(Object credentials) {
+            return true;
         }
-
-        System.err.println("Shared State:");
-        for (Entry<String, ?> entry : sharedState.entrySet()) {
-            System.err.println(entry.getKey() + " => " + entry.getValue());
-        }
-
-        System.err.println("\nOptions:");
-        for (Entry<String, ?> entry : options.entrySet()) {
-            System.err.println(entry.getKey() + " => " + entry.getValue());
-        }
-        System.err.println("\n");
-
-    }
-
-    public boolean login() {
-        return true;
-    }
-
-    public boolean logout() {
-        return true;
     }
 
 }
