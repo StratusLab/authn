@@ -57,6 +57,9 @@
             <phase>process-resources</phase>
             <configuration>
               <outputDirectory>${basedir}/target/jetty-config</outputDirectory>
+              <nonFilteredFileExtensions>
+                <nonFilteredFileExtension>jks</nonFilteredFileExtension>
+              </nonFilteredFileExtensions>
               <resources>
                 <resource>
                   <directory>${basedir}/src/main/jetty-config</directory>
