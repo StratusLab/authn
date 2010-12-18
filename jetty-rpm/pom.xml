@@ -15,9 +15,30 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 
+  <!-- NOTE: This project MUST have same version as proxy module. -->
   <properties>
     <authn-proxy-war>authn-proxy-${project.version}.war</authn-proxy-war>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>eu.stratuslab.authn</groupId>
+        <artifactId>authn-ssl</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>eu.stratuslab.authn</groupId>
+        <artifactId>authn-login-module</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>eu.stratuslab.authn</groupId>
+        <artifactId>authn-proxy</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
 
@@ -97,12 +118,10 @@
                 <artifactItem>
                   <groupId>eu.stratuslab.authn</groupId>
                   <artifactId>authn-ssl</artifactId>
-                  <version>0.0.1-SNAPSHOT</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>eu.stratuslab.authn</groupId>
                   <artifactId>authn-login-module</artifactId>
-                  <version>0.0.1-SNAPSHOT</version>
                 </artifactItem>
               </artifactItems>
             </configuration>
@@ -120,7 +139,6 @@
                   <groupId>eu.stratuslab.authn</groupId>
                   <artifactId>authn-proxy</artifactId>
                   <type>war</type>
-                  <version>0.0.1-SNAPSHOT</version>
                 </artifactItem>
               </artifactItems>
             </configuration>
