@@ -176,7 +176,7 @@ Jetty packaging that includes StratusLab authentication proxy.
 	    </mapping>
 
 	    <mapping>
-	      <directory>/opt/jetty-7/webapps</directory>
+	      <directory>/opt/jetty-7/stratuslab-webapps</directory>
 	      <filemode>644</filemode>
 	      <username>root</username>
 	      <groupname>root</groupname>
