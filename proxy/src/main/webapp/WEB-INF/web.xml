@@ -31,7 +31,7 @@
 
   <login-config>
     <auth-method>CLIENT-CERT</auth-method>
-    <realm-name>Test JAAS Realm</realm-name>
+    <realm-name>StratusLab Certificate Realm</realm-name>
   </login-config>
 
   <security-role>
