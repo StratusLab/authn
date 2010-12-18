@@ -3,16 +3,16 @@
 
 <Configure id='wac' class="org.eclipse.jetty.webapp.WebAppContext">
 
-  <Set name="contextPath">/pswd</Set>
-  <Set name="war"><SystemProperty name="jetty.home" default="."/>/stratuslab-webapps/authn-proxy-0.0.1-SNAPSHOT.war</Set>
-  <Set name="overrideDescriptor"><SystemProperty name="jetty.home" default="."/>/etc/overrides/web-pswd.xml</Set>
+  <Set name="contextPath">/cert</Set>
+  <Set name="war"><SystemProperty name="jetty.home" default="."/>${authn-proxy-war}</Set>
+  <Set name="overrideDescriptor"><SystemProperty name="jetty.home" default="."/>/etc/overrides/web-cert.xml</Set>
 
   <Set name="securityHandler">
     <New class="org.eclipse.jetty.security.ConstraintSecurityHandler">
       <Set name="loginService">
         <New class="org.eclipse.jetty.plus.jaas.JAASLoginService">
-          <Set name="name">StratusLab Password Realm</Set>
-          <Set name="loginModuleName">stratuslab-pswd</Set>
+          <Set name="name">StratusLab Certificate Realm</Set>
+          <Set name="loginModuleName">stratuslab-cert</Set>
         </New>
       </Set>
     </New>

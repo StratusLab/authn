@@ -15,9 +15,37 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 
+  <properties>
+    <authn-proxy-war>authn-proxy-${project.version}.war</authn-proxy-war>
+  </properties>
+
   <build>
 
     <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+
+        <executions>
+          <execution>
+            <id>filter-jetty-configs</id>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+              <outputDirectory>${basedir}/target/jetty-config</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${basedir}/src/main/jetty-config</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -199,7 +227,7 @@
               <directoryIncluded>false</directoryIncluded>
               <sources>
                 <source>
-                  <location>src/main/resources/jetty</location>
+                  <location>target/jetty-config</location>
                   <includes>
                     <include>**/*</include>
                   </includes>
@@ -220,7 +248,7 @@
               <configuration>noreplace</configuration>
               <sources>
                 <source>
-                  <location>src/main/resources/jetty</location>
+                  <location>target/jetty-config</location>
                   <includes>
                     <include>etc/login/*</include>
                     <include>etc/overrides/*</include>
