@@ -52,6 +52,8 @@ public class CertLoginModule extends AbstractLoginModule {
     public void initialize(Subject subject, CallbackHandler callbackHandler,
             Map sharedState, Map options) {
 
+        super.initialize(subject, callbackHandler, sharedState, options);
+
         authnUsersRef.set(new AuthnData(options.get("file")));
     }
 
