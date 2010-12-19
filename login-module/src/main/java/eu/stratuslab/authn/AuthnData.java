@@ -74,13 +74,21 @@ public class AuthnData {
 
         Properties properties = new Properties();
 
+        FileReader reader = null;
         try {
             if (filename != null) {
-                FileReader reader = new FileReader(filename.toString());
+                reader = new FileReader(filename.toString());
                 properties.load(reader);
             }
         } catch (FileNotFoundException consumed) {
         } catch (IOException consumed) {
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException consumed) {
+                }
+            }
         }
 
         return properties;
