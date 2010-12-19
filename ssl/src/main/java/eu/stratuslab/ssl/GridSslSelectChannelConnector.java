@@ -1,7 +1,7 @@
 /*
  Created as part of the StratusLab project (http://stratuslab.eu),
  co-funded by the European Commission under the Grant Agreement
- INSFO-RI-261552."
+ INSFO-RI-261552.
 
  Copyright (c) 2010, Centre Nationale de la Recherche Scientifique
 
