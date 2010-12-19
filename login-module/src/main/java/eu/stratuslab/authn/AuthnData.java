@@ -20,7 +20,7 @@
 
 package eu.stratuslab.authn;
 
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,10 +28,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AuthnData {
+
+    private final static Pattern commentLine = Pattern.compile("^\\s*#.*");
+    private final static Pattern dataLine = Pattern
+            .compile("^\\s*\"(.*)\"[\\s,]*(.*)");
 
     // Authorized users with associated groups.
     private Map<String, List<String>> data = new HashMap<String, List<String>>();
@@ -40,7 +44,7 @@ public class AuthnData {
     private static List<String> noGroups = createGroupList(null);
 
     public AuthnData(Object filename) {
-        readAuthzFile(filename);
+        readAuthnFile(filename);
     }
 
     public boolean isValidUser(String username) {
@@ -51,59 +55,59 @@ public class AuthnData {
         return data.containsKey(username) ? data.get(username) : noGroups;
     }
 
-    private void readAuthzFile(Object filename) {
+    private void readAuthnFile(Object filename) {
 
-        Properties properties = loadProperties(filename);
+        if (filename != null) {
 
-        for (Entry<Object, Object> entry : properties.entrySet()) {
-            processEntry(entry);
-        }
-
-    }
-
-    private void processEntry(Entry<Object, Object> entry) {
-
-        Object key = entry.getKey();
-        List<String> groupList = createGroupList(entry.getValue());
-
-        data.put(key.toString(), groupList);
-
-    }
-
-    private static Properties loadProperties(Object filename) {
-
-        Properties properties = new Properties();
-
-        FileReader reader = null;
-        try {
-            if (filename != null) {
+            FileReader reader = null;
+            try {
                 reader = new FileReader(filename.toString());
-                properties.load(reader);
-            }
-        } catch (FileNotFoundException consumed) {
-        } catch (IOException consumed) {
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException consumed) {
+                BufferedReader br = new BufferedReader(reader);
+
+                processByLines(br);
+            } catch (IOException consumed) {
+
+            } finally {
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (IOException consumed) {
+                    }
                 }
             }
         }
-
-        return properties;
     }
 
-    private static List<String> createGroupList(Object value) {
+    private void processByLines(BufferedReader br) throws IOException {
+
+        String line = br.readLine();
+        while (line != null) {
+            if (!commentLine.matcher(line).matches()) {
+                Matcher m = dataLine.matcher(line);
+                if (m.matches()) {
+                    processLine(m.group(1), m.group(2));
+                }
+            }
+            line = br.readLine();
+        }
+
+    }
+
+    private void processLine(String username, String groupInfo) {
+
+        List<String> groupList = createGroupList(groupInfo);
+        data.put(username, groupList);
+
+    }
+
+    private static List<String> createGroupList(String groupInfo) {
 
         List<String> groupList = new ArrayList<String>();
 
-        if (value != null) {
-            String[] groups = value.toString().split("[\\s,]+");
+        if (groupInfo != null) {
+            String[] groups = groupInfo.split("[\\s,]+");
             for (String group : groups) {
-                if (!"".equals(group)) {
-                    groupList.add(group);
-                }
+                groupList.add(group);
             }
         }
 
