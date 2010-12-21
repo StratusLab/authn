@@ -3,7 +3,7 @@
 
   <groupId>eu.stratuslab.authn</groupId>
   <artifactId>authn-proxy</artifactId>
-  <version>0.0.4-SNAPSHOT</version>
+  <version>0.0.4</version>
   <name>StratusLab OpenNebula Proxy</name>
 
   <packaging>war</packaging>
@@ -11,7 +11,7 @@
   <parent>
     <groupId>eu.stratuslab.authn</groupId>
     <artifactId>authn</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>0.0.4</version>
   </parent>
 
   <dependencies>
@@ -42,7 +42,7 @@
     <dependency>
       <groupId>eu.stratuslab.authn</groupId>
       <artifactId>authn-ssl</artifactId>
-      <version>0.0.4-SNAPSHOT</version>
+      <version>0.0.4</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
