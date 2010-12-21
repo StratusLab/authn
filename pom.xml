@@ -13,6 +13,7 @@
     <module>proxy</module>
     <module>client</module>
     <module>login-module</module>
+    <module>jetty-rpm</module>
   </modules>
 
   <properties>
