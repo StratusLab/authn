@@ -3,7 +3,7 @@
 
   <groupId>eu.stratuslab.authn</groupId>
   <artifactId>authn</artifactId>
-  <version>0.0.4</version>
+  <version>0.0.5-SNAPSHOT</version>
   <name>StratusLab Authentication Framework</name>
 
   <packaging>pom</packaging>
