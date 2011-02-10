@@ -3,6 +3,7 @@
 
   <groupId>eu.stratuslab.authn</groupId>
   <artifactId>stratuslab-cloud-proxy-rpm</artifactId>
+  <version>0.0.7-SNAPSHOT</version>
   <name>StratusLab Cloud Proxy (Jetty) Packaging</name>
 
   <packaging>rpm</packaging>
@@ -166,6 +167,9 @@
           <description>
             Jetty packaging that includes StratusLab authentication proxy. 
           </description>
+          <requires>
+			<require>java</require>          
+          </requires>
           <mappings>
 
             <mapping>
