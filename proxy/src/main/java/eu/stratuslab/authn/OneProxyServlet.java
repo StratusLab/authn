@@ -137,8 +137,6 @@ public class OneProxyServlet extends XmlRpcServlet {
         private String extractAuthnInfo(XmlRpcRequest request)
                 throws XmlRpcNotAuthorizedException {
 
-            String passwd = "c5c9b9371be52dbb3d838aa5d687057c71966dc8";
-
             XmlRpcRequestConfig config = request.getConfig();
 
             String user = "";
@@ -155,7 +153,7 @@ public class OneProxyServlet extends XmlRpcServlet {
             }
 
             if (!"".equals(user)) {
-                return user + ":" + passwd;
+                return user + ":";
             } else {
                 throw new XmlRpcNotAuthorizedException(
                         "certificate DN or username not provided");
