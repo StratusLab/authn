@@ -24,6 +24,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -47,6 +50,17 @@ public class OneProxyServlet extends XmlRpcServlet {
     final private static String DEFAULT_PROXY_URL = "http://localhost:2633/RPC2";
 
     private URL proxyUrl = null;
+
+    final private static Logger logger;
+    static {
+        logger = Logger.getLogger("eu.stratuslab.authn");
+        for (Handler h : logger.getHandlers()) {
+            logger.removeHandler(h);
+        }
+
+        Handler handler = new ConsoleHandler();
+        logger.addHandler(handler);
+    }
 
     @Override
     public void init(ServletConfig pConfig) throws ServletException {
@@ -123,8 +137,10 @@ public class OneProxyServlet extends XmlRpcServlet {
 
             // Replace the authentication information.
             String authInfo = extractAuthnInfo(request);
-            System.err.println("AUTH INFO: " + authInfo);
             params.addElement(authInfo);
+
+            // Log this request.
+            logger.info("forwarding request from " + authInfo);
 
             // Copy all remaining parameters.
             for (int i = 1; i < request.getParameterCount(); i++) {
