@@ -17,6 +17,7 @@
 
   <properties>
     <jetty.version>7.2.2.v20101205</jetty.version>
+    <package.version>${version}</package.version>
   </properties>
 
   <scm>
@@ -98,6 +99,24 @@
 	<artifactId>jetty-plus</artifactId>
 	<version>${jetty.version}</version>
       </dependency>
+
+      <!-- Define dependencies for rpm packaging of code. -->
+      <dependency>
+        <groupId>eu.stratuslab.authn</groupId>
+        <artifactId>authn-ssl</artifactId>
+        <version>${package.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>eu.stratuslab.authn</groupId>
+        <artifactId>authn-login-module</artifactId>
+        <version>${package.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>eu.stratuslab.authn</groupId>
+        <artifactId>authn-proxy</artifactId>
+        <version>${package.version}</version>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
   

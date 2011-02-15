@@ -3,7 +3,7 @@
 
   <groupId>eu.stratuslab.authn</groupId>
   <artifactId>stratuslab-cloud-proxy-rpm</artifactId>
-  <version>0.0.7-SNAPSHOT</version>
+  <version>0.0.9-SNAPSHOT</version>
   <name>StratusLab Cloud Proxy (Jetty) Packaging</name>
 
   <packaging>rpm</packaging>
@@ -16,9 +16,10 @@
 
   <!-- NOTE: This project MUST have same version as proxy module. -->
   <properties>
-    <authn-proxy-war>authn-proxy-${version}.war</authn-proxy-war>
+    <authn-proxy-war>authn-proxy-${project.version}.war</authn-proxy-war>
   </properties>
 
+<!--
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -38,6 +39,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+-->
 
   <build>
 
