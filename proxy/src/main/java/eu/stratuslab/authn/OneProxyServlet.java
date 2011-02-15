@@ -169,7 +169,7 @@ public class OneProxyServlet extends XmlRpcServlet {
             }
 
             if (!"".equals(user)) {
-                return user + ":";
+                return user + ":" + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             } else {
                 throw new XmlRpcNotAuthorizedException(
                         "certificate DN or username not provided");
