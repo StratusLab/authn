@@ -169,7 +169,11 @@ public class OneProxyServlet extends XmlRpcServlet {
             }
 
             if (!"".equals(user)) {
-                return user + ":" + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+		// This is a hack to remove white space.  This is necessary
+		// because the authentication part of the OpenNebula 
+		// authorization framework causes the daemon to crash if
+		// a space is returned.
+                return user.replace(' ', '_') + ":X";
             } else {
                 throw new XmlRpcNotAuthorizedException(
                         "certificate DN or username not provided");
