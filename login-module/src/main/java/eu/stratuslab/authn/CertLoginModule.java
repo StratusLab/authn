@@ -23,9 +23,6 @@ package eu.stratuslab.authn;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
-import java.util.logging.Logger;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
@@ -40,19 +37,7 @@ public class CertLoginModule extends AbstractLoginModule {
 
     static {
         authnUsersRef.set(new AuthnData(null));
-    }
-
-    final private static Logger logger;
-    static {
-        logger = Logger.getLogger("eu.stratuslab.authn");
-        for (Handler h : logger.getHandlers()) {
-            logger.removeHandler(h);
-        }
-
-        Handler handler = new ConsoleHandler();
-        logger.addHandler(handler);
-
-        logger.warning("INITIALIZING CERT LOGIN MODULE");
+        System.err.println("STATIC INITIALIZER FOR CertLoginModule");
     }
 
     @Override
@@ -60,6 +45,8 @@ public class CertLoginModule extends AbstractLoginModule {
 
         Credential credential = createUserCredential(username);
         List<String> roles = getUserRoles(username);
+
+        System.err.println("REQUESTING USER INFO" + username);
 
         return new UserInfo(username, credential, roles);
     }
@@ -72,11 +59,12 @@ public class CertLoginModule extends AbstractLoginModule {
         super.initialize(subject, callbackHandler, sharedState, options);
 
         authnUsersRef.set(new AuthnData(options.get("file")));
+
+        System.err.println("CertLoginModule INITIALIZATION");
     }
 
     private Credential createUserCredential(String username) {
         AuthnData data = authnUsersRef.get();
-        logger.warning("TRYING TO CREATE USER: " + username);
         return new BooleanCredential(data.isValidUser(username));
     }
 
