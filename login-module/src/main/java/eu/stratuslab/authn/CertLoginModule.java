@@ -37,7 +37,6 @@ public class CertLoginModule extends AbstractLoginModule {
 
     static {
         authnUsersRef.set(new AuthnData(null));
-        System.err.println("STATIC INITIALIZER FOR CertLoginModule");
     }
 
     @Override
@@ -46,32 +45,9 @@ public class CertLoginModule extends AbstractLoginModule {
         Credential credential = createUserCredential(username);
         List<String> roles = getUserRoles(username);
 
-        System.err.println("REQUESTING USER INFO" + username);
-
         return new UserInfo(username, credential, roles);
     }
 
-    @Override
-    public boolean login() {
-        return true;
-    }
-
-    @Override
-    public boolean commit() {
-        return true;
-    }
-
-    @Override
-    public boolean abort() {
-        return false;
-    }
-
-    @Override
-    public boolean logout() {
-        return true;
-    }
-
-    @SuppressWarnings("unchecked")
     @Override
     public void initialize(Subject subject, CallbackHandler callbackHandler,
             Map sharedState, Map options) {
@@ -79,8 +55,6 @@ public class CertLoginModule extends AbstractLoginModule {
         super.initialize(subject, callbackHandler, sharedState, options);
 
         authnUsersRef.set(new AuthnData(options.get("file")));
-
-        System.err.println("CertLoginModule INITIALIZATION");
     }
 
     private Credential createUserCredential(String username) {

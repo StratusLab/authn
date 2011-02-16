@@ -22,24 +22,10 @@ package eu.stratuslab.ssl;
 
 import java.security.Security;
 
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 
 public class GridSslSelectChannelConnector extends SslSelectChannelConnector {
-
-    private static final Logger logger = Logger
-            .getLogger("org.glite.security.util.TrustStorage");
-
-    static {
-        logger.removeAllAppenders();
-
-        ConsoleAppender appender = new ConsoleAppender();
-        appender.setFollow(true);
-
-        logger.addAppender(appender);
-    }
 
     @Override
     public void doStart() throws Exception {
