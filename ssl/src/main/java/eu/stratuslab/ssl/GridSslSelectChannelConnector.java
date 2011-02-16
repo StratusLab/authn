@@ -22,15 +22,23 @@ package eu.stratuslab.ssl;
 
 import java.security.Security;
 
-import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 
 public class GridSslSelectChannelConnector extends SslSelectChannelConnector {
 
+    private static final Logger logger = Logger
+            .getLogger("org.glite.security.util.TrustStorage");
+
     static {
-        // Used to configure log4j which is used in the TrustManager code.
-        BasicConfigurator.configure();
+        logger.removeAllAppenders();
+
+        ConsoleAppender appender = new ConsoleAppender();
+        appender.setFollow(true);
+
+        logger.addAppender(appender);
     }
 
     @Override
