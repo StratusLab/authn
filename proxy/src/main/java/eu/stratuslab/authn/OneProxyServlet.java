@@ -173,7 +173,7 @@ public class OneProxyServlet extends XmlRpcServlet {
 		// because the authentication part of the OpenNebula 
 		// authorization framework causes the daemon to crash if
 		// a space is returned.
-                return user.replace(' ', '_') + ":X";
+                return user.replace(' ', '_') + ":aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             } else {
                 throw new XmlRpcNotAuthorizedException(
                         "certificate DN or username not provided");
