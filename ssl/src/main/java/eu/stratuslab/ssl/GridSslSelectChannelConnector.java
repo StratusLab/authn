@@ -22,10 +22,16 @@ package eu.stratuslab.ssl;
 
 import java.security.Security;
 
+import org.apache.log4j.BasicConfigurator;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 
 public class GridSslSelectChannelConnector extends SslSelectChannelConnector {
+
+    static {
+        // Used to configure log4j which is used in the TrustManager code.
+        BasicConfigurator.configure();
+    }
 
     @Override
     public void doStart() throws Exception {
