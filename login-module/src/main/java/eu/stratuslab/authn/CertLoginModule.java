@@ -51,6 +51,26 @@ public class CertLoginModule extends AbstractLoginModule {
         return new UserInfo(username, credential, roles);
     }
 
+    @Override
+    public boolean login() {
+        return true;
+    }
+
+    @Override
+    public boolean commit() {
+        return true;
+    }
+
+    @Override
+    public boolean abort() {
+        return false;
+    }
+
+    @Override
+    public boolean logout() {
+        return true;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public void initialize(Subject subject, CallbackHandler callbackHandler,
