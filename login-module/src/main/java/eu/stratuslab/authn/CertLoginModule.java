@@ -23,6 +23,9 @@ package eu.stratuslab.authn;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
@@ -39,6 +42,17 @@ public class CertLoginModule extends AbstractLoginModule {
         authnUsersRef.set(new AuthnData(null));
     }
 
+    final private static Logger logger;
+    static {
+        logger = Logger.getLogger("eu.stratuslab.authn");
+        for (Handler h : logger.getHandlers()) {
+            logger.removeHandler(h);
+        }
+
+        Handler handler = new ConsoleHandler();
+        logger.addHandler(handler);
+    }
+
     @Override
     public UserInfo getUserInfo(String username) throws Exception {
 
@@ -48,6 +62,7 @@ public class CertLoginModule extends AbstractLoginModule {
         return new UserInfo(username, credential, roles);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void initialize(Subject subject, CallbackHandler callbackHandler,
             Map sharedState, Map options) {
@@ -59,6 +74,7 @@ public class CertLoginModule extends AbstractLoginModule {
 
     private Credential createUserCredential(String username) {
         AuthnData data = authnUsersRef.get();
+        logger.warning("TRYING TO CREATE USER: " + username);
         return new BooleanCredential(data.isValidUser(username));
     }
 
