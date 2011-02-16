@@ -51,6 +51,8 @@ public class CertLoginModule extends AbstractLoginModule {
 
         Handler handler = new ConsoleHandler();
         logger.addHandler(handler);
+
+        logger.warning("INITIALIZING CERT LOGIN MODULE");
     }
 
     @Override
