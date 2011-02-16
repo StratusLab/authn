@@ -3,7 +3,7 @@
  co-funded by the European Commission under the Grant Agreement
  INSFO-RI-261552.
 
- Copyright (c) 2010, Centre Nationale de la Recherche Scientifique
+ Copyright (c) 2010-2011, Centre National de la Recherche Scientifique
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,6 +23,9 @@ package eu.stratuslab.authn;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
@@ -33,52 +36,67 @@ import org.eclipse.jetty.plus.jaas.spi.UserInfo;
 
 public class CertLoginModule extends AbstractLoginModule {
 
-    final private static AtomicReference<AuthnData> authnUsersRef = new AtomicReference<AuthnData>();
+    final private static AtomicReference<AuthnData> AUTHN_USERS_REF = new AtomicReference<AuthnData>();
 
     static {
-        authnUsersRef.set(new AuthnData(null));
+        AUTHN_USERS_REF.set(new AuthnData(null));
+    }
+
+    final private static Logger LOGGER;
+    static {
+        LOGGER = Logger.getLogger(CertLoginModule.class.getCanonicalName());
+        for (Handler h : LOGGER.getHandlers()) {
+            LOGGER.removeHandler(h);
+        }
+
+        LOGGER.addHandler(new ConsoleHandler());
     }
 
     @Override
     public UserInfo getUserInfo(String username) throws Exception {
 
-        Credential credential = createUserCredential(username);
-        List<String> roles = getUserRoles(username);
+        LOGGER.info("checking user: " + username);
 
-        return new UserInfo(username, credential, roles);
+        String strippedUsername = stripCNProxy(username);
+
+        AuthnData data = AUTHN_USERS_REF.get();
+        if (data.isValidUser(strippedUsername)) {
+            LOGGER.info("authorized user: " + strippedUsername);
+            Credential credential = new ValidCredential();
+            List<String> roles = getUserRoles(strippedUsername);
+
+            return new UserInfo(strippedUsername, credential, roles);
+        } else {
+            LOGGER.info("unauthorized user: " + strippedUsername);
+            return null;
+        }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void initialize(Subject subject, CallbackHandler callbackHandler,
             Map sharedState, Map options) {
 
         super.initialize(subject, callbackHandler, sharedState, options);
 
-        authnUsersRef.set(new AuthnData(options.get("file")));
-    }
-
-    private Credential createUserCredential(String username) {
-        AuthnData data = authnUsersRef.get();
-        return new BooleanCredential(data.isValidUser(username));
+        AUTHN_USERS_REF.set(new AuthnData(options.get("file")));
     }
 
     private List<String> getUserRoles(String username) {
-        AuthnData data = authnUsersRef.get();
+        AuthnData data = AUTHN_USERS_REF.get();
         return data.groups(username);
     }
 
+    public static String stripCNProxy(String username) {
+        return username.replaceFirst("^CN\\s*=\\s*proxy\\s*,\\s*", "");
+    }
+
     @SuppressWarnings("serial")
-    private static class BooleanCredential extends Credential {
-
-        final private boolean valid;
-
-        public BooleanCredential(boolean valid) {
-            this.valid = valid;
-        }
+    private static class ValidCredential extends Credential {
 
         @Override
         public boolean check(Object credentials) {
-            return valid;
+            return true;
         }
     }
 

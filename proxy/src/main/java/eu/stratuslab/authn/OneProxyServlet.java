@@ -51,15 +51,15 @@ public class OneProxyServlet extends XmlRpcServlet {
 
     private URL proxyUrl = null;
 
-    final private static Logger logger;
+    final private static Logger LOGGER;
     static {
-        logger = Logger.getLogger("eu.stratuslab.authn");
-        for (Handler h : logger.getHandlers()) {
-            logger.removeHandler(h);
+        LOGGER = Logger.getLogger(OneProxyServlet.class.getCanonicalName());
+        for (Handler h : LOGGER.getHandlers()) {
+            LOGGER.removeHandler(h);
         }
 
         Handler handler = new ConsoleHandler();
-        logger.addHandler(handler);
+        LOGGER.addHandler(handler);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class OneProxyServlet extends XmlRpcServlet {
             params.addElement(authInfo);
 
             // Log this request.
-            logger.info("forwarding request from " + authInfo);
+            LOGGER.info("forwarding request from " + authInfo);
 
             // Copy all remaining parameters.
             for (int i = 1; i < request.getParameterCount(); i++) {
@@ -169,11 +169,13 @@ public class OneProxyServlet extends XmlRpcServlet {
             }
 
             if (!"".equals(user)) {
-		// This is a hack to remove white space.  This is necessary
-		// because the authentication part of the OpenNebula 
-		// authorization framework causes the daemon to crash if
-		// a space is returned.
-                return user.replace(' ', '_') + ":aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+                // FIXME
+                // This is a hack to remove white space. This is necessary
+                // because the authentication part of the OpenNebula
+                // authorization framework causes the daemon to crash if
+                // a space is returned.
+                return user.replace(' ', '_')
+                        + ":aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             } else {
                 throw new XmlRpcNotAuthorizedException(
                         "certificate DN or username not provided");
