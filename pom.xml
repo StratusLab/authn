@@ -6,6 +6,13 @@
   <version>0.0.9-SNAPSHOT</version>
   <name>StratusLab Authentication Framework</name>
 
+  <description>
+StratusLab uses a proxy service to allow for flexible authentication
+for the cloud.  It currently allows authentication based on simple
+username/password pairs, username/password pairs from an LDAP server,
+grid certificates, and VOMS proxies.  
+</description>
+
   <packaging>pom</packaging>
 
   <modules>
@@ -34,23 +41,32 @@
     <package.version>${version}</package.version>
   </properties>
 
+  <licenses>
+    <license>
+      <name>Apache 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>StratusLab</name>
+    <url>http://stratuslab.eu/</url>
+  </organization>
+
+  <issueManagement>
+    <system>JIRA</system>
+    <url>http://jira.stratuslab.eu:8080/</url>
+  </issueManagement>
+
+  <ciManagement>
+    <system>Hudson</system>
+    <url>http://hudson.stratuslab.eu:8080/</url>
+  </ciManagement>
+
   <scm>
     <connection>scm:git:ssh://apache@code.stratuslab.eu/ext/git/stratuslab-authn.git</connection>
     <developerConnection>scm:git:ssh://apache@code.stratuslab.eu/ext/git/stratuslab-authn.git</developerConnection>
   </scm>
-
-  <distributionManagement>
-    <repository>
-      <id>stratuslab.releases</id>
-      <name>Releases</name>
-      <url>http://repo.stratuslab.eu:8081/content/repositories/releases/</url>
-    </repository>
-    <snapshotRepository>
-      <id>stratuslab.snapshots</id>
-      <name>Snapshots</name>
-      <url>http://repo.stratuslab.eu:8081/content/repositories/snapshots/</url>
-    </snapshotRepository>
-  </distributionManagement>
 
   <repositories>
     <repository>
@@ -70,6 +86,23 @@
       <layout>default</layout>
     </repository>
   </repositories>
+
+  <distributionManagement>
+    <repository>
+      <id>stratuslab.releases</id>
+      <name>Releases</name>
+      <url>http://repo.stratuslab.eu:8081/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>stratuslab.snapshots</id>
+      <name>Snapshots</name>
+      <url>http://repo.stratuslab.eu:8081/content/repositories/snapshots/</url>
+    </snapshotRepository>
+    <site>
+      <id>hudson.webserver</id>
+      <url>scp://hudson.stratuslab.eu/home/htdocs</url>
+    </site>
+  </distributionManagement>
 
   <dependencyManagement>
     <dependencies>
@@ -139,6 +172,22 @@
     </dependencies>
   </dependencyManagement>
   
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <show>public</show>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+  
   <build>
 
     <pluginManagement>
@@ -200,7 +249,12 @@
 	    <target>1.5</target>
 	    <source>1.5</source>
 	  </configuration>
-	</plugin>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.7</version>
+        </plugin>
 	<plugin>
 	  <groupId>org.apache.maven.plugins</groupId>
 	  <artifactId>maven-assembly-plugin</artifactId>
