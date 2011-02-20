@@ -100,7 +100,7 @@ grid certificates, and VOMS proxies.
     </snapshotRepository>
     <site>
       <id>hudson.webserver</id>
-      <url>scp://hudson.stratuslab.eu/home/htdocs</url>
+      <url>scp://hudson.stratuslab.eu/var/www/authn</url>
     </site>
   </distributionManagement>
 
