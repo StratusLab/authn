@@ -6,6 +6,8 @@
   <version>0.0.9-SNAPSHOT</version>
   <name>StratusLab Authentication Framework</name>
 
+  <url>http://hudson.stratuslab.eu/${artifactId}</url>
+
   <description>
 StratusLab uses a proxy service to allow for flexible authentication
 for the cloud.  It currently allows authentication based on simple
