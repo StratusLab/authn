@@ -20,8 +20,10 @@
 
 package eu.stratuslab.authn;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.ConsoleHandler;
@@ -131,7 +133,7 @@ public class OneProxyServlet extends XmlRpcServlet {
         }
 
         private List<Object> prepareRequestParameters(XmlRpcRequest request)
-                throws XmlRpcNotAuthorizedException {
+                throws XmlRpcException {
 
             Vector<Object> params = new Vector<Object>();
 
@@ -155,7 +157,7 @@ public class OneProxyServlet extends XmlRpcServlet {
         }
 
         private String extractAuthnInfo(XmlRpcRequest request)
-                throws XmlRpcNotAuthorizedException {
+                throws XmlRpcException {
 
             XmlRpcRequestConfig config = request.getConfig();
 
@@ -177,20 +179,23 @@ public class OneProxyServlet extends XmlRpcServlet {
                 // Get rid of the proxy part of the DN.
                 user = stripCNProxy(user);
 
-                // FIXME
-                // This is a hack to remove white space. This is necessary
-                // because the authentication part of the OpenNebula
-                // authorization framework causes the daemon to crash if
-                // a space is returned.
-                user = user.replace(' ', '_');
+                try {
 
-                return user + ":aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+                    // All of the usernames must be URL encoded to remove spaces
+                    // and other special characters.
+                    return URLEncoder.encode(user, "UTF-8")
+                            + ":aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+                } catch (UnsupportedEncodingException e) {
+                    LOGGER
+                            .severe("can't create UTF-8 encoding for URL encoding");
+                    throw new XmlRpcException("internal server error");
+                }
             } else {
                 throw new XmlRpcNotAuthorizedException(
                         "certificate DN or username not provided");
             }
         }
-
     }
 
 }
