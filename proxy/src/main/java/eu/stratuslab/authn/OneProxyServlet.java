@@ -24,6 +24,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.ConsoleHandler;
@@ -162,6 +164,8 @@ public class OneProxyServlet extends XmlRpcServlet {
             XmlRpcRequestConfig config = request.getConfig();
 
             String user = "";
+            String basicPswdHash = "";
+            String defaultPswdHash = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
             if (config instanceof OneProxyRequestConfigImpl) {
                 OneProxyRequestConfigImpl opconfig = (OneProxyRequestConfigImpl) config;
@@ -172,6 +176,7 @@ public class OneProxyServlet extends XmlRpcServlet {
                     && config instanceof XmlRpcHttpRequestConfigImpl) {
                 XmlRpcHttpRequestConfigImpl hconfig = (XmlRpcHttpRequestConfigImpl) config;
                 user = hconfig.getBasicUserName();
+                basicPswdHash = hashPassword(hconfig.getBasicPassword());
             }
 
             if (!"".equals(user)) {
@@ -181,10 +186,14 @@ public class OneProxyServlet extends XmlRpcServlet {
 
                 try {
 
+                    // Pass the hash of the password through if the username is
+                    // 'oneadmin'.
+                    String credentials = ("oneadmin".equals(user)) ? basicPswdHash
+                            : defaultPswdHash;
+
                     // All of the usernames must be URL encoded to remove spaces
                     // and other special characters.
-                    return URLEncoder.encode(user, "UTF-8")
-                            + ":XYZXYZ";
+                    return URLEncoder.encode(user, "UTF-8") + ":" + credentials;
 
                 } catch (UnsupportedEncodingException e) {
                     LOGGER
@@ -198,4 +207,16 @@ public class OneProxyServlet extends XmlRpcServlet {
         }
     }
 
+    private static String hashPassword(String password) throws XmlRpcException {
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            md.update((password != null) ? password.getBytes() : new byte[] {});
+            return md.toString();
+        } catch (NoSuchAlgorithmException e) {
+            LOGGER.severe("can't create UTF-8 encoding for URL encoding");
+            throw new XmlRpcException("internal server error");
+        }
+
+    }
 }
