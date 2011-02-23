@@ -17,6 +17,8 @@
   <!-- NOTE: This project MUST have same version as proxy module. -->
   <properties>
     <authn-proxy-war>authn-proxy-${project.version}.war</authn-proxy-war>
+    <maven.build.timestamp.format>yyyyMMdd.HHmmss</maven.build.timestamp.format>
+    <RELEASE>0.${maven.build.timestamp}</RELEASE>
   </properties>
 
   <build>
@@ -135,7 +137,7 @@
 	<artifactId>rpm-maven-plugin</artifactId>
 	<extensions>true</extensions>
 	<configuration>
-	  <release>1</release>
+	  <release>${RELEASE}</release>
 	  <summary>StratusLab Cloud Proxy (Jetty) Package</summary>
 	  <name>stratuslab-cloud-proxy</name>
 	  <group>System</group>
