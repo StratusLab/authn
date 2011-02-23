@@ -21,6 +21,7 @@
 package eu.stratuslab.authn;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -220,7 +221,8 @@ public class OneProxyServlet extends XmlRpcServlet {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             md.update((password != null) ? password.getBytes() : new byte[] {});
-            return md.toString();
+            BigInteger digest = new BigInteger(1, md.digest());
+            return digest.toString(16);
         } catch (NoSuchAlgorithmException e) {
             LOGGER.severe("can't create UTF-8 encoding for URL encoding");
             throw new XmlRpcException("internal server error");
