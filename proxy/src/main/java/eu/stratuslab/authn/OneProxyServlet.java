@@ -222,7 +222,7 @@ public class OneProxyServlet extends XmlRpcServlet {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             md.update((password != null) ? password.getBytes() : new byte[] {});
             BigInteger digest = new BigInteger(1, md.digest());
-            return digest.toString(16);
+            return String.format("%040x", digest);
         } catch (NoSuchAlgorithmException e) {
             LOGGER.severe("can't create UTF-8 encoding for URL encoding");
             throw new XmlRpcException("internal server error");
