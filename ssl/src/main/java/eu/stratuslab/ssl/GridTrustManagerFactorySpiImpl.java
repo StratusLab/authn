@@ -127,6 +127,7 @@ public class GridTrustManagerFactorySpiImpl extends TrustManagerFactorySpi {
             sb.append("::");
 
             sb.append(record.getMessage());
+            sb.append("\n");
 
             return sb.toString();
         }

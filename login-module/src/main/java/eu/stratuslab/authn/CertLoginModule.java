@@ -125,6 +125,7 @@ public class CertLoginModule extends AbstractLoginModule {
             sb.append("::");
 
             sb.append(record.getMessage());
+            sb.append("\n");
 
             return sb.toString();
         }
