@@ -21,13 +21,21 @@
 package eu.stratuslab.authn;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.ConsoleHandler;
+import java.util.logging.Formatter;
 import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletConfig;
@@ -61,7 +69,10 @@ public class OneProxyServlet extends XmlRpcServlet {
         }
 
         Handler handler = new ConsoleHandler();
+        handler.setFormatter(new ShortMsgFormatter());
         LOGGER.addHandler(handler);
+
+        LOGGER.setUseParentHandlers(false);
     }
 
     @Override
@@ -162,6 +173,8 @@ public class OneProxyServlet extends XmlRpcServlet {
             XmlRpcRequestConfig config = request.getConfig();
 
             String user = "";
+            String basicPswdHash = "";
+            String defaultPswdHash = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
             if (config instanceof OneProxyRequestConfigImpl) {
                 OneProxyRequestConfigImpl opconfig = (OneProxyRequestConfigImpl) config;
@@ -172,6 +185,7 @@ public class OneProxyServlet extends XmlRpcServlet {
                     && config instanceof XmlRpcHttpRequestConfigImpl) {
                 XmlRpcHttpRequestConfigImpl hconfig = (XmlRpcHttpRequestConfigImpl) config;
                 user = hconfig.getBasicUserName();
+                basicPswdHash = hashPassword(hconfig.getBasicPassword());
             }
 
             if (!"".equals(user)) {
@@ -181,11 +195,14 @@ public class OneProxyServlet extends XmlRpcServlet {
 
                 try {
 
+                    // Pass the hash of the password through if the username is
+                    // 'oneadmin'.
+                    String credentials = ("oneadmin".equals(user)) ? basicPswdHash
+                            : defaultPswdHash;
+
                     // All of the usernames must be URL encoded to remove spaces
                     // and other special characters.
-                	// Password part is the sha1 of XYZXYZ
-                    return URLEncoder.encode(user, "UTF-8")
-                            + ":7c7326cd70ef2a137dc2b13a3b249243ad44936d";
+                    return URLEncoder.encode(user, "UTF-8") + ":" + credentials;
 
                 } catch (UnsupportedEncodingException e) {
                     LOGGER
@@ -196,6 +213,42 @@ public class OneProxyServlet extends XmlRpcServlet {
                 throw new XmlRpcNotAuthorizedException(
                         "certificate DN or username not provided");
             }
+        }
+    }
+
+    private static String hashPassword(String password) throws XmlRpcException {
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            md.update((password != null) ? password.getBytes() : new byte[] {});
+            BigInteger digest = new BigInteger(1, md.digest());
+            return String.format("%040x", digest);
+        } catch (NoSuchAlgorithmException e) {
+            LOGGER.severe("can't create UTF-8 encoding for URL encoding");
+            throw new XmlRpcException("internal server error");
+        }
+
+    }
+
+    // TODO: Pull into separate class.
+    private static class ShortMsgFormatter extends Formatter {
+
+        public String format(LogRecord record) {
+            StringBuilder sb = new StringBuilder();
+
+            Date date = new Date(record.getMillis());
+            DateFormat dateFormat = new SimpleDateFormat(
+                    "yyyy-MM-dd HH:mm:ss.SSS");
+            sb.append(dateFormat.format(date));
+            sb.append(":");
+
+            sb.append(record.getLevel().getName());
+            sb.append("::");
+
+            sb.append(record.getMessage());
+            sb.append("\n");
+
+            return sb.toString();
         }
     }
 
