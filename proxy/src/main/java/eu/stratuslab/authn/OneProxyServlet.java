@@ -26,10 +26,15 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.ConsoleHandler;
+import java.util.logging.Formatter;
 import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletConfig;
@@ -63,7 +68,10 @@ public class OneProxyServlet extends XmlRpcServlet {
         }
 
         Handler handler = new ConsoleHandler();
+        handler.setFormatter(new ShortMsgFormatter());
         LOGGER.addHandler(handler);
+
+        LOGGER.setUseParentHandlers(false);
     }
 
     @Override
@@ -219,4 +227,26 @@ public class OneProxyServlet extends XmlRpcServlet {
         }
 
     }
+
+    // TODO: Pull into separate class.
+    private static class ShortMsgFormatter extends Formatter {
+
+        public String format(LogRecord record) {
+            StringBuilder sb = new StringBuilder();
+
+            Date date = new Date(record.getMillis());
+            DateFormat dateFormat = new SimpleDateFormat(
+                    "yyyy-MM-dd HH:mm:ss.SSS");
+            sb.append(dateFormat.format(date));
+            sb.append(":");
+
+            sb.append(record.getLevel().getName());
+            sb.append("::");
+
+            sb.append(record.getMessage());
+
+            return sb.toString();
+        }
+    }
+
 }
