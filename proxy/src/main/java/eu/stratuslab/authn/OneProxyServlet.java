@@ -183,8 +183,9 @@ public class OneProxyServlet extends XmlRpcServlet {
 
                     // All of the usernames must be URL encoded to remove spaces
                     // and other special characters.
+                	// Password part is the sha1 of XYZXYZ
                     return URLEncoder.encode(user, "UTF-8")
-                            + ":XYZXYZ";
+                            + ":7c7326cd70ef2a137dc2b13a3b249243ad44936d";
 
                 } catch (UnsupportedEncodingException e) {
                     LOGGER
