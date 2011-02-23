@@ -158,17 +158,17 @@ grid certificates, and VOMS proxies.
       <dependency>
         <groupId>eu.stratuslab.authn</groupId>
         <artifactId>authn-ssl</artifactId>
-        <version>${package.version}</version>
+        <version>${version}</version>
       </dependency>
       <dependency>
         <groupId>eu.stratuslab.authn</groupId>
         <artifactId>authn-login-module</artifactId>
-        <version>${package.version}</version>
+        <version>${version}</version>
       </dependency>
       <dependency>
         <groupId>eu.stratuslab.authn</groupId>
         <artifactId>authn-proxy</artifactId>
-        <version>${package.version}</version>
+        <version>${version}</version>
       </dependency>
 
     </dependencies>
