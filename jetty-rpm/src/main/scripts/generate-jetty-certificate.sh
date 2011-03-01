@@ -1,11 +1,17 @@
 #!/bin/bash
 
-JETTY_CERT=${JETTY_HOME}/etc/jetty.jks
+JETTY_HOME=`dirname $0`
+JETTY_CERT=${JETTY_HOME}/jetty.jks
 
 # If certificate exists, then do nothing.
 if [ -f "${JETTY_CERT}" ]; then
   exit 0;
 fi
+
+# File is needed for OpenSSL.
+RANDFILE=${JETTY_HOME}/.rnd
+touch ${RANDFILE}
+export RANDFILE
 
 cd ${JETTY_HOME}
 
