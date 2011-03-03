@@ -3,7 +3,7 @@
 
   <groupId>eu.stratuslab.authn</groupId>
   <artifactId>authn</artifactId>
-  <version>0.0.10</version>
+  <version>0.0.11-SNAPSHOT</version>
   <name>StratusLab Authentication Framework</name>
 
   <url>http://hudson.stratuslab.eu/authn</url>
