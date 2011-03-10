@@ -3,7 +3,7 @@
 
   <groupId>eu.stratuslab.authn</groupId>
   <artifactId>authn</artifactId>
-  <version>0.0.9-SNAPSHOT</version>
+  <version>0.0.11-SNAPSHOT</version>
   <name>StratusLab Authentication Framework</name>
 
   <url>http://hudson.stratuslab.eu/authn</url>
@@ -158,17 +158,17 @@ grid certificates, and VOMS proxies.
       <dependency>
         <groupId>eu.stratuslab.authn</groupId>
         <artifactId>authn-ssl</artifactId>
-        <version>${package.version}</version>
+        <version>${version}</version>
       </dependency>
       <dependency>
         <groupId>eu.stratuslab.authn</groupId>
         <artifactId>authn-login-module</artifactId>
-        <version>${package.version}</version>
+        <version>${version}</version>
       </dependency>
       <dependency>
         <groupId>eu.stratuslab.authn</groupId>
         <artifactId>authn-proxy</artifactId>
-        <version>${package.version}</version>
+        <version>${version}</version>
       </dependency>
 
     </dependencies>
