@@ -30,7 +30,7 @@ import org.apache.xmlrpc.webserver.XmlRpcServletServer;
 
 public class OneProxyServletServer extends XmlRpcServletServer {
 
-    final private static String X509_ATTR_NAME = "javax.servlet.request.X509Certificate";
+    private static final String X509_ATTR_NAME = "javax.servlet.request.X509Certificate";
 
     @Override
     protected XmlRpcHttpRequestConfigImpl newConfig(HttpServletRequest pRequest) {
@@ -41,7 +41,7 @@ public class OneProxyServletServer extends XmlRpcServletServer {
 
         Object c = request.getAttribute(X509_ATTR_NAME);
 
-        if (c != null && c instanceof X509Certificate[]) {
+        if (c instanceof X509Certificate[]) {
             X509Certificate[] certs = (X509Certificate[]) c;
             X500Principal principal = certs[0].getSubjectX500Principal();
             return principal.getName();

@@ -41,7 +41,7 @@ import org.eclipse.jetty.plus.jaas.spi.UserInfo;
 
 public class CertLoginModule extends AbstractLoginModule {
 
-    final private static AtomicReference<AuthnData> AUTHN_USERS_REF = new AtomicReference<AuthnData>();
+    private static final AtomicReference<AuthnData> AUTHN_USERS_REF = new AtomicReference<AuthnData>();
 
     static {
         AUTHN_USERS_REF.set(new AuthnData(null));

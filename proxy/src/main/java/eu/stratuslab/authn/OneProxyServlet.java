@@ -29,9 +29,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
@@ -56,12 +56,12 @@ import org.apache.xmlrpc.webserver.XmlRpcServletServer;
 @SuppressWarnings("serial")
 public class OneProxyServlet extends XmlRpcServlet {
 
-    final private static String PROXY_URL_PARAM_NAME = "oneProxyUrl";
-    final private static String DEFAULT_PROXY_URL = "http://localhost:2633/RPC2";
+    private static final String PROXY_URL_PARAM_NAME = "oneProxyUrl";
+    private static final String DEFAULT_PROXY_URL = "http://localhost:2633/RPC2";
 
     private URL proxyUrl = null;
 
-    final private static Logger LOGGER;
+    private static final Logger LOGGER;
     static {
         LOGGER = Logger.getLogger(OneProxyServlet.class.getCanonicalName());
         for (Handler h : LOGGER.getHandlers()) {
@@ -118,7 +118,7 @@ public class OneProxyServlet extends XmlRpcServlet {
 
     private static class ProxyHandler implements XmlRpcHandler {
 
-        final private URL proxyUrl;
+        private final URL proxyUrl;
 
         public ProxyHandler(URL proxyUrl) {
             this.proxyUrl = proxyUrl;
@@ -146,18 +146,18 @@ public class OneProxyServlet extends XmlRpcServlet {
         private List<Object> prepareRequestParameters(XmlRpcRequest request)
                 throws XmlRpcException {
 
-            Vector<Object> params = new Vector<Object>();
+            List<Object> params = new ArrayList<Object>();
 
             // Replace the authentication information.
             String authInfo = extractAuthnInfo(request);
-            params.addElement(authInfo);
+            params.add(authInfo);
 
             // Log this request.
             LOGGER.info("forwarding request from " + authInfo);
 
             // Copy all remaining parameters.
             for (int i = 1; i < request.getParameterCount(); i++) {
-                params.addElement(request.getParameter(i));
+                params.add(request.getParameter(i));
             }
 
             return params;

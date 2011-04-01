@@ -23,7 +23,8 @@ package eu.stratuslab.authn;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
@@ -60,10 +61,10 @@ public class OneProxyClient {
         XmlRpcClient client = new XmlRpcClient();
         client.setConfig(config);
 
-        Vector<Object> params = new Vector<Object>();
+        List<Object> params = new ArrayList<Object>();
 
-        params.addElement("tutorial:djdjdjdjd");
-        params.addElement(Integer.valueOf(-1));
+        params.add("tutorial:djdjdjdjd");
+        params.add(Integer.valueOf(-1));
 
         try {
             Object result = client.execute("one.vmpool.info", params);

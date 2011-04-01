@@ -23,7 +23,7 @@ package eu.stratuslab.ssl;
 import java.security.Provider;
 
 @SuppressWarnings("serial")
-final public class GridTrustManagerProvider extends Provider {
+public final class GridTrustManagerProvider extends Provider {
 
     public static final String DESCRIPTION = "Provider for TrustManagerFactory that uses grid certificates";
 
