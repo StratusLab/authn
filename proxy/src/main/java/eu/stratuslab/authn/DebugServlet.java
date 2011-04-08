@@ -61,13 +61,9 @@ public class DebugServlet extends HttpServlet {
     }
 
     public static String formatCookie(Cookie cookie) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(cookie.getName() + " : ");
-        sb.append(cookie.getDomain() + " : ");
-        sb.append(cookie.getMaxAge() + " : ");
-        sb.append(cookie.getSecure() + " : ");
-        sb.append(cookie.getValue() + " : ");
-        return sb.toString();
+        return String.format("%s : %s : %s : %s : %s ", cookie.getName(),
+                cookie.getDomain(), cookie.getMaxAge(), cookie.getSecure(),
+                cookie.getValue());
     }
 
     @SuppressWarnings("unchecked")

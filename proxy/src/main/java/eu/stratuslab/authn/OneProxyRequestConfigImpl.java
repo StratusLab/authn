@@ -25,7 +25,7 @@ import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 @SuppressWarnings("serial")
 public class OneProxyRequestConfigImpl extends XmlRpcClientConfigImpl {
 
-    final private String userDn;
+    private final String userDn;
 
     public OneProxyRequestConfigImpl(String userDn) {
         super();

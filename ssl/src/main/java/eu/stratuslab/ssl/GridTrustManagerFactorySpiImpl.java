@@ -51,7 +51,7 @@ public class GridTrustManagerFactorySpiImpl extends TrustManagerFactorySpi {
 
     private static final String TM_DEACTIVATED = "certificate authentication deactivated: ";
 
-    final private static Logger LOGGER;
+    private static final Logger LOGGER;
     static {
         LOGGER = Logger.getLogger(GridTrustManagerFactorySpiImpl.class
                 .getCanonicalName());

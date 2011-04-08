@@ -33,8 +33,8 @@ import java.util.regex.Pattern;
 
 public class AuthnData {
 
-    private final static Pattern commentLine = Pattern.compile("^\\s*#.*");
-    private final static Pattern dataLine = Pattern
+    private static final Pattern COMMENT_LINE = Pattern.compile("^\\s*#.*");
+    private static final Pattern DATA_LINE = Pattern
             .compile("^\\s*\"(.*)\"[\\s,]*(.*)");
 
     // Authorized users with associated groups.
@@ -82,8 +82,8 @@ public class AuthnData {
 
         String line = br.readLine();
         while (line != null) {
-            if (!commentLine.matcher(line).matches()) {
-                Matcher m = dataLine.matcher(line);
+            if (!COMMENT_LINE.matcher(line).matches()) {
+                Matcher m = DATA_LINE.matcher(line);
                 if (m.matches()) {
                     processLine(m.group(1), m.group(2));
                 }
