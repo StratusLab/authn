@@ -23,9 +23,12 @@ package eu.stratuslab.authn;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.Principal;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
+import javax.security.auth.x500.X500Principal;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,9 +45,13 @@ import org.apache.http.message.BasicHeader;
 public class ClaudiaProxyServlet extends HttpServlet {
 
     // This should NOT have a trailing slash!
-    private static final String DEFAULT_URL = "http://www.lal.in2p3.fr";
+    private static final String DEFAULT_URL = "http://localhost:8182";
 
     private static final int BUFFER_SIZE = 2048;
+
+    private static final String X509_ATTR_NAME = "javax.servlet.request.X509Certificate";
+
+    private static final String STRATUSLAB_USER_HEADER = "X-StratusLab-User";
 
     @Override
     protected void doGet(HttpServletRequest request,
@@ -59,6 +66,10 @@ public class ClaudiaProxyServlet extends HttpServlet {
 
         Header[] headers = getHeaders(request);
         httpget.setHeaders(headers);
+
+        String username = getUsername(request);
+        System.err.println("DEBUG: " + username);
+        httpget.addHeader(STRATUSLAB_USER_HEADER, username);
 
         try {
             HttpResponse clientResponse = httpclient.execute(httpget);
@@ -155,6 +166,42 @@ public class ClaudiaProxyServlet extends HttpServlet {
             }
         }
 
+    }
+
+    private String getUsername(HttpServletRequest request) {
+        String username = extractUserDn(request);
+        if (username == null) {
+            username = extractBasicUsername(request);
+        }
+        return username;
+    }
+
+    private String extractBasicUsername(HttpServletRequest request) {
+        Principal userPrincipal = request.getUserPrincipal();
+        if (userPrincipal != null) {
+            return userPrincipal.getName();
+        } else {
+            return "";
+        }
+    }
+
+    private String extractUserDn(HttpServletRequest request) {
+
+        Object c = request.getAttribute(X509_ATTR_NAME);
+
+        if (c instanceof X509Certificate[]) {
+            X509Certificate[] certs = (X509Certificate[]) c;
+            X500Principal principal = certs[0].getSubjectX500Principal();
+            String dn = principal.getName();
+            return stripCNProxy(dn);
+        }
+
+        return "";
+
+    }
+
+    private static String stripCNProxy(String username) {
+        return username.replaceFirst("^CN\\s*=\\s*proxy\\s*,\\s*", "");
     }
 
 }
