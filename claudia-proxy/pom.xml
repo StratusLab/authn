@@ -2,9 +2,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>eu.stratuslab.authn</groupId>
-  <artifactId>authn-proxy</artifactId>
+  <artifactId>authn-claudia-proxy</artifactId>
   <version>0.0.11-SNAPSHOT</version>
-  <name>StratusLab OpenNebula Proxy</name>
+  <name>StratusLab Claudia Proxy</name>
 
   <packaging>war</packaging>
 
@@ -16,12 +16,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.apache.xmlrpc</groupId>
-      <artifactId>xmlrpc-client</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.xmlrpc</groupId>
-      <artifactId>xmlrpc-server</artifactId>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>4.1.1</version>
     </dependency>
     <dependency>
       <groupId>bouncycastle</groupId>
@@ -139,16 +136,6 @@
 
 	  </systemProperties>
 
-	  <webAppConfig>
-	    <contextPath>/authn_proxy</contextPath>
-	    <securityHandler implementation="org.eclipse.jetty.security.ConstraintSecurityHandler">
-	      <loginService implementation="org.eclipse.jetty.plus.jaas.JAASLoginService">
-		<name>StratusLab Password Realm</name>
-		<loginModuleName>stratuslab-pswd</loginModuleName>
-	      </loginService>
-	    </securityHandler>
-	  </webAppConfig>
-	  
 	  <connectors>
 	    <connector implementation="eu.stratuslab.ssl.GridSslSelectChannelConnector">
 	      <SslTrustManagerFactoryAlgorithm>GridTM</SslTrustManagerFactoryAlgorithm>
