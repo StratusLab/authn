@@ -36,9 +36,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.AbstractHttpMessage;
 import org.apache.http.message.BasicHeader;
 
 @SuppressWarnings("serial")
@@ -57,35 +64,21 @@ public class ClaudiaProxyServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) {
 
-        HttpClient httpclient = new DefaultHttpClient();
-
         String proxyUri = getProxyUri(request);
+        System.err.println("DEBUG: " + proxyUri);
         HttpGet httpget = new HttpGet(proxyUri);
 
-        System.err.println("DEBUG: " + proxyUri);
+        copyAndModifyHeaders(httpget, request);
 
-        Header[] headers = getHeaders(request);
-        httpget.setHeaders(headers);
-
-        String username = getUsername(request);
-        System.err.println("DEBUG: " + username);
-        httpget.addHeader(STRATUSLAB_USER_HEADER, username);
-
-        try {
-            HttpResponse clientResponse = httpclient.execute(httpget);
-
-            HttpEntity entity = clientResponse.getEntity();
-            if (entity != null) {
-                try {
-                    InputStream is = entity.getContent();
-                    OutputStream os = response.getOutputStream();
-                    copyAndClose(is, os);
-                } catch (IOException e) {
-                    // TODO: Log this.
-                }
+        HttpEntity entity = sendMsgAndSetStatus(httpget, response);
+        if (entity != null) {
+            try {
+                InputStream is = entity.getContent();
+                OutputStream os = response.getOutputStream();
+                copyAndClose(is, os);
+            } catch (IOException e) {
+                // TODO: Log this.
             }
-        } catch (IOException e) {
-            // TODO: Log this.
         }
 
     }
@@ -94,17 +87,65 @@ public class ClaudiaProxyServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) {
 
+        String proxyUri = getProxyUri(request);
+        System.err.println("DEBUG: " + proxyUri);
+        HttpPost httppost = new HttpPost(proxyUri);
+
+        copyAndModifyHeaders(httppost, request);
+
+        httppost.setEntity(createEntityFromRequest(request));
+
+        HttpEntity entity = sendMsgAndSetStatus(httppost, response);
+
+        if (entity != null) {
+            try {
+                InputStream is = entity.getContent();
+                OutputStream os = response.getOutputStream();
+                copyAndClose(is, os);
+            } catch (IOException e) {
+                // TODO: Log this.
+            }
+        }
+
     }
 
     @Override
     protected void doPut(HttpServletRequest request,
             HttpServletResponse response) {
 
+        String proxyUri = getProxyUri(request);
+        System.err.println("DEBUG: " + proxyUri);
+        HttpPut httpput = new HttpPut(proxyUri);
+
+        copyAndModifyHeaders(httpput, request);
+
+        httpput.setEntity(createEntityFromRequest(request));
+
+        HttpEntity entity = sendMsgAndSetStatus(httpput, response);
+
+        if (entity != null) {
+            try {
+                InputStream is = entity.getContent();
+                OutputStream os = response.getOutputStream();
+                copyAndClose(is, os);
+            } catch (IOException e) {
+                // TODO: Log this.
+            }
+        }
+
     }
 
     @Override
     protected void doDelete(HttpServletRequest request,
             HttpServletResponse response) {
+
+        String proxyUri = getProxyUri(request);
+        System.err.println("DEBUG: " + proxyUri);
+        HttpDelete httpdelete = new HttpDelete(proxyUri);
+
+        copyAndModifyHeaders(httpdelete, request);
+
+        sendMsgAndSetStatus(httpdelete, response);
 
     }
 
@@ -129,6 +170,38 @@ public class ClaudiaProxyServlet extends HttpServlet {
 
     }
 
+    public static HttpEntity createEntityFromRequest(HttpServletRequest request) {
+        try {
+
+            InputStream is = request.getInputStream();
+            long length = request.getContentLength();
+            return new InputStreamEntity(is, length);
+
+        } catch (IOException e) {
+            // TODO: Do something here.
+            return null;
+        }
+    }
+
+    public static HttpEntity sendMsgAndSetStatus(HttpUriRequest msg,
+            HttpServletResponse response) {
+
+        try {
+
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpResponse clientResponse = httpclient.execute(msg);
+            StatusLine statusline = clientResponse.getStatusLine();
+            response.setStatus(statusline.getStatusCode());
+
+            return clientResponse.getEntity();
+
+        } catch (IOException e) {
+            // FIXME: Do something sensible.
+            return null;
+        }
+
+    }
+
     @SuppressWarnings("unchecked")
     public static Header[] getHeaders(HttpServletRequest request) {
         ArrayList<Header> headers = new ArrayList<Header>();
@@ -142,6 +215,18 @@ public class ClaudiaProxyServlet extends HttpServlet {
         }
 
         return headers.toArray(new Header[headers.size()]);
+    }
+
+    private void copyAndModifyHeaders(AbstractHttpMessage msg,
+            HttpServletRequest request) {
+
+        Header[] headers = getHeaders(request);
+        msg.setHeaders(headers);
+
+        String username = getUsername(request);
+        System.err.println("DEBUG: " + username);
+        msg.addHeader(STRATUSLAB_USER_HEADER, username);
+
     }
 
     private void copyAndClose(InputStream is, OutputStream os)
