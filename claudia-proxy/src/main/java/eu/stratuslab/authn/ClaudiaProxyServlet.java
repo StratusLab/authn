@@ -27,6 +27,7 @@ import java.security.Principal;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.logging.Logger;
 
 import javax.security.auth.x500.X500Principal;
 import javax.servlet.http.HttpServlet;
@@ -51,6 +52,8 @@ import org.apache.http.message.BasicHeader;
 @SuppressWarnings("serial")
 public class ClaudiaProxyServlet extends HttpServlet {
 
+    protected static final Logger LOGGER = Logger.getLogger("org.restlet");
+
     // This should NOT have a trailing slash!
     private static final String DEFAULT_URL = "http://localhost:8182";
 
@@ -65,7 +68,7 @@ public class ClaudiaProxyServlet extends HttpServlet {
             HttpServletResponse response) {
 
         String proxyUri = getProxyUri(request);
-        System.err.println("DEBUG: " + proxyUri);
+        LOGGER.info("DEBUG: " + proxyUri);
         HttpGet httpget = new HttpGet(proxyUri);
 
         copyAndModifyHeaders(httpget, request);
@@ -88,7 +91,7 @@ public class ClaudiaProxyServlet extends HttpServlet {
             HttpServletResponse response) {
 
         String proxyUri = getProxyUri(request);
-        System.err.println("DEBUG: " + proxyUri);
+        LOGGER.info("DEBUG: " + proxyUri);
         HttpPost httppost = new HttpPost(proxyUri);
 
         copyAndModifyHeaders(httppost, request);
@@ -114,7 +117,7 @@ public class ClaudiaProxyServlet extends HttpServlet {
             HttpServletResponse response) {
 
         String proxyUri = getProxyUri(request);
-        System.err.println("DEBUG: " + proxyUri);
+        LOGGER.info("DEBUG: " + proxyUri);
         HttpPut httpput = new HttpPut(proxyUri);
 
         copyAndModifyHeaders(httpput, request);
@@ -140,7 +143,7 @@ public class ClaudiaProxyServlet extends HttpServlet {
             HttpServletResponse response) {
 
         String proxyUri = getProxyUri(request);
-        System.err.println("DEBUG: " + proxyUri);
+        LOGGER.info("DEBUG: " + proxyUri);
         HttpDelete httpdelete = new HttpDelete(proxyUri);
 
         copyAndModifyHeaders(httpdelete, request);
@@ -224,7 +227,7 @@ public class ClaudiaProxyServlet extends HttpServlet {
         msg.setHeaders(headers);
 
         String username = getUsername(request);
-        System.err.println("DEBUG: " + username);
+        LOGGER.info("DEBUG: " + username);
         msg.addHeader(STRATUSLAB_USER_HEADER, username);
 
     }
