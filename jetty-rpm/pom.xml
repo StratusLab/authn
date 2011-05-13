@@ -152,9 +152,6 @@
 	  <requires>
 	    <require>java</require>          
 	  </requires>
-          <conflicts>
-              <conflict>jetty</conflict>
-          </conflicts>
 	  <mappings>
 
 	    <mapping>
