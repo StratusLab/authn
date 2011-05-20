@@ -186,7 +186,7 @@
 		<source>
 		  <location>src/main/scripts</location>
 		  <includes>
-		    <include>jetty</include>
+		    <include>authn-proxy</include>
 		  </includes>
 		</source>
 	      </sources>

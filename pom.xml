@@ -22,6 +22,7 @@ grid certificates, and VOMS proxies.
     <module>proxy</module>
     <module>client</module>
     <module>login-module</module>
+    <module>claudia-proxy</module>
   </modules>
 
   <profiles>
@@ -39,8 +40,11 @@ grid certificates, and VOMS proxies.
   </profiles>
 
   <properties>
-    <jetty.version>7.2.2.v20101205</jetty.version>
-    <package.version>${version}</package.version>
+    <jetty.version>7.4.0.v20110414</jetty.version>
+    <package.version>${project.version}</package.version>
+
+    <nexus.release.repository.name>releases</nexus.release.repository.name>
+    <nexus.snapshot.repository.name>snapshots</nexus.snapshot.repository.name>
   </properties>
 
   <licenses>
@@ -93,16 +97,16 @@ grid certificates, and VOMS proxies.
     <repository>
       <id>stratuslab.releases</id>
       <name>Releases</name>
-      <url>http://repo.stratuslab.eu:8081/content/repositories/releases/</url>
+      <url>http://repo.stratuslab.eu:8081/content/repositories/${nexus.release.repository.name}</url>
     </repository>
     <snapshotRepository>
       <id>stratuslab.snapshots</id>
       <name>Snapshots</name>
-      <url>http://repo.stratuslab.eu:8081/content/repositories/snapshots/</url>
+      <url>http://repo.stratuslab.eu:8081/content/repositories/${nexus.snapshot.repository.name}</url>
     </snapshotRepository>
     <site>
       <id>hudson.webserver</id>
-      <url>scp://hudson.stratuslab.eu/var/www/authn</url>
+      <url>scp://hudson.stratuslab.eu/var/www/one</url>
     </site>
   </distributionManagement>
 
@@ -154,21 +158,47 @@ grid certificates, and VOMS proxies.
 	<version>${jetty.version}</version>
       </dependency>
 
+      <dependency>  
+        <groupId>org.restlet.jee</groupId>  
+        <artifactId>org.restlet</artifactId>  
+        <version>2.0.4</version>  
+      </dependency>  
+      <dependency>  
+        <groupId>org.restlet.jee</groupId>  
+        <artifactId>org.restlet.ext.xml</artifactId>  
+        <version>2.0.4</version>  
+      </dependency>
+      <dependency>
+        <groupId>org.restlet.jee</groupId>
+        <artifactId>org.restlet.ext.servlet</artifactId>
+        <version>2.0.4</version>
+      </dependency>
+      <dependency>
+        <groupId>org.restlet.jee</groupId>
+        <artifactId>org.restlet.ext.freemarker</artifactId>
+        <version>2.0.4</version>
+      </dependency>
+      <dependency>
+        <groupId>org.restlet.jee</groupId>
+        <artifactId>org.restlet.ext.fileupload</artifactId>
+        <version>2.0.4</version>
+      </dependency>
+
       <!-- Define dependencies for rpm packaging of code. -->
       <dependency>
         <groupId>eu.stratuslab.authn</groupId>
         <artifactId>authn-ssl</artifactId>
-        <version>${version}</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>eu.stratuslab.authn</groupId>
         <artifactId>authn-login-module</artifactId>
-        <version>${version}</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>eu.stratuslab.authn</groupId>
         <artifactId>authn-proxy</artifactId>
-        <version>${version}</version>
+        <version>${project.version}</version>
       </dependency>
 
     </dependencies>
@@ -211,7 +241,7 @@ grid certificates, and VOMS proxies.
 	<plugin>
 	  <groupId>org.apache.maven.plugins</groupId>
 	  <artifactId>maven-dependency-plugin</artifactId>
-	  <version>2.1</version>
+	  <version>2.2</version>
 	</plugin>
 	<plugin>
 	  <groupId>org.apache.maven.plugins</groupId>
@@ -231,7 +261,7 @@ grid certificates, and VOMS proxies.
 	<plugin>
 	  <groupId>org.apache.maven.plugins</groupId>
 	  <artifactId>maven-resources-plugin</artifactId>
-	  <version>2.4.3</version>
+	  <version>2.5</version>
 	  <configuration>
 	    <encoding>UTF-8</encoding>
 	  </configuration>
@@ -244,7 +274,7 @@ grid certificates, and VOMS proxies.
 	<plugin>
 	  <groupId>org.apache.maven.plugins</groupId>
 	  <artifactId>maven-surefire-plugin</artifactId>
-	  <version>2.7.2</version>
+	  <version>2.8.1</version>
 	</plugin>
 	<plugin>
 	  <groupId>org.apache.maven.plugins</groupId>
@@ -267,7 +297,7 @@ grid certificates, and VOMS proxies.
 	<plugin>
 	  <groupId>org.apache.maven.plugins</groupId>
 	  <artifactId>maven-assembly-plugin</artifactId>
-	  <version>2.2</version>
+	  <version>2.2.1</version>
 	</plugin>
 
 	<plugin>
@@ -285,7 +315,7 @@ grid certificates, and VOMS proxies.
 	<plugin>
 	  <groupId>org.codehaus.mojo</groupId>
 	  <artifactId>findbugs-maven-plugin</artifactId>
-	  <version>2.3.1</version>
+	  <version>2.3.2</version>
 	</plugin>
 
 	<plugin>

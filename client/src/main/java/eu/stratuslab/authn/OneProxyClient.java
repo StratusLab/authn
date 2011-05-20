@@ -70,9 +70,13 @@ public class OneProxyClient {
             Object result = client.execute("one.vmpool.info", params);
             Object[] values = (Object[]) result;
             int i = 0;
+
+            StringBuilder sb = new StringBuilder();
             for (Object o : values) {
-                System.err.println(i++);
-                System.err.println(o.toString());
+                sb.append(i++);
+                sb.append("\n");
+                sb.append(o.toString());
+                sb.append("\n");
             }
         } catch (XmlRpcException e) {
             throw new RuntimeException(e.getMessage());
