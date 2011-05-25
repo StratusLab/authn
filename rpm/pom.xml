@@ -16,6 +16,7 @@
 
   <!-- NOTE: This project MUST have same version as proxy module. -->
   <properties>
+    <configuration.dir>/etc/stratuslab/one-proxy</configuration.dir>
     <installation.dir>/opt/stratuslab/one-proxy</installation.dir>
  
     <authn-proxy-war>authn-proxy-${project.version}.war</authn-proxy-war>
@@ -32,6 +33,7 @@
 	<artifactId>maven-resources-plugin</artifactId>
 
 	<executions>
+
 	  <execution>
 	    <id>filter-jetty-configs</id>
 	    <goals>
@@ -40,9 +42,9 @@
 	    <phase>process-resources</phase>
 	    <configuration>
 	      <outputDirectory>${basedir}/target/jetty-config</outputDirectory>
-	      <nonFilteredFileExtensions>
-		<nonFilteredFileExtension>jks</nonFilteredFileExtension>
-	      </nonFilteredFileExtensions>
+              <nonFilteredFileExtensions>
+                <nonFilteredFileExtension>jks</nonFilteredFileExtension>
+              </nonFilteredFileExtensions>
 	      <resources>
 		<resource>
 		  <directory>${basedir}/src/main/jetty-config</directory>
@@ -51,6 +53,27 @@
 	      </resources>
 	    </configuration>
 	  </execution>
+
+	  <execution>
+	    <id>filter-service-configs</id>
+	    <goals>
+	      <goal>copy-resources</goal>
+	    </goals>
+	    <phase>process-resources</phase>
+	    <configuration>
+	      <outputDirectory>${basedir}/target/service-config</outputDirectory>
+              <nonFilteredFileExtensions>
+                <nonFilteredFileExtension>jks</nonFilteredFileExtension>
+              </nonFilteredFileExtensions>
+	      <resources>
+		<resource>
+		  <directory>${basedir}/src/main/service-config</directory>
+		  <filtering>true</filtering>
+		</resource>
+	      </resources>
+	    </configuration>
+	  </execution>
+
 	</executions>
       </plugin>
 

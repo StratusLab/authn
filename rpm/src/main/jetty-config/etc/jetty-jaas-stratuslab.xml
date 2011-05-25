@@ -7,7 +7,7 @@
          Both password and certificate configurations are in the file. -->
     <Call class="java.lang.System" name="setProperty">
       <Arg>java.security.auth.login.config</Arg>
-      <Arg><SystemProperty name="jetty.home" default="." />/etc/login/login.conf</Arg>
+      <Arg>${configuration.dir}/one-proxy/login.conf</Arg>
     </Call>
 
     <!-- Realm for checking username/password pairs. -->
