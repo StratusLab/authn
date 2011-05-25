@@ -16,6 +16,8 @@
 
   <!-- NOTE: This project MUST have same version as proxy module. -->
   <properties>
+    <installation.dir>/opt/stratuslab/one-proxy</installation.dir>
+ 
     <authn-proxy-war>authn-proxy-${project.version}.war</authn-proxy-war>
     <maven.build.timestamp.format>yyyyMMdd.HHmmss</maven.build.timestamp.format>
     <RELEASE>0.${maven.build.timestamp}</RELEASE>
@@ -155,7 +157,7 @@
 	  <mappings>
 
 	    <mapping>
-	      <directory>/opt/jetty-7/</directory>
+	      <directory>${installation.dir}</directory>
 	      <filemode>644</filemode>
 	      <username>root</username>
 	      <groupname>root</groupname>
@@ -193,7 +195,7 @@
 	    </mapping>
 
 	    <mapping>
-	      <directory>/opt/jetty-7/etc</directory>
+	      <directory>${installation.dir}/etc</directory>
 	      <filemode>755</filemode>
 	      <username>root</username>
 	      <groupname>root</groupname>
@@ -209,7 +211,7 @@
 	    </mapping>
 
 	    <mapping>
-	      <directory>/opt/jetty-7/lib/ext</directory>
+	      <directory>${installation.dir}/lib/ext</directory>
 	      <filemode>644</filemode>
 	      <username>root</username>
 	      <groupname>root</groupname>
@@ -225,7 +227,7 @@
 	    </mapping>
 
 	    <mapping>
-	      <directory>/opt/jetty-7/stratuslab-webapps</directory>
+	      <directory>${installation.dir}/stratuslab-webapps</directory>
 	      <filemode>644</filemode>
 	      <username>root</username>
 	      <groupname>root</groupname>
@@ -241,7 +243,7 @@
 	    </mapping>
 
 	    <mapping>
-	      <directory>/opt/jetty-7/</directory>
+	      <directory>${installation.dir}</directory>
 	      <filemode>644</filemode>
 	      <username>root</username>
 	      <groupname>root</groupname>
@@ -261,7 +263,7 @@
 	    </mapping>
 
 	    <mapping>
-	      <directory>/opt/jetty-7/</directory>
+	      <directory>${installation.dir}</directory>
 	      <filemode>644</filemode>
 	      <username>root</username>
 	      <groupname>root</groupname>

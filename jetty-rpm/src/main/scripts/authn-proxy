@@ -179,10 +179,10 @@ fi
 ##################################################
 if [ -z "$JETTY_HOME" ] ; then
   STANDARD_LOCATIONS=(
-        "/opt"
+        "/opt/stratuslab"
         )
   JETTY_DIR_NAMES=(
-        "jetty-7"
+        "one-proxy"
         )
         
   for L in "${STANDARD_LOCATIONS[@]}"
