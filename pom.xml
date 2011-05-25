@@ -34,7 +34,7 @@ grid certificates, and VOMS proxies.
         </file>
       </activation>
       <modules>
-        <module>jetty-rpm</module>
+        <module>rpm</module>
       </modules>
     </profile>
   </profiles>
