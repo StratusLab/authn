@@ -19,7 +19,7 @@ grid certificates, and VOMS proxies.
 
   <modules>
     <module>ssl</module>
-    <module>proxy</module>
+    <module>one-proxy</module>
     <module>client</module>
     <module>login-module</module>
     <module>claudia-proxy</module>
