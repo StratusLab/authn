@@ -2,9 +2,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>eu.stratuslab.authn</groupId>
-  <artifactId>stratuslab-cloud-proxy-rpm</artifactId>
+  <artifactId>authn-one-proxy-rpm</artifactId>
   <version>0.0.13-SNAPSHOT</version>
-  <name>StratusLab Cloud Proxy (Jetty) Packaging</name>
+  <name>StratusLab OpenNebula Proxy (RPM)</name>
 
   <packaging>rpm</packaging>
 
@@ -19,7 +19,7 @@
     <configuration.dir>/etc/stratuslab/one-proxy</configuration.dir>
     <installation.dir>/opt/stratuslab/one-proxy</installation.dir>
  
-    <authn-proxy-war>authn-proxy-${project.version}.war</authn-proxy-war>
+    <authn-proxy-war>authn-proxy-war-${project.version}.war</authn-proxy-war>
     <maven.build.timestamp.format>yyyyMMdd.HHmmss</maven.build.timestamp.format>
     <RELEASE>0.${maven.build.timestamp}</RELEASE>
   </properties>
@@ -146,7 +146,7 @@
 	      <artifactItems>
 		<artifactItem>
 		  <groupId>eu.stratuslab.authn</groupId>
-		  <artifactId>authn-proxy</artifactId>
+		  <artifactId>authn-proxy-war</artifactId>
 		  <type>war</type>
 		</artifactItem>
 	      </artifactItems>
@@ -163,8 +163,8 @@
 	<extensions>true</extensions>
 	<configuration>
 	  <release>${RELEASE}</release>
-	  <summary>StratusLab Cloud Proxy (Jetty) Package</summary>
-	  <name>stratuslab-cloud-proxy</name>
+	  <summary>StratusLab OpenNebula Proxy</summary>
+	  <name>stratuslab-one-proxy</name>
 	  <group>System</group>
 	  <vendor>StratusLab</vendor>
 	  <packager>StratusLab</packager>

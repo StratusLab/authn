@@ -2,9 +2,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>eu.stratuslab.authn</groupId>
-  <artifactId>authn-client</artifactId>
+  <artifactId>authn-one-proxy-client</artifactId>
   <version>0.0.13-SNAPSHOT</version>
-  <name>StratusLab Proxy Client</name>
+  <name>StratusLab OpenNebula Proxy Client (JAR)</name>
 
   <packaging>jar</packaging>
 

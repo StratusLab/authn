@@ -4,7 +4,7 @@
   <groupId>eu.stratuslab.authn</groupId>
   <artifactId>authn-ssl</artifactId>
   <version>0.0.13-SNAPSHOT</version>
-  <name>StratusLab SSL Utilities for Grid Certificates</name>
+  <name>StratusLab SSL Utilities for Grid Certificates (JAR)</name>
 
   <packaging>jar</packaging>
 
