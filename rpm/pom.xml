@@ -146,7 +146,7 @@
 	      <artifactItems>
 		<artifactItem>
 		  <groupId>eu.stratuslab.authn</groupId>
-		  <artifactId>authn-proxy-war</artifactId>
+		  <artifactId>authn-one-proxy-war</artifactId>
 		  <type>war</type>
 		</artifactItem>
 	      </artifactItems>
