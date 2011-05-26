@@ -197,7 +197,7 @@ grid certificates, and VOMS proxies.
       </dependency>
       <dependency>
         <groupId>eu.stratuslab.authn</groupId>
-        <artifactId>authn-proxy</artifactId>
+        <artifactId>authn-one-proxy-war</artifactId>
         <version>${project.version}</version>
       </dependency>
 
