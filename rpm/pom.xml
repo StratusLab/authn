@@ -277,16 +277,12 @@
 		  <includes>
 		    <include>**/*</include>
 		  </includes>
-		  <excludes>
-		    <exclude>etc/login/*</exclude>
-		    <exclude>etc/overrides/*</exclude>
-		  </excludes>
 		</source>
 	      </sources>
 	    </mapping>
 
 	    <mapping>
-	      <directory>${installation.dir}</directory>
+	      <directory>${configuration.dir}</directory>
 	      <filemode>644</filemode>
 	      <username>root</username>
 	      <groupname>root</groupname>
@@ -294,11 +290,7 @@
 	      <configuration>noreplace</configuration>
 	      <sources>
 		<source>
-		  <location>target/jetty-config</location>
-		  <includes>
-		    <include>etc/login/*</include>
-		    <include>etc/overrides/*</include>
-		  </includes>
+		  <location>target/service-config</location>
 		</source>
 	      </sources>
 	    </mapping>
