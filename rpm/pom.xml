@@ -211,7 +211,7 @@
 		<source>
 		  <location>src/main/scripts</location>
 		  <includes>
-		    <include>authn-proxy</include>
+		    <include>one-proxy</include>
 		  </includes>
 		</source>
 	      </sources>
