@@ -1,5 +1,5 @@
 <projectDescription>
-  <name>authn-proxy</name>
+  <name>authn-one-proxy-war</name>
   <comment>StratusLab uses a proxy service to allow for flexible authentication
 for the cloud.  It currently allows authentication based on simple
 username/password pairs, username/password pairs from an LDAP server,

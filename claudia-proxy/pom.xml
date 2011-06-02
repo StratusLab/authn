@@ -18,4 +18,18 @@
     <module>war</module>
   </modules>
 
+  <profiles>
+    <profile>
+      <id>build-claudia-proxy-rpm</id>
+      <activation>
+        <file>
+          <exists>/usr/bin/rpmbuild</exists>
+        </file>
+      </activation>
+      <modules>
+        <module>rpm</module>
+      </modules>
+    </profile>
+  </profiles>
+
 </project>

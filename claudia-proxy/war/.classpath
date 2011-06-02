@@ -4,20 +4,17 @@
   <classpathentry kind="var" path="M2_REPO/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar"/>
   <classpathentry kind="src" path="/authn-ssl"/>
   <classpathentry kind="var" path="M2_REPO/bouncycastle/bcprov-jdk16/140/bcprov-jdk16-140.jar"/>
-  <classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.1/commons-logging-1.1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/commons-codec/commons-codec/1.4/commons-codec-1.4.jar"/>
+  <classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/httpcomponents/httpclient/4.1.1/httpclient-4.1.1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/httpcomponents/httpcore/4.1/httpcore-4.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/jetty-continuation/7.4.0.v20110414/jetty-continuation-7.4.0.v20110414.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/jetty-http/7.4.0.v20110414/jetty-http-7.4.0.v20110414.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/jetty-io/7.4.0.v20110414/jetty-io-7.4.0.v20110414.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/jetty-server/7.4.0.v20110414/jetty-server-7.4.0.v20110414.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/jetty-util/7.4.0.v20110414/jetty-util-7.4.0.v20110414.jar"/>
-  <classpathentry kind="var" path="M2_REPO/junit/junit/4.8.2/junit-4.8.2.jar"/>
   <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.16/log4j-1.2.16.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/glite/security/trustmanager/2.5.5/trustmanager-2.5.5.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/glite/security/util-java/2.8.0/util-java-2.8.0.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/apache/ws/commons/util/ws-commons-util/1.0.2/ws-commons-util-1.0.2.jar"/>
-  <classpathentry kind="var" path="M2_REPO/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/apache/xmlrpc/xmlrpc-client/3.1.3/xmlrpc-client-3.1.3.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/apache/xmlrpc/xmlrpc-common/3.1.3/xmlrpc-common-3.1.3.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/apache/xmlrpc/xmlrpc-server/3.1.3/xmlrpc-server-3.1.3.jar"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 </classpath>
