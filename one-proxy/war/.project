@@ -1,0 +1,19 @@
+<projectDescription>
+  <name>authn-one-proxy-war</name>
+  <comment>StratusLab uses a proxy service to allow for flexible authentication
+for the cloud.  It currently allows authentication based on simple
+username/password pairs, username/password pairs from an LDAP server,
+grid certificates, and VOMS proxies. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
+  <projects>
+    <project>authn-login-module</project>
+    <project>authn-ssl</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+  </natures>
+</projectDescription>
