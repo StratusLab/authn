@@ -25,20 +25,6 @@ grid certificates, and VOMS proxies.
     <module>claudia-proxy</module>
   </modules>
 
-  <profiles>
-    <profile>
-      <id>build-rpm</id>
-      <activation>
-        <file>
-          <exists>/usr/bin/rpmbuild</exists>
-        </file>
-      </activation>
-      <modules>
-        <module>rpm</module>
-      </modules>
-    </profile>
-  </profiles>
-
   <properties>
     <jetty.version>7.4.0.v20110414</jetty.version>
     <package.version>${project.version}</package.version>
