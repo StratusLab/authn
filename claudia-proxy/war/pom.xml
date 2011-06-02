@@ -1,0 +1,169 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>eu.stratuslab.authn</groupId>
+  <artifactId>authn-claudia-proxy-war</artifactId>
+  <version>0.0.13-SNAPSHOT</version>
+  <name>StratusLab Claudia Proxy (WAR)</name>
+
+  <packaging>war</packaging>
+
+  <parent>
+    <groupId>eu.stratuslab.authn</groupId>
+    <artifactId>authn-claudia-proxy-pom</artifactId>
+    <version>0.0.13-SNAPSHOT</version>
+  </parent>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>4.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>bouncycastle</groupId>
+      <artifactId>bcprov-jdk16</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.glite.security</groupId>
+      <artifactId>trustmanager</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.glite.security</groupId>
+      <artifactId>util-java</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>eu.stratuslab.authn</groupId>
+      <artifactId>authn-ssl</artifactId>
+      <version>0.0.13-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+
+    <plugins>
+
+      <plugin>
+	<groupId>org.codehaus.mojo</groupId>
+	<artifactId>findbugs-maven-plugin</artifactId>
+	<executions>
+	<execution>
+	  <id>run-findbugs</id>
+	  <phase>process-classes</phase>
+	  <goals>
+	    <goal>check</goal>
+	  </goals>
+	</execution>
+	</executions>
+      </plugin>
+
+      <plugin>
+	<groupId>org.mortbay.jetty</groupId>
+	<artifactId>jetty-maven-plugin</artifactId>
+
+	<dependencies>
+	  <dependency>
+	    <groupId>bouncycastle</groupId>
+	    <artifactId>bcprov-jdk16</artifactId>
+	    <version>140</version>
+	  </dependency>
+	  <dependency>
+	    <groupId>log4j</groupId>
+	    <artifactId>log4j</artifactId>
+	    <version>1.2.8</version>
+	  </dependency>
+	  <dependency>
+	    <groupId>org.glite.security</groupId>
+	    <artifactId>util-java</artifactId>
+	    <version>2.8.0</version>
+	  </dependency>
+	  <dependency>
+	    <groupId>eu.stratuslab.authn</groupId>
+	    <artifactId>authn-ssl</artifactId>
+	    <version>0.0.13-SNAPSHOT</version>
+	  </dependency>
+	</dependencies>
+
+	<configuration>
+
+	  <systemProperties>
+	    <systemProperty>
+	      <name>sSLImplementation</name>
+	      <value>org.glite.security.trustmanager.tomcat.TMSSLImplementation</value>
+	    </systemProperty>
+	    <systemProperty>
+	      <name>sslCAFiles</name>
+	      <value>/etc/grid-security/certificates/*.0</value>
+	    </systemProperty>
+	    <systemProperty>
+	      <name>crlFiles</name>
+	      <value>/etc/grid-security/certificates*.r0</value>
+	    </systemProperty>
+	    <systemProperty>
+	      <name>sslCertFile</name>
+	      <value>/etc/grid-security/hostcert.pem</value>
+	    </systemProperty>
+	    <systemProperty>
+	      <name>sslKey</name>
+	      <value>/etc/grid-security/hostkey.pem</value>
+	    </systemProperty>
+	    <systemProperty>
+	      <name>log4jConfFile</name>
+	      <value>/var/log4j-trustmanager.properties</value>
+	    </systemProperty>
+
+	    <!-- This is for convenience so that the src/etc/login.conf file
+                 can stay unmodified when copied to $jetty.home/etc directory -->
+	    <systemProperty>
+	      <name>jetty.home</name>
+	      <value>${basedir}/src/main/config</value>
+	    </systemProperty>
+
+	    <!-- Mandatory. This system property tells JAAS where to find
+                 the login module configuration file -->
+	    <systemProperty>
+	      <name>java.security.auth.login.config</name>
+	      <value>${basedir}/src/main/config/etc/login.conf</value>
+	    </systemProperty>
+
+	  </systemProperties>
+
+	  <connectors>
+	    <connector implementation="eu.stratuslab.ssl.GridSslSelectChannelConnector">
+	      <SslTrustManagerFactoryAlgorithm>GridTM</SslTrustManagerFactoryAlgorithm>
+	      <port>8443</port>
+	      <maxIdleTime>30000</maxIdleTime>
+	      <keystore>${basedir}/src/main/certs/jetty.jks</keystore>
+	      <password>jettycred</password>
+	      <keyPassword>jettycred</keyPassword>
+	      <truststore>${basedir}/src/main/certs/jetty.jks</truststore>
+	      <trustPassword>jettycred</trustPassword>
+	      <!-- <needClientAuth>true</needClientAuth> -->
+	      <wantClientAuth>true</wantClientAuth>
+	    </connector>
+	  </connectors>
+
+	</configuration>
+      </plugin>
+
+      <plugin>
+	<groupId>org.codehaus.mojo</groupId>
+	<artifactId>exec-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>eu.stratuslab.client.Main</mainClass>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+</project>
