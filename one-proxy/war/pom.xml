@@ -45,11 +45,6 @@
       <version>0.0.13-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>eu.stratuslab.authn</groupId>
-      <artifactId>authn-login-module</artifactId>
-      <version>0.0.13-SNAPSHOT</version>
-    </dependency>
-    <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
       <scope>provided</scope>
@@ -78,6 +73,7 @@
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
           <packagingExcludes>WEB-INF/lib/servlet*.jar</packagingExcludes>
+          <packagingExcludes>WEB-INF/lib/junit*.jar</packagingExcludes>
         </configuration>
       </plugin>
       
