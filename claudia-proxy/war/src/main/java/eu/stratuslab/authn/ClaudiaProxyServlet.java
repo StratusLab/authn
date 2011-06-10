@@ -28,6 +28,8 @@ import java.security.Principal;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
 import java.util.logging.Logger;
 
 import javax.security.auth.x500.X500Principal;
@@ -53,7 +55,20 @@ import org.apache.http.message.BasicHeader;
 @SuppressWarnings("serial")
 public class ClaudiaProxyServlet extends HttpServlet {
 
-    protected static final Logger LOGGER = Logger.getLogger("org.restlet");
+    protected static final Logger LOGGER = Logger
+            .getLogger("eu.stratuslab.claudia.proxy");
+
+    static {
+
+        // Remove all existing handlers.
+        Handler[] handlers = LOGGER.getHandlers();
+        for (Handler handler : handlers) {
+            LOGGER.removeHandler(handler);
+        }
+
+        // Basic handler.
+        LOGGER.addHandler(new ConsoleHandler());
+    }
 
     // This should NOT have a trailing slash!
     private static final String DEFAULT_URL = "http://localhost:8182";
