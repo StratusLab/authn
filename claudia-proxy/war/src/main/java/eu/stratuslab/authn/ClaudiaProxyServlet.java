@@ -20,6 +20,7 @@
 
 package eu.stratuslab.authn;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -68,7 +69,7 @@ public class ClaudiaProxyServlet extends HttpServlet {
             HttpServletResponse response) {
 
         String proxyUri = getProxyUri(request);
-        LOGGER.info("DEBUG: " + proxyUri);
+        LOGGER.info("GET: " + proxyUri);
         HttpGet httpget = new HttpGet(proxyUri);
 
         copyAndModifyHeaders(httpget, request);
@@ -80,7 +81,7 @@ public class ClaudiaProxyServlet extends HttpServlet {
                 OutputStream os = response.getOutputStream();
                 copyAndClose(is, os);
             } catch (IOException e) {
-                // TODO: Log this.
+                LOGGER.severe(e.getMessage());
             }
         }
 
@@ -91,7 +92,7 @@ public class ClaudiaProxyServlet extends HttpServlet {
             HttpServletResponse response) {
 
         String proxyUri = getProxyUri(request);
-        LOGGER.info("DEBUG: " + proxyUri);
+        LOGGER.info("POST: " + proxyUri);
         HttpPost httppost = new HttpPost(proxyUri);
 
         copyAndModifyHeaders(httppost, request);
@@ -106,7 +107,7 @@ public class ClaudiaProxyServlet extends HttpServlet {
                 OutputStream os = response.getOutputStream();
                 copyAndClose(is, os);
             } catch (IOException e) {
-                // TODO: Log this.
+                LOGGER.severe(e.getMessage());
             }
         }
 
@@ -117,7 +118,7 @@ public class ClaudiaProxyServlet extends HttpServlet {
             HttpServletResponse response) {
 
         String proxyUri = getProxyUri(request);
-        LOGGER.info("DEBUG: " + proxyUri);
+        LOGGER.info("PUT: " + proxyUri);
         HttpPut httpput = new HttpPut(proxyUri);
 
         copyAndModifyHeaders(httpput, request);
@@ -132,7 +133,7 @@ public class ClaudiaProxyServlet extends HttpServlet {
                 OutputStream os = response.getOutputStream();
                 copyAndClose(is, os);
             } catch (IOException e) {
-                // TODO: Log this.
+                LOGGER.severe(e.getMessage());
             }
         }
 
@@ -143,7 +144,7 @@ public class ClaudiaProxyServlet extends HttpServlet {
             HttpServletResponse response) {
 
         String proxyUri = getProxyUri(request);
-        LOGGER.info("DEBUG: " + proxyUri);
+        LOGGER.info("DELETE: " + proxyUri);
         HttpDelete httpdelete = new HttpDelete(proxyUri);
 
         copyAndModifyHeaders(httpdelete, request);
@@ -181,7 +182,7 @@ public class ClaudiaProxyServlet extends HttpServlet {
             return new InputStreamEntity(is, length);
 
         } catch (IOException e) {
-            // TODO: Do something here.
+            LOGGER.severe(e.getMessage());
             return null;
         }
     }
@@ -199,7 +200,7 @@ public class ClaudiaProxyServlet extends HttpServlet {
             return clientResponse.getEntity();
 
         } catch (IOException e) {
-            // FIXME: Do something sensible.
+            LOGGER.severe(e.getMessage());
             return null;
         }
 
@@ -227,7 +228,9 @@ public class ClaudiaProxyServlet extends HttpServlet {
         msg.setHeaders(headers);
 
         String username = getUsername(request);
-        LOGGER.info("DEBUG: " + username);
+        String loginfo = "ADDING " + STRATUSLAB_USER_HEADER + " HEADER: "
+                + username;
+        LOGGER.info(loginfo);
         msg.addHeader(STRATUSLAB_USER_HEADER, username);
 
     }
@@ -242,16 +245,8 @@ public class ClaudiaProxyServlet extends HttpServlet {
         } catch (IOException e) {
             throw e;
         } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                // TODO: Log this.
-            }
-            try {
-                os.close();
-            } catch (IOException e) {
-                // TODO: Log this.
-            }
+            closeReliably(is);
+            closeReliably(os);
         }
 
     }
@@ -286,6 +281,14 @@ public class ClaudiaProxyServlet extends HttpServlet {
 
         return "";
 
+    }
+
+    private void closeReliably(Closeable closeable) {
+        try {
+            closeable.close();
+        } catch (IOException e) {
+            LOGGER.warning(e.getMessage());
+        }
     }
 
     private static String stripCNProxy(String username) {
