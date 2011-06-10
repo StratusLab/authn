@@ -5,7 +5,6 @@ for the cloud.  It currently allows authentication based on simple
 username/password pairs, username/password pairs from an LDAP server,
 grid certificates, and VOMS proxies. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
   <projects>
-    <project>authn-login-module</project>
     <project>authn-ssl</project>
   </projects>
   <buildSpec>
