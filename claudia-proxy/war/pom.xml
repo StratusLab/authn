@@ -52,7 +52,6 @@
 
     <plugins>
 
-<!--
       <plugin>
 	<groupId>org.codehaus.mojo</groupId>
 	<artifactId>findbugs-maven-plugin</artifactId>
@@ -66,7 +65,6 @@
 	</execution>
 	</executions>
       </plugin>
--->
 
       <plugin>
 	<groupId>org.mortbay.jetty</groupId>
@@ -101,6 +99,10 @@
 	    <systemProperty>
 	      <name>sSLImplementation</name>
 	      <value>org.glite.security.trustmanager.tomcat.TMSSLImplementation</value>
+	    </systemProperty>
+	    <systemProperty>
+	      <name>javax.net.debug</name>
+	      <value>SSL</value>
 	    </systemProperty>
 	    <systemProperty>
 	      <name>sslCAFiles</name>

@@ -87,7 +87,6 @@ public class ClaudiaProxyServlet extends HttpServlet {
 
         String proxyUri = getProxyUri(request);
         LOGGER.info("GET: " + proxyUri);
-        System.err.println("GET: " + proxyUri);
         HttpGet httpget = new HttpGet(proxyUri);
 
         copyAndModifyHeaders(httpget, request);
@@ -100,7 +99,6 @@ public class ClaudiaProxyServlet extends HttpServlet {
                 copyAndClose(is, os);
             } catch (IOException e) {
                 LOGGER.severe(e.getMessage());
-                System.err.println(e.getMessage());
             }
         }
 
@@ -112,7 +110,6 @@ public class ClaudiaProxyServlet extends HttpServlet {
 
         String proxyUri = getProxyUri(request);
         LOGGER.info("POST: " + proxyUri);
-        System.err.println("POST: " + proxyUri);
         HttpPost httppost = new HttpPost(proxyUri);
 
         copyAndModifyHeaders(httppost, request);
@@ -128,7 +125,6 @@ public class ClaudiaProxyServlet extends HttpServlet {
                 copyAndClose(is, os);
             } catch (IOException e) {
                 LOGGER.severe(e.getMessage());
-                System.err.println(e.getMessage());
             }
         }
 
@@ -140,7 +136,6 @@ public class ClaudiaProxyServlet extends HttpServlet {
 
         String proxyUri = getProxyUri(request);
         LOGGER.info("PUT: " + proxyUri);
-        System.err.println("PUT: " + proxyUri);
         HttpPut httpput = new HttpPut(proxyUri);
 
         copyAndModifyHeaders(httpput, request);
@@ -156,7 +151,6 @@ public class ClaudiaProxyServlet extends HttpServlet {
                 copyAndClose(is, os);
             } catch (IOException e) {
                 LOGGER.severe(e.getMessage());
-                System.err.println(e.getMessage());
             }
         }
 
@@ -168,7 +162,6 @@ public class ClaudiaProxyServlet extends HttpServlet {
 
         String proxyUri = getProxyUri(request);
         LOGGER.info("DELETE: " + proxyUri);
-        System.err.println("DELETE: " + proxyUri);
         HttpDelete httpdelete = new HttpDelete(proxyUri);
 
         copyAndModifyHeaders(httpdelete, request);
@@ -222,7 +215,6 @@ public class ClaudiaProxyServlet extends HttpServlet {
             response.setStatus(statusline.getStatusCode());
 
             LOGGER.info("POST status: " + statusline.getStatusCode());
-            System.err.println("POST status: " + statusline.getStatusCode());
 
             return clientResponse.getEntity();
 
@@ -258,7 +250,6 @@ public class ClaudiaProxyServlet extends HttpServlet {
         String loginfo = "ADDING " + STRATUSLAB_USER_HEADER + " HEADER: "
                 + username;
         LOGGER.info(loginfo);
-        System.err.println(loginfo);
         msg.addHeader(STRATUSLAB_USER_HEADER, username);
 
     }
@@ -316,7 +307,6 @@ public class ClaudiaProxyServlet extends HttpServlet {
             closeable.close();
         } catch (IOException e) {
             LOGGER.warning(e.getMessage());
-            System.err.println(e.getMessage());
         }
     }
 
