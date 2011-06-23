@@ -68,6 +68,8 @@ public class ClaudiaProxyServlet extends HttpServlet {
 
         // Basic handler.
         LOGGER.addHandler(new ConsoleHandler());
+        LOGGER.setUseParentHandlers(false);
+
     }
 
     // This should NOT have a trailing slash!
@@ -211,6 +213,8 @@ public class ClaudiaProxyServlet extends HttpServlet {
             HttpResponse clientResponse = httpclient.execute(msg);
             StatusLine statusline = clientResponse.getStatusLine();
             response.setStatus(statusline.getStatusCode());
+
+            LOGGER.info("POST status: " + statusline.getStatusCode());
 
             return clientResponse.getEntity();
 

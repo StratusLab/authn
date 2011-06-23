@@ -101,6 +101,10 @@
 	      <value>org.glite.security.trustmanager.tomcat.TMSSLImplementation</value>
 	    </systemProperty>
 	    <systemProperty>
+	      <name>javax.net.debug</name>
+	      <value>SSL</value>
+	    </systemProperty>
+	    <systemProperty>
 	      <name>sslCAFiles</name>
 	      <value>/etc/grid-security/certificates/*.0</value>
 	    </systemProperty>
