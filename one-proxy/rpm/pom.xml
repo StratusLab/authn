@@ -175,7 +175,7 @@
 	    Jetty packaging that includes StratusLab authentication proxy. 
 	  </description>
 	  <requires>
-	    <require>java</require>          
+	    <require>java-1.6.0-openjdk</require>          
 	  </requires>
 	  <mappings>
 
