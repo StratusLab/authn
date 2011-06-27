@@ -24,6 +24,17 @@
     <RELEASE>0.${maven.build.timestamp}</RELEASE>
   </properties>
 
+  <dependencies>
+    <dependency>
+      <groupId>eu.stratuslab.authn</groupId>
+      <artifactId>authn-ssl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>eu.stratuslab.authn</groupId>
+      <artifactId>authn-login-module</artifactId>
+    </dependency>
+  </dependencies>
+
   <build>
 
     <plugins>
