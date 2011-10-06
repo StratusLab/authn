@@ -1,0 +1,96 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>authn-config-rpm</artifactId>
+  <name>StratusLab Authn Configuration (RPM)</name>
+
+  <packaging>rpm</packaging>
+
+  <parent>
+    <groupId>eu.stratuslab.authn</groupId>
+    <artifactId>authn-config-pom</artifactId>
+    <version>1.0.2-SNAPSHOT</version>
+  </parent>
+
+  <properties>
+    <configuration.dir>/etc/stratuslab/authn</configuration.dir>
+ 
+    <maven.build.timestamp.format>yyyyMMdd.HHmmss</maven.build.timestamp.format>
+    <RELEASE>0.${maven.build.timestamp}</RELEASE>
+  </properties>
+
+  <build>
+
+    <plugins>
+
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-resources-plugin</artifactId>
+
+	<executions>
+
+	  <execution>
+	    <id>filter-service-configs</id>
+	    <goals>
+	      <goal>copy-resources</goal>
+	    </goals>
+	    <phase>process-resources</phase>
+	    <configuration>
+	      <outputDirectory>${basedir}/target/service-config</outputDirectory>
+              <nonFilteredFileExtensions>
+                <nonFilteredFileExtension>jks</nonFilteredFileExtension>
+              </nonFilteredFileExtensions>
+	      <resources>
+		<resource>
+		  <directory>${basedir}/src/main/service-config</directory>
+		  <filtering>true</filtering>
+		</resource>
+	      </resources>
+	    </configuration>
+	  </execution>
+
+	</executions>
+      </plugin>
+
+      <plugin>
+	<groupId>org.codehaus.mojo</groupId>
+	<artifactId>rpm-maven-plugin</artifactId>
+	<extensions>true</extensions>
+	<configuration>
+	  <release>${RELEASE}</release>
+	  <summary>StratusLab Authn Configuration</summary>
+	  <name>stratuslab-authn-config</name>
+	  <group>System</group>
+	  <vendor>StratusLab</vendor>
+	  <packager>StratusLab</packager>
+	  <copyright>Apache</copyright>
+	  <url>http://stratuslab.eu/</url>
+	  <needarch>noarch</needarch>
+	  <description>
+	    Common configuration for StratusLab authentication proxy.
+	  </description>
+	  <mappings>
+
+	    <mapping>
+	      <directory>${configuration.dir}</directory>
+	      <filemode>644</filemode>
+	      <username>root</username>
+	      <groupname>root</groupname>
+	      <directoryIncluded>false</directoryIncluded>
+	      <configuration>noreplace</configuration>
+	      <sources>
+		<source>
+		  <location>target/service-config</location>
+		</source>
+	      </sources>
+	    </mapping>
+
+	  </mappings>
+	</configuration>
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+</project>
