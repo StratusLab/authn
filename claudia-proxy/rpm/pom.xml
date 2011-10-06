@@ -184,6 +184,7 @@
 	    Jetty packaging that includes StratusLab claudia authentication proxy. 
 	  </description>
 	  <requires>
+            <require>stratuslab-authn-config</require>
 	    <require>java-1.6.0-openjdk</require>          
 	  </requires>
 	  <mappings>
