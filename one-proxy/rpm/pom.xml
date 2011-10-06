@@ -14,7 +14,7 @@
 
   <!-- NOTE: This project MUST have same version as proxy module. -->
   <properties>
-    <configuration.dir>/etc/stratuslab/one-proxy</configuration.dir>
+    <configuration.dir>/etc/stratuslab/authn</configuration.dir>
     <installation.dir>/opt/stratuslab/one-proxy</installation.dir>
  
     <authn-proxy-war>authn-one-proxy-war-${project.version}.war</authn-proxy-war>
