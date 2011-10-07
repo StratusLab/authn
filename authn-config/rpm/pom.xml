@@ -73,7 +73,7 @@
 
 	    <mapping>
 	      <directory>${configuration.dir}</directory>
-	      <filemode>644</filemode>
+	      <filemode>600</filemode>
 	      <username>root</username>
 	      <groupname>root</groupname>
 	      <directoryIncluded>false</directoryIncluded>
