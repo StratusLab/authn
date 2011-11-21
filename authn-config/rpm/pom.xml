@@ -79,9 +79,29 @@
 	      <directoryIncluded>false</directoryIncluded>
 	      <configuration>noreplace</configuration>
 	      <sources>
-		<source>
-		  <location>target/service-config</location>
-		</source>
+			<source>
+			  <location>target/service-config</location>
+	          <excludes>
+	            <exclude>login-pswd.properties</exclude>
+	          </excludes>
+			</source>
+	      </sources>
+	    </mapping>
+
+	    <mapping>
+	      <directory>${configuration.dir}</directory>
+	      <filemode>640</filemode>
+	      <username>root</username>
+	      <groupname>cloud</groupname>
+	      <directoryIncluded>false</directoryIncluded>
+	      <configuration>noreplace</configuration>
+	      <sources>
+			<source>
+			  <location>target/service-config</location>
+	          <includes>
+	            <include>login-pswd.properties</include>
+	          </includes>
+			</source>
 	      </sources>
 	    </mapping>
 
