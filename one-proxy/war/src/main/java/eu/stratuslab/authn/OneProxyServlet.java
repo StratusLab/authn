@@ -174,7 +174,7 @@ public class OneProxyServlet extends XmlRpcServlet {
 
             String user = "";
             String basicPswdHash = "";
-            String defaultPswdHash = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+            String defaultPswdHash = "dummy:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
             if (config instanceof OneProxyRequestConfigImpl) {
                 OneProxyRequestConfigImpl opconfig = (OneProxyRequestConfigImpl) config;
