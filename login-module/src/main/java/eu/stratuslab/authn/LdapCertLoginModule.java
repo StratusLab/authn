@@ -362,7 +362,7 @@ public class LdapCertLoginModule extends AbstractLoginModule {
      * @param sharedState
      * @param options
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     @Override
     public void initialize(Subject subject, CallbackHandler callbackHandler,
             Map sharedState, Map options) {
@@ -427,7 +427,7 @@ public class LdapCertLoginModule extends AbstractLoginModule {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     private String getOption(Map options, String key, String defaultValue) {
         Object value = options.get(key);
 
