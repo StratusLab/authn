@@ -20,9 +20,6 @@
 
 package eu.stratuslab.authn;
 
-import java.security.cert.X509Certificate;
-
-import javax.security.auth.x500.X500Principal;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.xmlrpc.common.XmlRpcHttpRequestConfigImpl;
@@ -30,7 +27,9 @@ import org.apache.xmlrpc.webserver.XmlRpcServletServer;
 
 public class OneProxyServletServer extends XmlRpcServletServer {
 
-    private static final String X509_ATTR_NAME = "javax.servlet.request.X509Certificate";
+    private static final String SHIBBOLETH_IDP_HEADER = "Shib-Identity-Provider";
+
+    private static final String SHIBBOLETH_USER_HEADER = "REMOTE_USER";
 
     @Override
     protected XmlRpcHttpRequestConfigImpl newConfig(HttpServletRequest pRequest) {
@@ -39,16 +38,14 @@ public class OneProxyServletServer extends XmlRpcServletServer {
 
     private String extractUserDn(HttpServletRequest request) {
 
-        Object c = request.getAttribute(X509_ATTR_NAME);
+        String idp = request.getHeader(SHIBBOLETH_IDP_HEADER);
+        String user = request.getHeader(SHIBBOLETH_USER_HEADER);
 
-        if (c instanceof X509Certificate[]) {
-            X509Certificate[] certs = (X509Certificate[]) c;
-            X500Principal principal = certs[0].getSubjectX500Principal();
-            return principal.getName();
+        if (idp != null && user != null) {
+            return String.format("%s/%s", idp, user);
         }
 
         return "";
-
     }
 
 }
