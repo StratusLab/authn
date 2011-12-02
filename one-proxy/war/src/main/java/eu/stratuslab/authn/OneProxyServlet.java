@@ -176,10 +176,12 @@ public class OneProxyServlet extends XmlRpcServlet {
             String basicPswdHash = "";
             String defaultPswdHash = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
+            LOGGER.info("BEFORE!");
             if (config instanceof OneProxyRequestConfigImpl) {
                 OneProxyRequestConfigImpl opconfig = (OneProxyRequestConfigImpl) config;
                 user = opconfig.getUserDn();
             }
+            LOGGER.info("AFTER with user: " + user);
 
             if ("".equals(user)
                     && config instanceof XmlRpcHttpRequestConfigImpl) {
@@ -187,6 +189,8 @@ public class OneProxyServlet extends XmlRpcServlet {
                 user = hconfig.getBasicUserName();
                 basicPswdHash = hashPassword(hconfig.getBasicPassword());
             }
+
+            LOGGER.info("AFTER 2 with user: " + user);
 
             if (!"".equals(user)) {
 
@@ -205,8 +209,7 @@ public class OneProxyServlet extends XmlRpcServlet {
                     return URLEncoder.encode(user, "UTF-8") + ":" + credentials;
 
                 } catch (UnsupportedEncodingException e) {
-                    LOGGER
-                            .severe("can't create UTF-8 encoding for URL encoding");
+                    LOGGER.severe("can't create UTF-8 encoding for URL encoding");
                     throw new XmlRpcException("internal server error");
                 }
             } else {

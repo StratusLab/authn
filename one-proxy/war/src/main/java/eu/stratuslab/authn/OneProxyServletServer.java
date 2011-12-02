@@ -20,6 +20,15 @@
 
 package eu.stratuslab.authn;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.xmlrpc.common.XmlRpcHttpRequestConfigImpl;
@@ -31,6 +40,20 @@ public class OneProxyServletServer extends XmlRpcServletServer {
 
     private static final String SHIBBOLETH_USER_HEADER = "REMOTE_USER";
 
+    private static final Logger LOGGER;
+    static {
+        LOGGER = Logger.getLogger(OneProxyServlet.class.getCanonicalName());
+        for (Handler h : LOGGER.getHandlers()) {
+            LOGGER.removeHandler(h);
+        }
+
+        Handler handler = new ConsoleHandler();
+        handler.setFormatter(new ShortMsgFormatter());
+        LOGGER.addHandler(handler);
+
+        LOGGER.setUseParentHandlers(false);
+    }
+
     @Override
     protected XmlRpcHttpRequestConfigImpl newConfig(HttpServletRequest pRequest) {
         return new OneProxyRequestConfigImpl(extractUserDn(pRequest));
@@ -41,11 +64,39 @@ public class OneProxyServletServer extends XmlRpcServletServer {
         String idp = request.getHeader(SHIBBOLETH_IDP_HEADER);
         String user = request.getHeader(SHIBBOLETH_USER_HEADER);
 
+        LOGGER.info("IDP");
+        LOGGER.info(idp);
+        LOGGER.info("user");
+        LOGGER.info(user);
+
         if (idp != null && user != null) {
-            return String.format("%s/%s", idp, user);
+            String uid = String.format("%s/%s", idp, user);
+            return uid;
         }
 
         return "";
+    }
+
+    // TODO: Pull into separate class.
+    private static class ShortMsgFormatter extends Formatter {
+
+        public String format(LogRecord record) {
+            StringBuilder sb = new StringBuilder();
+
+            Date date = new Date(record.getMillis());
+            DateFormat dateFormat = new SimpleDateFormat(
+                    "yyyy-MM-dd HH:mm:ss.SSS");
+            sb.append(dateFormat.format(date));
+            sb.append(":");
+
+            sb.append(record.getLevel().getName());
+            sb.append("::");
+
+            sb.append(record.getMessage());
+            sb.append("\n");
+
+            return sb.toString();
+        }
     }
 
 }
