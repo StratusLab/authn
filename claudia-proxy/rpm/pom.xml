@@ -9,7 +9,7 @@
   <parent>
     <groupId>eu.stratuslab.authn</groupId>
     <artifactId>authn-claudia-proxy-pom</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8-SNAPSHOT</version>
   </parent>
 
   <!-- NOTE: This project MUST have same version as proxy module. -->
