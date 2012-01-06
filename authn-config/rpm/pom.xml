@@ -76,7 +76,7 @@
               <filemode>600</filemode>
               <username>root</username>
               <groupname>root</groupname>
-              <directoryIncluded>true</directoryIncluded>
+              <directoryIncluded>false</directoryIncluded>
               <configuration>noreplace</configuration>
               <sources>
                 <source>
