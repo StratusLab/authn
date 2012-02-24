@@ -19,7 +19,7 @@
  
     <authn-proxy-war>authn-claudia-proxy-war-${project.version}.war</authn-proxy-war>
     <maven.build.timestamp.format>yyyyMMdd.HHmmss</maven.build.timestamp.format>
-    <RELEASE>0.${maven.build.timestamp}</RELEASE>
+    <RELEASE>${package.os}0.${maven.build.timestamp}</RELEASE>
   </properties>
 
   <dependencies>

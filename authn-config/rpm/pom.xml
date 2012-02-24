@@ -16,7 +16,7 @@
     <configuration.dir>/etc/stratuslab/authn</configuration.dir>
     
     <maven.build.timestamp.format>yyyyMMdd.HHmmss</maven.build.timestamp.format>
-    <RELEASE>0.${maven.build.timestamp}</RELEASE>
+    <RELEASE>${package.os}0.${maven.build.timestamp}</RELEASE>
   </properties>
 
   <build>
