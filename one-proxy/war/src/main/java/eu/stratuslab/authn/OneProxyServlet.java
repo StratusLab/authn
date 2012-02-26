@@ -25,6 +25,7 @@ import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -58,6 +59,8 @@ public class OneProxyServlet extends XmlRpcServlet {
 
     private static final String PROXY_URL_PARAM_NAME = "oneProxyUrl";
     private static final String DEFAULT_PROXY_URL = "http://localhost:2633/RPC2";
+
+    private static final Charset UTF8 = Charset.forName("UTF-8");
 
     private URL proxyUrl = null;
 
@@ -205,8 +208,7 @@ public class OneProxyServlet extends XmlRpcServlet {
                     return URLEncoder.encode(user, "UTF-8") + ":" + credentials;
 
                 } catch (UnsupportedEncodingException e) {
-                    LOGGER
-                            .severe("can't create UTF-8 encoding for URL encoding");
+                    LOGGER.severe("can't create UTF-8 encoding for URL encoding");
                     throw new XmlRpcException("internal server error");
                 }
             } else {
@@ -220,7 +222,8 @@ public class OneProxyServlet extends XmlRpcServlet {
 
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
-            md.update((password != null) ? password.getBytes() : new byte[] {});
+            md.update((password != null) ? password.getBytes(UTF8)
+                    : new byte[] {});
             BigInteger digest = new BigInteger(1, md.digest());
             return String.format("%040x", digest);
         } catch (NoSuchAlgorithmException e) {

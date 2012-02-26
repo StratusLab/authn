@@ -21,8 +21,11 @@
 package eu.stratuslab.authn;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -59,9 +62,10 @@ public class AuthnData {
 
         if (filename != null) {
 
-            FileReader reader = null;
+            Reader reader = null;
             try {
-                reader = new FileReader(filename.toString());
+                reader = new InputStreamReader(new FileInputStream(
+                        filename.toString()), Charset.defaultCharset());
                 BufferedReader br = new BufferedReader(reader);
 
                 processByLines(br);
