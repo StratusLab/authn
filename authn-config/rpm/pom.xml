@@ -55,9 +55,9 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>rpm-maven-plugin</artifactId>
-        <classifier>${package.os}</classifier>
         <extensions>true</extensions>
         <configuration>
+          <classifier>${package.os}</classifier>
           <release>${RELEASE}</release>
           <summary>StratusLab Authn Configuration</summary>
           <name>stratuslab-authn-config</name>
