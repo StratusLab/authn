@@ -4,7 +4,7 @@
   <artifactId>authn-config-rpm</artifactId>
   <name>StratusLab Authn Configuration (RPM)</name>
 
-  <packaging>rpm</packaging>
+  <packaging>pom</packaging>
 
   <parent>
     <groupId>eu.stratuslab.authn</groupId>
@@ -55,6 +55,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>rpm-maven-plugin</artifactId>
+        <classifier>${package.os}</classifier>
         <extensions>true</extensions>
         <configuration>
           <release>${RELEASE}</release>
@@ -108,6 +109,17 @@
 
           </mappings>
         </configuration>
+
+        <executions>
+          <execution>
+            <id>attach-rpm</id>
+            <phase>package</phase>
+            <goals>
+              <goal>attached-rpm</goal>
+            </goals>
+          </execution>
+        </executions>
+
       </plugin>
 
     </plugins>
