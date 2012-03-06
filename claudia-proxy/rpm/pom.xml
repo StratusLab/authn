@@ -130,10 +130,6 @@
 		  <artifactId>trustmanager</artifactId>
 		</artifactItem>
 		<artifactItem>
-		  <groupId>org.glite.security</groupId>
-		  <artifactId>util-java</artifactId>
-		</artifactItem>
-		<artifactItem>
 		  <groupId>eu.stratuslab.authn</groupId>
 		  <artifactId>authn-ssl</artifactId>
 		</artifactItem>

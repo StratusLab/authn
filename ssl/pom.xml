@@ -27,7 +27,7 @@
     </dependency>
     <dependency>
       <groupId>org.glite.security</groupId>
-      <artifactId>util-java</artifactId>
+      <artifactId>trustmanager</artifactId>
     </dependency>
   </dependencies>
 
