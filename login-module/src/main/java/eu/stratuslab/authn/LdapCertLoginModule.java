@@ -43,7 +43,7 @@ import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginException;
 
-import org.eclipse.jetty.http.security.Credential;
+import org.eclipse.jetty.util.security.Credential;
 import org.eclipse.jetty.plus.jaas.spi.AbstractLoginModule;
 import org.eclipse.jetty.plus.jaas.spi.UserInfo;
 import org.slf4j.Logger;

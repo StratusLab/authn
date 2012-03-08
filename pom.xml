@@ -27,7 +27,8 @@ grid certificates, and VOMS proxies.
   </modules>
 
   <properties>
-    <jetty.version>7.5.4.v20111024</jetty.version>
+    <jetty.version>7.6.1.v20120215</jetty.version>
+    <!-- <jetty.version>7.5.4.v20111024</jetty.version> -->
     <package.version>${project.version}</package.version>
 
     <package.os>fc14</package.os>
