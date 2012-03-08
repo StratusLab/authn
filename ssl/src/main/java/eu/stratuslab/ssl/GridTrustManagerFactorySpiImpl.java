@@ -26,111 +26,73 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchProviderException;
 import java.security.cert.CertificateException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 import javax.net.ssl.ManagerFactoryParameters;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactorySpi;
 
 import org.glite.security.trustmanager.OpensslTrustmanager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GridTrustManagerFactorySpiImpl extends TrustManagerFactorySpi {
 
-    private static AtomicReference<TrustManager> ref = new AtomicReference<TrustManager>();
+	private static AtomicReference<TrustManager> ref = new AtomicReference<TrustManager>();
 
-    private static final String CA_DIRECTORY = "/etc/grid-security/certificates";
+	private static final String CA_DIRECTORY = "/etc/grid-security/certificates";
 
-    private static final String TM_DEACTIVATED = "certificate authentication deactivated: ";
+	private static final String TM_DEACTIVATED = "certificate authentication deactivated: {}";
 
-    private static final Logger LOGGER;
-    static {
-        LOGGER = Logger.getLogger(GridTrustManagerFactorySpiImpl.class
-                .getCanonicalName());
-        for (Handler h : LOGGER.getHandlers()) {
-            LOGGER.removeHandler(h);
-        }
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(GridTrustManagerFactorySpiImpl.class.getCanonicalName());
 
-        Handler handler = new ConsoleHandler();
-        handler.setFormatter(new ShortMsgFormatter());
-        LOGGER.addHandler(handler);
+	@Override
+	protected TrustManager[] engineGetTrustManagers() {
+		return new TrustManager[] { ref.get() };
+	}
 
-        LOGGER.setUseParentHandlers(false);
-    }
+	@Override
+	protected void engineInit(KeyStore arg0) throws KeyStoreException {
+		initializeTrustManager();
+	}
 
-    @Override
-    protected TrustManager[] engineGetTrustManagers() {
-        return new TrustManager[] { ref.get() };
-    }
+	@Override
+	protected void engineInit(ManagerFactoryParameters arg0)
+			throws InvalidAlgorithmParameterException {
 
-    @Override
-    protected void engineInit(KeyStore arg0) throws KeyStoreException {
-        initializeTrustManager();
-    }
+		initializeTrustManager();
+	}
 
-    @Override
-    protected void engineInit(ManagerFactoryParameters arg0)
-            throws InvalidAlgorithmParameterException {
+	private void initializeTrustManager() {
+		if (ref.get() == null) {
+			ref.compareAndSet(null, createTrustManager());
+		}
+	}
 
-        initializeTrustManager();
-    }
+	private TrustManager createTrustManager() {
 
-    private void initializeTrustManager() {
-        if (ref.get() == null) {
-            ref.compareAndSet(null, createTrustManager());
-        }
-    }
+		try {
 
-    private TrustManager createTrustManager() {
+			// TODO: This needs to be updated to actually pass the expected
+			// properties in the last argument.
+			return new OpensslTrustmanager(CA_DIRECTORY, true, null);
 
-        try {
+		} catch (CertificateException e) {
+			return logErrorAndGetEmptyTrustManager(e.getMessage());
+		} catch (NoSuchProviderException e) {
+			return logErrorAndGetEmptyTrustManager(e.getMessage());
+		} catch (IOException e) {
+			return logErrorAndGetEmptyTrustManager(e.getMessage());
+		} catch (ParseException e) {
+			return logErrorAndGetEmptyTrustManager(e.getMessage());
+		}
+	}
 
-            return new OpensslTrustmanager(CA_DIRECTORY, true);
-
-        } catch (CertificateException e) {
-            return logErrorAndGetEmptyTrustManager(e.getMessage());
-        } catch (NoSuchProviderException e) {
-            return logErrorAndGetEmptyTrustManager(e.getMessage());
-        } catch (IOException e) {
-            return logErrorAndGetEmptyTrustManager(e.getMessage());
-        } catch (ParseException e) {
-            return logErrorAndGetEmptyTrustManager(e.getMessage());
-        }
-    }
-
-    private TrustManager logErrorAndGetEmptyTrustManager(String msg) {
-        LOGGER.severe(TM_DEACTIVATED + msg);
-        return new EmptyTrustManager();
-    }
-
-    // TODO: Pull into separate class.
-    private static class ShortMsgFormatter extends Formatter {
-
-        public String format(LogRecord record) {
-            StringBuilder sb = new StringBuilder();
-
-            Date date = new Date(record.getMillis());
-            DateFormat dateFormat = new SimpleDateFormat(
-                    "yyyy-MM-dd HH:mm:ss.SSS");
-            sb.append(dateFormat.format(date));
-            sb.append(":");
-
-            sb.append(record.getLevel().getName());
-            sb.append("::");
-
-            sb.append(record.getMessage());
-            sb.append("\n");
-
-            return sb.toString();
-        }
-    }
+	private TrustManager logErrorAndGetEmptyTrustManager(String msg) {
+		LOGGER.error(TM_DEACTIVATED, msg);
+		return new EmptyTrustManager();
+	}
 
 }

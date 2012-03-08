@@ -20,17 +20,9 @@
 
 package eu.stratuslab.authn;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
@@ -38,97 +30,66 @@ import javax.security.auth.callback.CallbackHandler;
 import org.eclipse.jetty.http.security.Credential;
 import org.eclipse.jetty.plus.jaas.spi.AbstractLoginModule;
 import org.eclipse.jetty.plus.jaas.spi.UserInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CertLoginModule extends AbstractLoginModule {
 
-    private static final AtomicReference<AuthnData> AUTHN_USERS_REF = new AtomicReference<AuthnData>();
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(CertLoginModule.class.getCanonicalName());
 
-    static {
-        AUTHN_USERS_REF.set(new AuthnData(null));
-    }
+	private static final AtomicReference<AuthnData> AUTHN_USERS_REF = new AtomicReference<AuthnData>();
 
-    final private static Logger LOGGER;
-    static {
-        LOGGER = Logger.getLogger(CertLoginModule.class.getCanonicalName());
-        for (Handler h : LOGGER.getHandlers()) {
-            LOGGER.removeHandler(h);
-        }
+	static {
+		AUTHN_USERS_REF.set(new AuthnData(null));
+	}
 
-        Handler handler = new ConsoleHandler();
-        handler.setFormatter(new ShortMsgFormatter());
-        LOGGER.addHandler(handler);
+	@Override
+	public UserInfo getUserInfo(String username) throws Exception {
 
-        LOGGER.setUseParentHandlers(false);
-    }
+		LOGGER.info("checking user: {}", username);
 
-    @Override
-    public UserInfo getUserInfo(String username) throws Exception {
+		String strippedUsername = stripCNProxy(username);
 
-        LOGGER.info("checking user: " + username);
+		AuthnData data = AUTHN_USERS_REF.get();
+		if (data.isValidUser(strippedUsername)) {
+			LOGGER.info("authorized user: {}", strippedUsername);
+			Credential credential = new ValidCredential();
+			List<String> roles = getUserRoles(strippedUsername);
 
-        String strippedUsername = stripCNProxy(username);
+			return new UserInfo(strippedUsername, credential, roles);
+		} else {
+			LOGGER.info("unauthorized user: {}", strippedUsername);
+			return null;
+		}
+	}
 
-        AuthnData data = AUTHN_USERS_REF.get();
-        if (data.isValidUser(strippedUsername)) {
-            LOGGER.info("authorized user: " + strippedUsername);
-            Credential credential = new ValidCredential();
-            List<String> roles = getUserRoles(strippedUsername);
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public void initialize(Subject subject, CallbackHandler callbackHandler,
+			Map sharedState, Map options) {
 
-            return new UserInfo(strippedUsername, credential, roles);
-        } else {
-            LOGGER.info("unauthorized user: " + strippedUsername);
-            return null;
-        }
-    }
+		super.initialize(subject, callbackHandler, sharedState, options);
 
-    @SuppressWarnings("rawtypes")
-    @Override
-    public void initialize(Subject subject, CallbackHandler callbackHandler,
-            Map sharedState, Map options) {
+		AUTHN_USERS_REF.set(new AuthnData(options.get("file")));
+	}
 
-        super.initialize(subject, callbackHandler, sharedState, options);
+	private List<String> getUserRoles(String username) {
+		AuthnData data = AUTHN_USERS_REF.get();
+		return data.groups(username);
+	}
 
-        AUTHN_USERS_REF.set(new AuthnData(options.get("file")));
-    }
+	public static String stripCNProxy(String username) {
+		return username.replaceFirst("^CN\\s*=\\s*proxy\\s*,\\s*", "");
+	}
 
-    private List<String> getUserRoles(String username) {
-        AuthnData data = AUTHN_USERS_REF.get();
-        return data.groups(username);
-    }
+	@SuppressWarnings("serial")
+	private static class ValidCredential extends Credential {
 
-    public static String stripCNProxy(String username) {
-        return username.replaceFirst("^CN\\s*=\\s*proxy\\s*,\\s*", "");
-    }
-
-    @SuppressWarnings("serial")
-    private static class ValidCredential extends Credential {
-
-        @Override
-        public boolean check(Object credentials) {
-            return true;
-        }
-    }
-
-    // TODO: pull into separate class
-    private static class ShortMsgFormatter extends Formatter {
-
-        public String format(LogRecord record) {
-            StringBuilder sb = new StringBuilder();
-
-            Date date = new Date(record.getMillis());
-            DateFormat dateFormat = new SimpleDateFormat(
-                    "yyyy-MM-dd HH:mm:ss.SSS");
-            sb.append(dateFormat.format(date));
-            sb.append(":");
-
-            sb.append(record.getLevel().getName());
-            sb.append("::");
-
-            sb.append(record.getMessage());
-            sb.append("\n");
-
-            return sb.toString();
-        }
-    }
+		@Override
+		public boolean check(Object credentials) {
+			return true;
+		}
+	}
 
 }

@@ -28,16 +28,8 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -53,206 +45,175 @@ import org.apache.xmlrpc.common.XmlRpcNotAuthorizedException;
 import org.apache.xmlrpc.server.XmlRpcHandlerMapping;
 import org.apache.xmlrpc.webserver.XmlRpcServlet;
 import org.apache.xmlrpc.webserver.XmlRpcServletServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 public class OneProxyServlet extends XmlRpcServlet {
 
-    private static final String PROXY_URL_PARAM_NAME = "oneProxyUrl";
-    private static final String DEFAULT_PROXY_URL = "http://localhost:2633/RPC2";
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(OneProxyServlet.class.getCanonicalName());
 
-    private static final Charset UTF8 = Charset.forName("UTF-8");
+	private static final String PROXY_URL_PARAM_NAME = "oneProxyUrl";
+	private static final String DEFAULT_PROXY_URL = "http://localhost:2633/RPC2";
 
-    private URL proxyUrl = null;
+	private static final Charset UTF8 = Charset.forName("UTF-8");
 
-    private static final Logger LOGGER;
-    static {
-        LOGGER = Logger.getLogger(OneProxyServlet.class.getCanonicalName());
-        for (Handler h : LOGGER.getHandlers()) {
-            LOGGER.removeHandler(h);
-        }
+	private URL proxyUrl = null;
 
-        Handler handler = new ConsoleHandler();
-        handler.setFormatter(new ShortMsgFormatter());
-        LOGGER.addHandler(handler);
+	@Override
+	public void init(ServletConfig pConfig) throws ServletException {
+		super.init(pConfig);
 
-        LOGGER.setUseParentHandlers(false);
-    }
+		proxyUrl = extractProxyUrl(pConfig);
+	}
 
-    @Override
-    public void init(ServletConfig pConfig) throws ServletException {
-        super.init(pConfig);
+	@Override
+	public XmlRpcHandlerMapping newXmlRpcHandlerMapping()
+			throws XmlRpcException {
 
-        proxyUrl = extractProxyUrl(pConfig);
-    }
+		return new ProxyHandlerMapping();
+	}
 
-    @Override
-    public XmlRpcHandlerMapping newXmlRpcHandlerMapping()
-            throws XmlRpcException {
+	@Override
+	public XmlRpcServletServer newXmlRpcServer(ServletConfig pConfig) {
 
-        return new ProxyHandlerMapping();
-    }
+		return new OneProxyServletServer();
+	}
 
-    @Override
-    public XmlRpcServletServer newXmlRpcServer(ServletConfig pConfig) {
+	private class ProxyHandlerMapping implements XmlRpcHandlerMapping {
 
-        return new OneProxyServletServer();
-    }
+		public XmlRpcHandler getHandler(String handlerName) {
+			return new ProxyHandler(proxyUrl);
+		}
+	}
 
-    private class ProxyHandlerMapping implements XmlRpcHandlerMapping {
+	private URL extractProxyUrl(ServletConfig pConfig) throws ServletException {
 
-        public XmlRpcHandler getHandler(String handlerName) {
-            return new ProxyHandler(proxyUrl);
-        }
-    }
+		String url = pConfig.getInitParameter(PROXY_URL_PARAM_NAME);
+		if (url == null) {
+			url = DEFAULT_PROXY_URL;
+		}
 
-    private URL extractProxyUrl(ServletConfig pConfig) throws ServletException {
+		try {
+			return new URL(url);
+		} catch (MalformedURLException e) {
+			throw new ServletException("Proxy URL is malformed: " + url);
+		}
+	}
 
-        String url = pConfig.getInitParameter(PROXY_URL_PARAM_NAME);
-        if (url == null) {
-            url = DEFAULT_PROXY_URL;
-        }
+	private static class ProxyHandler implements XmlRpcHandler {
 
-        try {
-            return new URL(url);
-        } catch (MalformedURLException e) {
-            throw new ServletException("Proxy URL is malformed: " + url);
-        }
-    }
+		private final URL proxyUrl;
 
-    private static class ProxyHandler implements XmlRpcHandler {
+		public ProxyHandler(URL proxyUrl) {
+			this.proxyUrl = proxyUrl;
+		}
 
-        private final URL proxyUrl;
+		public Object execute(XmlRpcRequest request) throws XmlRpcException {
 
-        public ProxyHandler(URL proxyUrl) {
-            this.proxyUrl = proxyUrl;
-        }
+			List<Object> params = prepareRequestParameters(request);
 
-        public Object execute(XmlRpcRequest request) throws XmlRpcException {
+			return executeProxyRequest(request.getMethodName(), params);
+		}
 
-            List<Object> params = prepareRequestParameters(request);
+		private Object executeProxyRequest(String methodName,
+				List<Object> params) throws XmlRpcException {
 
-            return executeProxyRequest(request.getMethodName(), params);
-        }
+			XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+			config.setServerURL(proxyUrl);
 
-        private Object executeProxyRequest(String methodName,
-                List<Object> params) throws XmlRpcException {
+			XmlRpcClient client = new XmlRpcClient();
+			client.setConfig(config);
 
-            XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-            config.setServerURL(proxyUrl);
+			return client.execute(methodName, params);
+		}
 
-            XmlRpcClient client = new XmlRpcClient();
-            client.setConfig(config);
+		private List<Object> prepareRequestParameters(XmlRpcRequest request)
+				throws XmlRpcException {
 
-            return client.execute(methodName, params);
-        }
+			List<Object> params = new ArrayList<Object>();
 
-        private List<Object> prepareRequestParameters(XmlRpcRequest request)
-                throws XmlRpcException {
+			// Replace the authentication information.
+			String authInfo = extractAuthnInfo(request);
+			params.add(authInfo);
 
-            List<Object> params = new ArrayList<Object>();
+			// Log this request.
+			LOGGER.info("forwarding request from {}", authInfo);
 
-            // Replace the authentication information.
-            String authInfo = extractAuthnInfo(request);
-            params.add(authInfo);
+			// Copy all remaining parameters.
+			for (int i = 1; i < request.getParameterCount(); i++) {
+				params.add(request.getParameter(i));
+			}
 
-            // Log this request.
-            LOGGER.info("forwarding request from " + authInfo);
+			return params;
+		}
 
-            // Copy all remaining parameters.
-            for (int i = 1; i < request.getParameterCount(); i++) {
-                params.add(request.getParameter(i));
-            }
+		private static String stripCNProxy(String username) {
+			return username.replaceFirst("^CN\\s*=\\s*proxy\\s*,\\s*", "");
+		}
 
-            return params;
-        }
+		private String extractAuthnInfo(XmlRpcRequest request)
+				throws XmlRpcException {
 
-        private static String stripCNProxy(String username) {
-            return username.replaceFirst("^CN\\s*=\\s*proxy\\s*,\\s*", "");
-        }
+			XmlRpcRequestConfig config = request.getConfig();
 
-        private String extractAuthnInfo(XmlRpcRequest request)
-                throws XmlRpcException {
+			String user = "";
+			String basicPswdHash = "";
+			String defaultPswdHash = "dummy:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
-            XmlRpcRequestConfig config = request.getConfig();
+			if (config instanceof OneProxyRequestConfigImpl) {
+				OneProxyRequestConfigImpl opconfig = (OneProxyRequestConfigImpl) config;
+				user = opconfig.getUserDn();
+			}
 
-            String user = "";
-            String basicPswdHash = "";
-            String defaultPswdHash = "dummy:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+			if ("".equals(user)
+					&& config instanceof XmlRpcHttpRequestConfigImpl) {
+				XmlRpcHttpRequestConfigImpl hconfig = (XmlRpcHttpRequestConfigImpl) config;
+				user = hconfig.getBasicUserName();
+				basicPswdHash = hashPassword(hconfig.getBasicPassword());
+			}
 
-            if (config instanceof OneProxyRequestConfigImpl) {
-                OneProxyRequestConfigImpl opconfig = (OneProxyRequestConfigImpl) config;
-                user = opconfig.getUserDn();
-            }
+			if (!"".equals(user)) {
 
-            if ("".equals(user)
-                    && config instanceof XmlRpcHttpRequestConfigImpl) {
-                XmlRpcHttpRequestConfigImpl hconfig = (XmlRpcHttpRequestConfigImpl) config;
-                user = hconfig.getBasicUserName();
-                basicPswdHash = hashPassword(hconfig.getBasicPassword());
-            }
+				// Get rid of the proxy part of the DN.
+				user = stripCNProxy(user);
 
-            if (!"".equals(user)) {
+				try {
 
-                // Get rid of the proxy part of the DN.
-                user = stripCNProxy(user);
+					// Pass the hash of the password through if the username is
+					// 'oneadmin'.
+					String credentials = ("oneadmin".equals(user)) ? basicPswdHash
+							: defaultPswdHash;
 
-                try {
+					// All of the usernames must be URL encoded to remove spaces
+					// and other special characters.
+					return URLEncoder.encode(user, "UTF-8") + ":" + credentials;
 
-                    // Pass the hash of the password through if the username is
-                    // 'oneadmin'.
-                    String credentials = ("oneadmin".equals(user)) ? basicPswdHash
-                            : defaultPswdHash;
+				} catch (UnsupportedEncodingException e) {
+					LOGGER.error("can't create UTF-8 encoding for URL encoding");
+					throw new XmlRpcException("internal server error");
+				}
+			} else {
+				throw new XmlRpcNotAuthorizedException(
+						"certificate DN or username not provided");
+			}
+		}
+	}
 
-                    // All of the usernames must be URL encoded to remove spaces
-                    // and other special characters.
-                    return URLEncoder.encode(user, "UTF-8") + ":" + credentials;
+	private static String hashPassword(String password) throws XmlRpcException {
 
-                } catch (UnsupportedEncodingException e) {
-                    LOGGER.severe("can't create UTF-8 encoding for URL encoding");
-                    throw new XmlRpcException("internal server error");
-                }
-            } else {
-                throw new XmlRpcNotAuthorizedException(
-                        "certificate DN or username not provided");
-            }
-        }
-    }
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-1");
+			md.update((password != null) ? password.getBytes(UTF8)
+					: new byte[] {});
+			BigInteger digest = new BigInteger(1, md.digest());
+			return String.format("%040x", digest);
+		} catch (NoSuchAlgorithmException e) {
+			LOGGER.error("can't create UTF-8 encoding for URL encoding");
+			throw new XmlRpcException("internal server error");
+		}
 
-    private static String hashPassword(String password) throws XmlRpcException {
-
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-1");
-            md.update((password != null) ? password.getBytes(UTF8)
-                    : new byte[] {});
-            BigInteger digest = new BigInteger(1, md.digest());
-            return String.format("%040x", digest);
-        } catch (NoSuchAlgorithmException e) {
-            LOGGER.severe("can't create UTF-8 encoding for URL encoding");
-            throw new XmlRpcException("internal server error");
-        }
-
-    }
-
-    // TODO: Pull into separate class.
-    private static class ShortMsgFormatter extends Formatter {
-
-        public String format(LogRecord record) {
-            StringBuilder sb = new StringBuilder();
-
-            Date date = new Date(record.getMillis());
-            DateFormat dateFormat = new SimpleDateFormat(
-                    "yyyy-MM-dd HH:mm:ss.SSS");
-            sb.append(dateFormat.format(date));
-            sb.append(":");
-
-            sb.append(record.getLevel().getName());
-            sb.append("::");
-
-            sb.append(record.getMessage());
-            sb.append("\n");
-
-            return sb.toString();
-        }
-    }
+	}
 
 }
