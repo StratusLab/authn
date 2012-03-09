@@ -30,13 +30,12 @@ public class GridSslContextFactory extends SslContextFactory {
 	public GridSslContextFactory() {
 		super();
 
-		ensureSecurityProvidersExist();
-
 		setTrustManagerFactoryAlgorithm(GridTrustManagerProvider.PROVIDER_NAME);
 		setWantClientAuth(true);
 	}
 
-	public void ensureSecurityProvidersExist() {
+	@Override
+	public void doStart() throws Exception {
 
 		if (Security.getProvider(GridTrustManagerProvider.PROVIDER_NAME) == null) {
 			Security.addProvider(new GridTrustManagerProvider());
@@ -45,6 +44,8 @@ public class GridSslContextFactory extends SslContextFactory {
 		if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
 			Security.addProvider(new BouncyCastleProvider());
 		}
+
+		super.doStart();
 
 	}
 

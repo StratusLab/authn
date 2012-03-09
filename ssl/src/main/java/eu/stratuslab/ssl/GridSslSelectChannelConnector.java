@@ -39,7 +39,6 @@ public class GridSslSelectChannelConnector extends SslSelectChannelConnector {
 	@Override
 	public void doStart() throws Exception {
 
-		// Add the BouncyCastle (crypto algorithms) and TrustManager providers.
 		if (Security.getProvider(GridTrustManagerProvider.PROVIDER_NAME) == null) {
 			Security.addProvider(new GridTrustManagerProvider());
 		}
