@@ -30,10 +30,6 @@
       <artifactId>slf4j-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>eu.emi.security</groupId>
-      <artifactId>authlib</artifactId>
-    </dependency>
-    <dependency>
       <groupId>eu.stratuslab.authn</groupId>
       <artifactId>authn-ssl</artifactId>
       <version>1.0.13-SNAPSHOT</version>
