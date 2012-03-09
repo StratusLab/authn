@@ -117,14 +117,6 @@
 	    <configuration>
 	      <outputDirectory>${project.build.directory}/dependency/jars</outputDirectory>
 	      <artifactItems>
-		<artifactItem>
-		  <groupId>bouncycastle</groupId>
-		  <artifactId>bcprov-jdk16</artifactId>
-		</artifactItem>
-                <artifactItem>
-                  <groupId>org.slf4j</groupId>
-                  <artifactId>slf4j-api</artifactId>
-                </artifactItem>
                 <artifactItem>
                   <groupId>org.slf4j</groupId>
                   <artifactId>slf4j-log4j12</artifactId>
@@ -132,14 +124,6 @@
 		<artifactItem>
 		  <groupId>log4j</groupId>
 		  <artifactId>log4j</artifactId>
-		</artifactItem>
-		<artifactItem>
-		  <groupId>eu.emi.security</groupId>
-		  <artifactId>authlib</artifactId>
-		</artifactItem>
-		<artifactItem>
-		  <groupId>eu.stratuslab.authn</groupId>
-		  <artifactId>authn-ssl</artifactId>
 		</artifactItem>
 		<artifactItem>
 		  <groupId>eu.stratuslab.authn</groupId>

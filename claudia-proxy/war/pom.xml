@@ -18,18 +18,12 @@
       <artifactId>httpclient</artifactId>
     </dependency>
     <dependency>
-      <groupId>bouncycastle</groupId>
-      <artifactId>bcprov-jdk16</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>eu.stratuslab.authn</groupId>
-      <artifactId>authn-ssl</artifactId>
-      <version>1.0.13-SNAPSHOT</version>
-    </dependency>
+
+    <!-- Brought in to get correct servlet version. -->
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>

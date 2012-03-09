@@ -15,7 +15,6 @@
 
     <web-resource-collection>
       <web-resource-name>JAAS Role</web-resource-name>
-      <url-pattern>/debug</url-pattern>
       <url-pattern>/xmlrpc</url-pattern>
     </web-resource-collection>
 
@@ -37,16 +36,6 @@
   <security-role>
     <role-name>cloud-access</role-name>
   </security-role>
-
-  <servlet>
-    <servlet-name>DebugServlet</servlet-name>
-    <servlet-class>eu.stratuslab.authn.DebugServlet</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>DebugServlet</servlet-name>
-    <url-pattern>/debug</url-pattern>
-  </servlet-mapping>
 
   <servlet>
     <servlet-name>OneProxyServlet</servlet-name>
