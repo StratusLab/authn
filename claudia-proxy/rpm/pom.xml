@@ -134,8 +134,8 @@
 		  <artifactId>log4j</artifactId>
 		</artifactItem>
 		<artifactItem>
-		  <groupId>org.glite.security</groupId>
-		  <artifactId>trustmanager</artifactId>
+		  <groupId>eu.emi.security</groupId>
+		  <artifactId>authlib</artifactId>
 		</artifactItem>
 		<artifactItem>
 		  <groupId>eu.stratuslab.authn</groupId>

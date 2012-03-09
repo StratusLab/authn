@@ -20,30 +20,31 @@
 
 package eu.stratuslab.ssl;
 
-import java.io.IOException;
+import java.io.File;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
-import java.security.NoSuchProviderException;
-import java.security.cert.CertificateException;
-import java.text.ParseException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.net.ssl.ManagerFactoryParameters;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactorySpi;
 
-import org.glite.security.trustmanager.OpensslTrustmanager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.emi.security.authn.x509.CommonX509TrustManager;
+import eu.emi.security.authn.x509.NamespaceCheckingMode;
+import eu.emi.security.authn.x509.X509CertChainValidator;
+import eu.emi.security.authn.x509.impl.OpensslCertChainValidator;
+
 public class GridTrustManagerFactorySpiImpl extends TrustManagerFactorySpi {
 
-	private static AtomicReference<TrustManager> ref = new AtomicReference<TrustManager>();
+	private static final AtomicReference<TrustManager> ref = new AtomicReference<TrustManager>();
 
-	private static final String CA_DIRECTORY = "/etc/grid-security/certificates";
-
-	private static final String TM_DEACTIVATED = "certificate authentication deactivated: {}";
+	private static final String DEFAULT_CA_DIR = "/etc/grid-security/certificates";
+	private static final NamespaceCheckingMode DEFAULT_NS_CHECK_MODE = NamespaceCheckingMode.EUGRIDPMA_AND_GLOBUS;
+	private static final Long DEFAULT_UPDATE_INTERVAL = 15L * 60L * 1000L; // 15min
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(GridTrustManagerFactorySpiImpl.class.getCanonicalName());
@@ -73,26 +74,59 @@ public class GridTrustManagerFactorySpiImpl extends TrustManagerFactorySpi {
 
 	private TrustManager createTrustManager() {
 
-		try {
+		String dir = getCADirectory();
+		NamespaceCheckingMode mode = getNSCheckingMode();
+		Long interval = getUpdateInterval();
 
-			// TODO: This needs to be updated to actually pass the expected
-			// properties in the last argument.
-			return new OpensslTrustmanager(CA_DIRECTORY, true, null);
+		X509CertChainValidator validator = new OpensslCertChainValidator(dir,
+				mode, interval);
+		return new CommonX509TrustManager(validator);
+	}
 
-		} catch (CertificateException e) {
-			return logErrorAndGetEmptyTrustManager(e.getMessage());
-		} catch (NoSuchProviderException e) {
-			return logErrorAndGetEmptyTrustManager(e.getMessage());
-		} catch (IOException e) {
-			return logErrorAndGetEmptyTrustManager(e.getMessage());
-		} catch (ParseException e) {
-			return logErrorAndGetEmptyTrustManager(e.getMessage());
+	private static String getCADirectory() {
+
+		String dir = System.getProperty("STRATUSLAB_CA_DIRECTORY",
+				DEFAULT_CA_DIR);
+
+		LOGGER.info("using {} for trusted certificates", dir);
+		if (!(new File(dir)).isDirectory()) {
+			LOGGER.error("trusted certificate directory {} does not exist", dir);
 		}
+		return dir;
 	}
 
-	private TrustManager logErrorAndGetEmptyTrustManager(String msg) {
-		LOGGER.error(TM_DEACTIVATED, msg);
-		return new EmptyTrustManager();
+	private static NamespaceCheckingMode getNSCheckingMode() {
+
+		String name = System.getProperty("STRATUSLAB_NS_CHECK_MODE",
+				DEFAULT_NS_CHECK_MODE.name());
+
+		NamespaceCheckingMode mode = DEFAULT_NS_CHECK_MODE;
+		try {
+			mode = NamespaceCheckingMode.valueOf(name);
+		} catch (IllegalArgumentException e) {
+			LOGGER.warn("invalid namespace checking mode: {}", name);
+		} catch (NullPointerException e) {
+			LOGGER.warn("null namespace checking mode given");
+		}
+
+		LOGGER.info("using {} for namespace checking mode", mode.toString());
+		return mode;
 	}
 
+	private static Long getUpdateInterval() {
+
+		String name = System.getProperty("STRATUSLAB_UPDATE_INTERVAL",
+				DEFAULT_UPDATE_INTERVAL.toString());
+
+		Long interval = DEFAULT_UPDATE_INTERVAL;
+		try {
+			interval = Long.valueOf(name);
+		} catch (NumberFormatException e) {
+			LOGGER.warn("invalid update interval: {}", name);
+		}
+
+		LOGGER.info("using {} for update interval", interval.toString());
+
+		return interval;
+	}
 }

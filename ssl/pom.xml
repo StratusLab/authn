@@ -27,8 +27,8 @@
       <artifactId>jetty-server</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.glite.security</groupId>
-      <artifactId>trustmanager</artifactId>
+      <groupId>eu.emi.security</groupId>
+      <artifactId>authlib</artifactId>
     </dependency>
   </dependencies>
 

@@ -23,8 +23,8 @@ package eu.stratuslab.ssl;
 import java.security.Security;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.eclipse.jetty.http.ssl.SslContextFactory;
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 
 public class GridSslSelectChannelConnector extends SslSelectChannelConnector {
 
