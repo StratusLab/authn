@@ -32,29 +32,86 @@ public class GridSslContextFactory extends SslContextFactory {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(GridSslContextFactory.class.getCanonicalName());
 
+	private String caDirectory = null;
+	private String namespaceCheckingMode = null;
+	private String updateInterval = null;
+
 	public GridSslContextFactory() {
+
 		super();
 
-		setTrustManagerFactoryAlgorithm(GridTrustManagerProvider.PROVIDER_NAME);
-		setWantClientAuth(true);
+		initializeDefaultValues();
+	}
+
+	public GridSslContextFactory(String caDirectory, String nsCheckMode,
+			String updateInterval) {
+
+		super();
+
+		this.caDirectory = caDirectory;
+		this.namespaceCheckingMode = nsCheckMode;
+		this.updateInterval = updateInterval;
+
+		initializeDefaultValues();
 	}
 
 	@Override
 	public void doStart() throws Exception {
 
+		registerTrustManagerServiceProvider();
+		registerCryptoServiceProvider();
+
+		super.doStart();
+
+	}
+
+	private void initializeDefaultValues() {
+		setTrustManagerFactoryAlgorithm(GridTrustManagerProvider.ALGORITHM);
+		setWantClientAuth(true);
+	}
+
+	public String getCaDirectory() {
+		return caDirectory;
+	}
+
+	public void setCaDirectory(String caDirectory) {
+		this.caDirectory = caDirectory;
+	}
+
+	public String getNamespaceCheckingMode() {
+		return namespaceCheckingMode;
+	}
+
+	public void setNamespaceCheckingMode(String namespaceCheckingMode) {
+		this.namespaceCheckingMode = namespaceCheckingMode;
+	}
+
+	public String getUpdateInterval() {
+		return updateInterval;
+	}
+
+	public void setUpdateInterval(String updateInterval) {
+		this.updateInterval = updateInterval;
+	}
+
+	private void registerTrustManagerServiceProvider() {
+
 		if (Security.getProvider(GridTrustManagerProvider.PROVIDER_NAME) == null) {
 			LOGGER.info("registering {} provider",
 					GridTrustManagerProvider.PROVIDER_NAME);
-			Security.addProvider(new GridTrustManagerProvider());
+			Security.addProvider(new GridTrustManagerProvider(caDirectory,
+					namespaceCheckingMode, updateInterval));
 		}
+
+	}
+
+	private void registerCryptoServiceProvider() {
 
 		if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
 			LOGGER.info("registering {} provider",
 					BouncyCastleProvider.PROVIDER_NAME);
 			Security.addProvider(new BouncyCastleProvider());
 		}
-
-		super.doStart();
 
 	}
 
