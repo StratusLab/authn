@@ -11,10 +11,12 @@
     <Arg>
       <New class="org.eclipse.jetty.server.ssl.SslSelectChannelConnector">
 	<Arg>
-	  <New class="org.eclipse.jetty.util.ssl.SslContextFactory">
+	  <New class="eu.stratuslab.ssl.GridSslContextFactor">
 
+            <!-- DEFAULTS: 
 	    <Set name="TrustManagerFactoryAlgorithm">GridTM</Set>
 	    <Set name="WantClientAuth">true</Set>
+            -->
 
 	    <Set name="KeyManagerPassword">jettycred</Set>
 
