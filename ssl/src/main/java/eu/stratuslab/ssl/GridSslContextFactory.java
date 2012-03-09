@@ -24,8 +24,13 @@ import java.security.Security;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GridSslContextFactory extends SslContextFactory {
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(GridSslContextFactory.class.getCanonicalName());
 
 	public GridSslContextFactory() {
 		super();
@@ -38,10 +43,14 @@ public class GridSslContextFactory extends SslContextFactory {
 	public void doStart() throws Exception {
 
 		if (Security.getProvider(GridTrustManagerProvider.PROVIDER_NAME) == null) {
+			LOGGER.info("registering {} provider",
+					GridTrustManagerProvider.PROVIDER_NAME);
 			Security.addProvider(new GridTrustManagerProvider());
 		}
 
 		if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
+			LOGGER.info("registering {} provider",
+					BouncyCastleProvider.PROVIDER_NAME);
 			Security.addProvider(new BouncyCastleProvider());
 		}
 

@@ -68,6 +68,7 @@ public class GridTrustManagerFactorySpiImpl extends TrustManagerFactorySpi {
 
 	private void initializeTrustManager() {
 		if (ref.get() == null) {
+			LOGGER.error("initializing trust manager factory");
 			ref.compareAndSet(null, createTrustManager());
 		}
 	}

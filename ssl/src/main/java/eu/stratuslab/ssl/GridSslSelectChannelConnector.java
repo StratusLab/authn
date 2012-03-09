@@ -25,8 +25,13 @@ import java.security.Security;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GridSslSelectChannelConnector extends SslSelectChannelConnector {
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(GridSslSelectChannelConnector.class.getCanonicalName());
 
 	public GridSslSelectChannelConnector(SslContextFactory sslContextFactory) {
 		super(sslContextFactory);
@@ -40,12 +45,16 @@ public class GridSslSelectChannelConnector extends SslSelectChannelConnector {
 	public void doStart() throws Exception {
 
 		if (Security.getProvider(GridTrustManagerProvider.PROVIDER_NAME) == null) {
+			LOGGER.info("registering {} provider",
+					GridTrustManagerProvider.PROVIDER_NAME);
 			Security.addProvider(new GridTrustManagerProvider());
 		}
 		if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
+			LOGGER.info("registering {} provider",
+					BouncyCastleProvider.PROVIDER_NAME);
 			Security.addProvider(new BouncyCastleProvider());
 		}
-
+		
 		super.doStart();
 
 	}
