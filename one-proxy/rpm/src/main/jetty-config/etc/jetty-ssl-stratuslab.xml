@@ -11,7 +11,7 @@
     <Arg>
       <New class="org.eclipse.jetty.server.ssl.SslSelectChannelConnector">
 	<Arg>
-	  <New class="eu.stratuslab.ssl.GridSslContextFactor">
+	  <New class="eu.stratuslab.ssl.GridSslContextFactory">
 
 	    <Set name="KeyManagerPassword">jettycred</Set>
 
