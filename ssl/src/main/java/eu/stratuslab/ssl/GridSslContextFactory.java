@@ -23,31 +23,28 @@ package eu.stratuslab.ssl;
 import java.security.Security;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 
-public class GridSslSelectChannelConnector extends SslSelectChannelConnector {
+public class GridSslContextFactory extends SslContextFactory {
 
-	public GridSslSelectChannelConnector(SslContextFactory sslContextFactory) {
-		super(sslContextFactory);
-	}
-
-	public GridSslSelectChannelConnector() {
+	public GridSslContextFactory() {
 		super();
+
+		ensureSecurityProvidersExist();
+
+		setTrustManagerFactoryAlgorithm(GridTrustManagerProvider.PROVIDER_NAME);
+		setWantClientAuth(true);
 	}
 
-	@Override
-	public void doStart() throws Exception {
+	public void ensureSecurityProvidersExist() {
 
-		// Add the BouncyCastle (crypto algorithms) and TrustManager providers.
 		if (Security.getProvider(GridTrustManagerProvider.PROVIDER_NAME) == null) {
 			Security.addProvider(new GridTrustManagerProvider());
 		}
+
 		if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
 			Security.addProvider(new BouncyCastleProvider());
 		}
-
-		super.doStart();
 
 	}
 
