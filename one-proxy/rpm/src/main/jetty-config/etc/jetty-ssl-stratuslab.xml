@@ -13,11 +13,6 @@
 	<Arg>
 	  <New class="eu.stratuslab.ssl.GridSslContextFactor">
 
-            <!-- DEFAULTS: 
-	    <Set name="TrustManagerFactoryAlgorithm">GridTM</Set>
-	    <Set name="WantClientAuth">true</Set>
-            -->
-
 	    <Set name="KeyManagerPassword">jettycred</Set>
 
 	    <Set name="KeyStorePath"><Property name="jetty.home" default="." />/etc/jetty.jks</Set>
