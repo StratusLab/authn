@@ -34,8 +34,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.emi.security.authn.x509.CommonX509TrustManager;
+import eu.emi.security.authn.x509.CrlCheckingMode;
 import eu.emi.security.authn.x509.NamespaceCheckingMode;
-import eu.emi.security.authn.x509.X509CertChainValidator;
+import eu.emi.security.authn.x509.RevocationParameters;
 import eu.emi.security.authn.x509.impl.OpensslCertChainValidator;
 
 public class GridSslContextFactory extends SslContextFactory {
@@ -51,15 +52,20 @@ public class GridSslContextFactory extends SslContextFactory {
 	public static final NamespaceCheckingMode DEFAULT_NS_CHECKING_MODE = //
 	NamespaceCheckingMode.EUGRIDPMA_AND_GLOBUS;
 
+	public static final CrlCheckingMode DEFAULT_CRL_CHECKING_MODE = //
+	CrlCheckingMode.REQUIRE;
+
 	public static final Long DEFAULT_UPDATE_INTERVAL = //
 	10L * 60L * 1000L; // 10min
 
 	private final String caDirectory;
 	private final NamespaceCheckingMode namespaceCheckingMode;
 	private final Long updateInterval;
+	private final CrlCheckingMode crlCheckingMode;
 
 	public GridSslContextFactory(String caDirectory,
-			String namespaceCheckingMode, String updateInterval) {
+			String namespaceCheckingMode, String updateInterval,
+			String crlCheckingMode) {
 
 		super();
 
@@ -68,6 +74,7 @@ public class GridSslContextFactory extends SslContextFactory {
 		this.caDirectory = getCADirectory(caDirectory);
 		this.namespaceCheckingMode = getNSCheckingMode(namespaceCheckingMode);
 		this.updateInterval = getUpdateInterval(updateInterval);
+		this.crlCheckingMode = getCrlCheckingMode(crlCheckingMode);
 
 		// Algorithm name is never really used.
 		setTrustManagerFactoryAlgorithm(ALGORITHM);
@@ -96,8 +103,11 @@ public class GridSslContextFactory extends SslContextFactory {
 
 	private TrustManager createTrustManager() {
 
-		X509CertChainValidator validator = new OpensslCertChainValidator(
+		OpensslCertChainValidator validator = new OpensslCertChainValidator(
 				caDirectory, namespaceCheckingMode, updateInterval);
+
+		RevocationParameters params = validator.getRevocationCheckingMode();
+		params.setCrlCheckingMode(crlCheckingMode);
 
 		TrustManager trustManager = new CommonX509TrustManager(validator);
 
@@ -108,7 +118,10 @@ public class GridSslContextFactory extends SslContextFactory {
 
 	public static String getCADirectory(String name) {
 
-		String dir = (name != null) ? name : DEFAULT_CA_DIRECTORY;
+		String dir = DEFAULT_CA_DIRECTORY;
+		if (name != null && !"".equals(name.trim())) {
+			dir = name;
+		}
 
 		LOGGER.info("using {} for trusted certificates", dir);
 		if (!(new File(dir)).isDirectory()) {
@@ -149,6 +162,21 @@ public class GridSslContextFactory extends SslContextFactory {
 		LOGGER.info("using update interval of {} ms", interval.toString());
 
 		return interval;
+	}
+
+	public static CrlCheckingMode getCrlCheckingMode(String name) {
+
+		CrlCheckingMode mode = DEFAULT_CRL_CHECKING_MODE;
+		try {
+			mode = CrlCheckingMode.valueOf(name);
+		} catch (IllegalArgumentException e) {
+			LOGGER.warn("invalid CRL checking mode: {}", name);
+		} catch (NullPointerException e) {
+			LOGGER.warn("null CRL checking mode given");
+		}
+
+		LOGGER.info("using {} for CRL checking mode", mode.toString());
+		return mode;
 	}
 
 }

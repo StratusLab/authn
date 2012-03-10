@@ -11,9 +11,10 @@
       <New class="org.eclipse.jetty.server.ssl.SslSelectChannelConnector">
 	<Arg>
 	  <New class="eu.stratuslab.ssl.GridSslContextFactory">
-            <Arg>/etc/grid-security/certificates</Arg> <!-- CA directory -->
-            <Arg>EUGRIDPMA_AND_GLOBUS</Arg> <!-- CA namespace validation --> 
-            <Arg>600000</Arg>  <!-- update interval in ms-->
+            <Arg></Arg> <!-- CA directory (/etc/grid-security/certificates) -->
+            <Arg></Arg> <!-- CA namespace validation (EUGRIDPMA_AND_GLOBUS) --> 
+            <Arg></Arg> <!-- update interval in ms (60000 = 10 min) -->
+            <Arg></Arg> <!-- CRL checking policy (REQUIRE) -->
 
 	    <Set name="KeyManagerPassword">jettycred</Set>
 

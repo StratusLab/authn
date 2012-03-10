@@ -124,22 +124,6 @@
 	    </goals>
 	    <configuration>
 	      <outputDirectory>${project.build.directory}/dependency/jars</outputDirectory>
-<!--
-	      <artifactItems>
-                <artifactItem>
-                  <groupId>org.slf4j</groupId>
-                  <artifactId>slf4j-log4j12</artifactId>
-                </artifactItem>
-		<artifactItem>
-		  <groupId>log4j</groupId>
-		  <artifactId>log4j</artifactId>
-		</artifactItem>
-		<artifactItem>
-		  <groupId>eu.stratuslab.authn</groupId>
-		  <artifactId>authn-login-module</artifactId>
-		</artifactItem>
-	      </artifactItems>
--->
 	    </configuration>
 	  </execution>
 
@@ -279,6 +263,7 @@
 	      <filemode>644</filemode>
 	      <username>root</username>
 	      <groupname>root</groupname>
+              <configuration>true</configuration>
 	      <directoryIncluded>false</directoryIncluded>
 	      <sources>
 		<source>
