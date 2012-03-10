@@ -20,89 +20,68 @@
 
 package eu.stratuslab.ssl;
 
+import java.io.File;
+import java.security.KeyStore;
 import java.security.Security;
+import java.security.cert.CRL;
+import java.util.Collection;
+
+import javax.net.ssl.TrustManager;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.emi.security.authn.x509.CommonX509TrustManager;
+import eu.emi.security.authn.x509.NamespaceCheckingMode;
+import eu.emi.security.authn.x509.X509CertChainValidator;
+import eu.emi.security.authn.x509.impl.OpensslCertChainValidator;
+
 public class GridSslContextFactory extends SslContextFactory {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(GridSslContextFactory.class.getCanonicalName());
 
-	private String caDirectory = null;
-	private String namespaceCheckingMode = null;
-	private String updateInterval = null;
+	public static final String ALGORITHM = "CommonX509TrustManager";
 
-	public GridSslContextFactory() {
+	public static final String DEFAULT_CA_DIRECTORY = //
+	"/etc/grid-security/certificates";
+
+	public static final NamespaceCheckingMode DEFAULT_NS_CHECKING_MODE = //
+	NamespaceCheckingMode.EUGRIDPMA_AND_GLOBUS;
+
+	public static final Long DEFAULT_UPDATE_INTERVAL = //
+	10L * 60L * 1000L; // 10min
+
+	private final String caDirectory;
+	private final NamespaceCheckingMode namespaceCheckingMode;
+	private final Long updateInterval;
+
+	public GridSslContextFactory(String caDirectory,
+			String namespaceCheckingMode, String updateInterval) {
 
 		super();
 
-		initializeDefaultValues();
-	}
-
-	public GridSslContextFactory(String caDirectory, String nsCheckMode,
-			String updateInterval) {
-
-		super();
-
-		this.caDirectory = caDirectory;
-		this.namespaceCheckingMode = nsCheckMode;
-		this.updateInterval = updateInterval;
-
-		initializeDefaultValues();
-	}
-
-	@Override
-	public void doStart() throws Exception {
-
-		registerTrustManagerServiceProvider();
 		registerCryptoServiceProvider();
 
-		super.doStart();
+		this.caDirectory = getCADirectory(caDirectory);
+		this.namespaceCheckingMode = getNSCheckingMode(namespaceCheckingMode);
+		this.updateInterval = getUpdateInterval(updateInterval);
 
-	}
+		// Algorithm name is never really used.
+		setTrustManagerFactoryAlgorithm(ALGORITHM);
 
-	private void initializeDefaultValues() {
-		setTrustManagerFactoryAlgorithm(GridTrustManagerProvider.ALGORITHM);
+		// Allow, but don't require, client certificates to be compatible with
+		// other authentication methods.
 		setWantClientAuth(true);
 	}
 
-	public String getCaDirectory() {
-		return caDirectory;
-	}
+	@Override
+	protected TrustManager[] getTrustManagers(KeyStore trustStore,
+			Collection<? extends CRL> crls) throws Exception {
 
-	public void setCaDirectory(String caDirectory) {
-		this.caDirectory = caDirectory;
-	}
-
-	public String getNamespaceCheckingMode() {
-		return namespaceCheckingMode;
-	}
-
-	public void setNamespaceCheckingMode(String namespaceCheckingMode) {
-		this.namespaceCheckingMode = namespaceCheckingMode;
-	}
-
-	public String getUpdateInterval() {
-		return updateInterval;
-	}
-
-	public void setUpdateInterval(String updateInterval) {
-		this.updateInterval = updateInterval;
-	}
-
-	private void registerTrustManagerServiceProvider() {
-
-		if (Security.getProvider(GridTrustManagerProvider.PROVIDER_NAME) == null) {
-			LOGGER.info("registering {} provider",
-					GridTrustManagerProvider.PROVIDER_NAME);
-			Security.addProvider(new GridTrustManagerProvider(caDirectory,
-					namespaceCheckingMode, updateInterval));
-		}
-
+		return new TrustManager[] { createTrustManager() };
 	}
 
 	private void registerCryptoServiceProvider() {
@@ -113,6 +92,63 @@ public class GridSslContextFactory extends SslContextFactory {
 			Security.addProvider(new BouncyCastleProvider());
 		}
 
+	}
+
+	private TrustManager createTrustManager() {
+
+		X509CertChainValidator validator = new OpensslCertChainValidator(
+				caDirectory, namespaceCheckingMode, updateInterval);
+
+		TrustManager trustManager = new CommonX509TrustManager(validator);
+
+		LOGGER.info("created new CommonX509TrustManager");
+
+		return trustManager;
+	}
+
+	public static String getCADirectory(String name) {
+
+		String dir = (name != null) ? name : DEFAULT_CA_DIRECTORY;
+
+		LOGGER.info("using {} for trusted certificates", dir);
+		if (!(new File(dir)).isDirectory()) {
+			LOGGER.error("trusted certificate directory {} does not exist",
+					name);
+		}
+		return dir;
+	}
+
+	public static NamespaceCheckingMode getNSCheckingMode(String name) {
+
+		NamespaceCheckingMode mode = DEFAULT_NS_CHECKING_MODE;
+		try {
+			mode = NamespaceCheckingMode.valueOf(name);
+		} catch (IllegalArgumentException e) {
+			LOGGER.warn("invalid namespace checking mode: {}", name);
+		} catch (NullPointerException e) {
+			LOGGER.warn("null namespace checking mode given");
+		}
+
+		LOGGER.info("using {} for namespace checking mode", mode.toString());
+		return mode;
+	}
+
+	public static Long getUpdateInterval(String name) {
+
+		Long interval = DEFAULT_UPDATE_INTERVAL;
+		try {
+			interval = Long.valueOf(name);
+			if (interval <= 60000) {
+				LOGGER.warn("interval cannot be less than 60000 ms");
+				interval = DEFAULT_UPDATE_INTERVAL;
+			}
+		} catch (NumberFormatException e) {
+			LOGGER.warn("invalid update interval: {}", name);
+		}
+
+		LOGGER.info("using update interval of {} ms", interval.toString());
+
+		return interval;
 	}
 
 }
