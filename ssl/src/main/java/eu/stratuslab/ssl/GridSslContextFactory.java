@@ -138,7 +138,7 @@ public class GridSslContextFactory extends SslContextFactory {
 		Long interval = DEFAULT_UPDATE_INTERVAL;
 		try {
 			interval = Long.valueOf(name);
-			if (interval <= 60000) {
+			if (interval < 60000) {
 				LOGGER.warn("interval cannot be less than 60000 ms");
 				interval = DEFAULT_UPDATE_INTERVAL;
 			}

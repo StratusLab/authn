@@ -26,6 +26,7 @@ public class GridSslContextFactoryTest {
 
 	@Test
 	public void realUpdateInterval() {
+		assertEquals(Long.valueOf(60000), getUpdateInterval("60000"));
 		assertEquals(Long.valueOf(120000), getUpdateInterval("120000"));
 	}
 
