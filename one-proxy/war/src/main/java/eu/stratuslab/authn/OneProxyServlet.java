@@ -159,8 +159,8 @@ public class OneProxyServlet extends XmlRpcServlet {
 			XmlRpcRequestConfig config = request.getConfig();
 
 			String user = "";
-			String basicPswdHash = "";
-			String defaultPswdHash = "dummy:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+			String basicPswd = "";
+			String defaultPswd = "dummy:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
 			if (config instanceof OneProxyRequestConfigImpl) {
 				OneProxyRequestConfigImpl opconfig = (OneProxyRequestConfigImpl) config;
@@ -171,7 +171,7 @@ public class OneProxyServlet extends XmlRpcServlet {
 					&& config instanceof XmlRpcHttpRequestConfigImpl) {
 				XmlRpcHttpRequestConfigImpl hconfig = (XmlRpcHttpRequestConfigImpl) config;
 				user = hconfig.getBasicUserName();
-				basicPswdHash = hashPassword(hconfig.getBasicPassword());
+				basicPswd = hconfig.getBasicPassword();
 			}
 
 			if (!"".equals(user)) {
@@ -183,8 +183,8 @@ public class OneProxyServlet extends XmlRpcServlet {
 
 					// Pass the hash of the password through if the username is
 					// 'oneadmin'.
-					String credentials = ("oneadmin".equals(user)) ? basicPswdHash
-							: defaultPswdHash;
+					String credentials = ("oneadmin".equals(user)) ? basicPswd
+							: defaultPswd;
 
 					// All of the usernames must be URL encoded to remove spaces
 					// and other special characters.
@@ -199,21 +199,6 @@ public class OneProxyServlet extends XmlRpcServlet {
 						"certificate DN or username not provided");
 			}
 		}
-	}
-
-	private static String hashPassword(String password) throws XmlRpcException {
-
-		try {
-			MessageDigest md = MessageDigest.getInstance("SHA-1");
-			md.update((password != null) ? password.getBytes(UTF8)
-					: new byte[] {});
-			BigInteger digest = new BigInteger(1, md.digest());
-			return String.format("%040x", digest);
-		} catch (NoSuchAlgorithmException e) {
-			LOGGER.error("can't create UTF-8 encoding for URL encoding");
-			throw new XmlRpcException("internal server error");
-		}
-
 	}
 
 }
