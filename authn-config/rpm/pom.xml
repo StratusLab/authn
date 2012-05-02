@@ -9,7 +9,7 @@
   <parent>
     <groupId>eu.stratuslab.authn</groupId>
     <artifactId>authn-config-pom</artifactId>
-    <version>1.0.16-SNAPSHOT</version>
+    <version>1.0.16</version>
   </parent>
 
   <properties>
