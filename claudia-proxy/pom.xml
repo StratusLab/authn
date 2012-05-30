@@ -2,6 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>authn-claudia-proxy-pom</artifactId>
+  <version>1.0.17</version>
   <name>StratusLab Claudia Proxy (POM)</name>
 
   <packaging>pom</packaging>
@@ -9,7 +10,7 @@
   <parent>
     <groupId>eu.stratuslab.authn</groupId>
     <artifactId>authn</artifactId>
-    <version>1.0.17</version>
+    <version>1.0.18</version>
   </parent>
 
   <modules>
