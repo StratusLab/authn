@@ -59,7 +59,7 @@ grid certificates, and VOMS proxies.
 
   <scm>
     <connection>scm:git:https://stratuslab-builder@github.com:StratusLab/authn.git</connection>
-    <developerConnection>scm:git:https://stratuslab-builder@code.stratuslab.eu/ext/git/stratuslab-authn.git</developerConnection>
+    <developerConnection>scm:git:https://stratuslab-builder@github.com:StratusLab/authn.git</developerConnection>
   </scm>
 
   <repositories>
