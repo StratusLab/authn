@@ -9,7 +9,7 @@
   <parent>
     <groupId>eu.stratuslab.authn</groupId>
     <artifactId>authn-claudia-proxy-pom</artifactId>
-    <version>1.0.19-SNAPSHOT</version>
+    <version>1.0.19</version>
   </parent>
 
   <dependencies>
