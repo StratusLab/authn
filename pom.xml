@@ -22,7 +22,6 @@ grid certificates, and VOMS proxies.
     <module>one-proxy</module>
     <module>client</module>
     <module>login-module</module>
-    <module>claudia-proxy</module>
     <module>authn-config</module>
   </modules>
 
