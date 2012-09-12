@@ -1,6 +1,8 @@
 Authentication Service
 ======================
 
+[![Build Status](https://secure.travis-ci.org/StratusLab/authn.png)](https://secure.travis-ci.org/StratusLab/authn.png)
+
 The Authentication service is a collection of proxies that unify
 user authentication for the various StratusLab cloud services. 
 
@@ -22,5 +24,7 @@ permissions and limitations under the License.
 Acknowledgements
 ----------------
 
-StratusLab is co-funded by the European Community’s Seventh Framework
-Programme (Capacities) Grant Agreement INFSO-RI-261552.
+This software originated in the StratusLab project that was co-funded
+by the European Community’s Seventh Framework Programme (Capacities)
+Grant Agreement INFSO-RI-261552 and that ran from June 2010 to May
+2012.
