@@ -145,6 +145,11 @@ grid certificates, and VOMS proxies.
         </exclusions>
       </dependency>
       <dependency>
+        <groupId>enlive</groupId>
+        <artifactId>enlive</artifactId>
+        <version>1.0.1</version>
+      </dependency>
+      <dependency>
         <groupId>clj-http</groupId>
         <artifactId>clj-http</artifactId>
         <version>0.5.3</version>
