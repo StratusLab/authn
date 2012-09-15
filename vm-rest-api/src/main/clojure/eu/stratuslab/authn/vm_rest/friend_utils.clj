@@ -8,7 +8,7 @@
 
 ;; FIXME!
 (defn login-failure-handler [& opts]
-  nil)
+  "login failed")
 
 (defn configure-friend [f & [context-path]]
   (let [context-path (or context-path "")
@@ -25,4 +25,10 @@
 
 ;; FIXME!
 (defn credential-fn [identity]
-  {})
+  (let [authn-map {"cal" {:identity "cal"
+                          :username "cal"
+                          :password (creds/hash-bcrypt "cal")}
+                   "test1" {:identity "test1"
+                            :username "test1"
+                            :password (creds/hash-bcrypt "test1")}}]
+    (get authn-map identity)))

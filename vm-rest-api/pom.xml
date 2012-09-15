@@ -77,12 +77,6 @@
 	<artifactId>jetty-maven-plugin</artifactId>
 	<configuration>
           <useTestScope>true</useTestScope>
-          <systemProperties>
-            <systemProperty>
-              <name>ttf.use.embedded.cassandra</name>
-              <value>"true"</value>
-            </systemProperty>
-          </systemProperties>
 	  <scanIntervalSeconds>5</scanIntervalSeconds>
 	  <scanTargetPatterns>
 	    <scanTargetPattern>
@@ -93,7 +87,7 @@
 	    </scanTargetPattern>
 	  </scanTargetPatterns>
 	  <webApp>
-	    <contextPath>/ttf</contextPath>
+	    <contextPath>/vmm</contextPath>
 	  </webApp>
 	</configuration>
       </plugin>
@@ -165,7 +159,7 @@
         <artifactId>exec-maven-plugin</artifactId>
 	
 	<configuration>
-	  <mainClass>eu.stratuslab.authn.vm-rest.main</mainClass>
+	  <mainClass>eu.stratuslab.authn.vm_rest.main</mainClass>
           <classpathScope>test</classpathScope>
 	</configuration>
 	

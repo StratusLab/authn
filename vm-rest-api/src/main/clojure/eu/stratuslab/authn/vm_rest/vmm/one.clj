@@ -13,7 +13,7 @@
   This is all machines that haven't been deleted."
   []
   (log/info "list all virtual machines")
-  [])
+  {"a" "ok", "b" "bad"})
 
 (defn status
   "Provides the detailed status information for a single virtual

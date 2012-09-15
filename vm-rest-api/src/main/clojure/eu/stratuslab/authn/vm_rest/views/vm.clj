@@ -2,6 +2,7 @@
   (:require [noir.core :refer [defpage]]
             [noir.response :as resp]
             [clojure.tools.logging :as log]
+            [net.cgrand.enlive-html :refer [deftemplate content]]
             [eu.stratuslab.authn.vm-rest.vmm.one :as one]))
 
 ;;
@@ -10,11 +11,13 @@
 ;; additional pre-routes for authentication here.
 ;;
 
+(deftemplate vm-form "eu/stratuslab/authn/vm_rest/views/vm-form.html" []
+  [:div#wrapper :p] (content "VM Service Launcher"))
+
 ;; html page for starting machine (post to /vm)
 (defpage [:get "/vm"] {}
-  ;; FIXME: Do this with enlive.
   ;; Should take query parameters to pre-fill some fields.
-  "dummy page")
+  (apply str (vm-form)))
 
 ;; post to create new machine
 (defpage [:post ["/vm"]] {:as data}

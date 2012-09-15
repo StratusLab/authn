@@ -9,7 +9,8 @@
 
 ;; Authentication must also be configured.
 ;; NOTE: the context path is hardcoded!
-(friend-utils/configure-friend friend-utils/credential-fn "/vm")
+;; FIXME: should be "/vm"
+(friend-utils/configure-friend friend-utils/credential-fn "")
 
 (def servlet-handler
   "Wraps the standard noir handler to inject the path info and context
