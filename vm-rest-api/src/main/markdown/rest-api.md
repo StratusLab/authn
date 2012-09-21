@@ -177,7 +177,10 @@ The response will provide the newly-created virtual machine's identifier. The
 HTTP response in this case is `302` with the URI of the new virtual machine in
 the "Location" header. The body will also include the raw machine identifier.
 
-NOTE: Should OVF be used as a valid input format? 
+NOTE: Should OVF be used as a valid input format?
+
+NOTE: The detailed specifications for the various input formats will be
+defined as the implementation progresses.
 
 ### HTTP Status Codes
   * 302: redirect to URL of new virtual machine
