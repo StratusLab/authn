@@ -44,4 +44,32 @@ grid certificates, and VOMS proxies.
     <developerConnection>scm:git:ssh://git@github.com/StratusLab/authn.git</developerConnection>
   </scm>
 
+  <repositories>
+
+    <repository>
+      <releases>
+	<enabled>true</enabled>
+      </releases>
+      <snapshots>
+	<enabled>false</enabled>
+      </snapshots>
+      <id>POMReleases</id>
+      <name>POM Releases</name>
+      <url>http://repo.stratuslab.eu:8081/content/repositories/releases</url>
+    </repository>
+
+    <repository>
+      <releases>
+	<enabled>false</enabled>
+      </releases>
+      <snapshots>
+	<enabled>true</enabled>
+      </snapshots>
+      <id>POMSnapshots</id>
+      <name>POM Snapshots</name>
+      <url>http://repo.stratuslab.eu:8081/content/repositories/snapshots</url>
+    </repository>
+
+  </repositories>
+
 </project>
