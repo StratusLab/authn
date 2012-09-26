@@ -1,7 +1,7 @@
 Authentication Service
 ======================
 
-[![Build Status](https://secure.travis-ci.org/StratusLab/authn.png)](https://secure.travis-ci.org/StratusLab/authn)
+[![Build Status](https://secure.travis-ci.org/StratusLab/authn.png)](http://travis-ci.org/#!/StratusLab/authn)
  
 The Authentication service is a collection of proxies that unify
 user authentication for the various StratusLab cloud services. 
