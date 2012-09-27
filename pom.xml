@@ -29,9 +29,6 @@ grid certificates, and VOMS proxies.
     <module>client</module>
     <module>login-module</module>
     <module>authn-config</module>
-    <!-- FIXME: Build hangs when done from here.
-    <module>vm-rest-api</module>
-    -->
   </modules>
 
   <issueManagement>
