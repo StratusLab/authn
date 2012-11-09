@@ -21,13 +21,9 @@
 package eu.stratuslab.authn;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,154 +47,158 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("serial")
 public class OneProxyServlet extends XmlRpcServlet {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(OneProxyServlet.class.getCanonicalName());
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(OneProxyServlet.class.getCanonicalName());
 
-	private static final String PROXY_URL_PARAM_NAME = "oneProxyUrl";
-	private static final String DEFAULT_PROXY_URL = "http://localhost:2633/RPC2";
+    private static final String PROXY_URL_PARAM_NAME = "oneProxyUrl";
+    private static final String DEFAULT_PROXY_URL = "http://localhost:2633/RPC2";
 
-	private static final Charset UTF8 = Charset.forName("UTF-8");
+    private URL proxyUrl = null;
 
-	private URL proxyUrl = null;
+    @Override
+    public void init(ServletConfig pConfig) throws ServletException {
+        super.init(pConfig);
 
-	@Override
-	public void init(ServletConfig pConfig) throws ServletException {
-		super.init(pConfig);
+        proxyUrl = extractProxyUrl(pConfig);
+    }
 
-		proxyUrl = extractProxyUrl(pConfig);
-	}
+    @Override
+    public XmlRpcHandlerMapping newXmlRpcHandlerMapping()
+            throws XmlRpcException {
 
-	@Override
-	public XmlRpcHandlerMapping newXmlRpcHandlerMapping()
-			throws XmlRpcException {
+        return new ProxyHandlerMapping();
+    }
 
-		return new ProxyHandlerMapping();
-	}
+    @Override
+    public XmlRpcServletServer newXmlRpcServer(ServletConfig pConfig) {
 
-	@Override
-	public XmlRpcServletServer newXmlRpcServer(ServletConfig pConfig) {
+        return new OneProxyServletServer();
+    }
 
-		return new OneProxyServletServer();
-	}
+    private class ProxyHandlerMapping implements XmlRpcHandlerMapping {
 
-	private class ProxyHandlerMapping implements XmlRpcHandlerMapping {
+        public XmlRpcHandler getHandler(String handlerName) {
+            return new ProxyHandler(proxyUrl);
+        }
+    }
 
-		public XmlRpcHandler getHandler(String handlerName) {
-			return new ProxyHandler(proxyUrl);
-		}
-	}
+    private URL extractProxyUrl(ServletConfig pConfig) throws ServletException {
 
-	private URL extractProxyUrl(ServletConfig pConfig) throws ServletException {
+        String url = pConfig.getInitParameter(PROXY_URL_PARAM_NAME);
+        if (url == null) {
+            url = DEFAULT_PROXY_URL;
+        }
 
-		String url = pConfig.getInitParameter(PROXY_URL_PARAM_NAME);
-		if (url == null) {
-			url = DEFAULT_PROXY_URL;
-		}
+        try {
+            return new URL(url);
+        } catch (MalformedURLException e) {
+            throw new ServletException("Proxy URL is malformed: " + url);
+        }
+    }
 
-		try {
-			return new URL(url);
-		} catch (MalformedURLException e) {
-			throw new ServletException("Proxy URL is malformed: " + url);
-		}
-	}
+    private static class ProxyHandler implements XmlRpcHandler {
 
-	private static class ProxyHandler implements XmlRpcHandler {
+        private final URL proxyUrl;
 
-		private final URL proxyUrl;
+        public ProxyHandler(URL proxyUrl) {
+            this.proxyUrl = proxyUrl;
+        }
 
-		public ProxyHandler(URL proxyUrl) {
-			this.proxyUrl = proxyUrl;
-		}
+        public Object execute(XmlRpcRequest request) throws XmlRpcException {
 
-		public Object execute(XmlRpcRequest request) throws XmlRpcException {
+            List<Object> params = prepareRequestParameters(request);
 
-			List<Object> params = prepareRequestParameters(request);
+            return executeProxyRequest(request.getMethodName(), params);
+        }
 
-			return executeProxyRequest(request.getMethodName(), params);
-		}
+        private Object executeProxyRequest(String methodName,
+                List<Object> params) throws XmlRpcException {
 
-		private Object executeProxyRequest(String methodName,
-				List<Object> params) throws XmlRpcException {
+            XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+            config.setServerURL(proxyUrl);
 
-			XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-			config.setServerURL(proxyUrl);
+            XmlRpcClient client = new XmlRpcClient();
+            client.setConfig(config);
 
-			XmlRpcClient client = new XmlRpcClient();
-			client.setConfig(config);
+            return client.execute(methodName, params);
+        }
 
-			return client.execute(methodName, params);
-		}
+        private List<Object> prepareRequestParameters(XmlRpcRequest request)
+                throws XmlRpcException {
 
-		private List<Object> prepareRequestParameters(XmlRpcRequest request)
-				throws XmlRpcException {
+            List<Object> params = new ArrayList<Object>();
 
-			List<Object> params = new ArrayList<Object>();
+            // Replace the authentication information.
+            String authInfo = extractAuthnInfo(request);
+            params.add(authInfo);
 
-			// Replace the authentication information.
-			String authInfo = extractAuthnInfo(request);
-			params.add(authInfo);
+            // Log this request.
+            LOGGER.info("forwarding request from {}", authInfo);
 
-			// Log this request.
-			LOGGER.info("forwarding request from {}", authInfo);
+            // Copy all remaining parameters.
+            for (int i = 1; i < request.getParameterCount(); i++) {
+                params.add(request.getParameter(i));
+            }
 
-			// Copy all remaining parameters.
-			for (int i = 1; i < request.getParameterCount(); i++) {
-				params.add(request.getParameter(i));
-			}
+            return params;
+        }
 
-			return params;
-		}
+        //
+        // Different proxy versions have different DN structures. Old style has
+        // explicitly CN=proxy at the beginning. The new RFC proxies use
+        // CN=serial-no with 'serial-no' being a string of digits.
+        //
+        public static String stripCNProxy(String username) {
+            return username.replaceFirst("^CN\\s*=\\s*proxy\\s*,\\s*", "")
+                    .replaceFirst("^CN\\s*=\\s*\\d+\\s*,\\s*", "");
+        }
 
-		private static String stripCNProxy(String username) {
-			return username.replaceFirst("^CN\\s*=\\s*proxy\\s*,\\s*", "");
-		}
+        private String extractAuthnInfo(XmlRpcRequest request)
+                throws XmlRpcException {
 
-		private String extractAuthnInfo(XmlRpcRequest request)
-				throws XmlRpcException {
+            XmlRpcRequestConfig config = request.getConfig();
 
-			XmlRpcRequestConfig config = request.getConfig();
+            String user = "";
+            String basicPswd = "";
+            String defaultPswd = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
-			String user = "";
-			String basicPswd = "";
-			String defaultPswd = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+            if (config instanceof OneProxyRequestConfigImpl) {
+                OneProxyRequestConfigImpl opconfig = (OneProxyRequestConfigImpl) config;
+                user = opconfig.getUserDn();
+            }
 
-			if (config instanceof OneProxyRequestConfigImpl) {
-				OneProxyRequestConfigImpl opconfig = (OneProxyRequestConfigImpl) config;
-				user = opconfig.getUserDn();
-			}
+            if ("".equals(user)
+                    && config instanceof XmlRpcHttpRequestConfigImpl) {
+                XmlRpcHttpRequestConfigImpl hconfig = (XmlRpcHttpRequestConfigImpl) config;
+                user = hconfig.getBasicUserName();
+                basicPswd = hconfig.getBasicPassword();
+            }
 
-			if ("".equals(user)
-					&& config instanceof XmlRpcHttpRequestConfigImpl) {
-				XmlRpcHttpRequestConfigImpl hconfig = (XmlRpcHttpRequestConfigImpl) config;
-				user = hconfig.getBasicUserName();
-				basicPswd = hconfig.getBasicPassword();
-			}
+            if (!"".equals(user)) {
 
-			if (!"".equals(user)) {
+                // Get rid of the proxy part of the DN.
+                user = stripCNProxy(user);
 
-				// Get rid of the proxy part of the DN.
-				user = stripCNProxy(user);
+                try {
 
-				try {
+                    // Pass the hash of the password through if the username is
+                    // 'oneadmin'.
+                    String credentials = ("oneadmin".equals(user)) ? basicPswd
+                            : defaultPswd;
 
-					// Pass the hash of the password through if the username is
-					// 'oneadmin'.
-					String credentials = ("oneadmin".equals(user)) ? basicPswd
-							: defaultPswd;
+                    // All of the usernames must be URL encoded to remove spaces
+                    // and other special characters.
+                    return URLEncoder.encode(user, "UTF-8") + ":" + credentials;
 
-					// All of the usernames must be URL encoded to remove spaces
-					// and other special characters.
-					return URLEncoder.encode(user, "UTF-8") + ":" + credentials;
-
-				} catch (UnsupportedEncodingException e) {
-					LOGGER.error("can't create UTF-8 encoding for URL encoding");
-					throw new XmlRpcException("internal server error");
-				}
-			} else {
-				throw new XmlRpcNotAuthorizedException(
-						"certificate DN or username not provided");
-			}
-		}
-	}
+                } catch (UnsupportedEncodingException e) {
+                    LOGGER.error("can't create UTF-8 encoding for URL encoding");
+                    throw new XmlRpcException("internal server error");
+                }
+            } else {
+                throw new XmlRpcNotAuthorizedException(
+                        "certificate DN or username not provided");
+            }
+        }
+    }
 
 }
