@@ -3,7 +3,7 @@
  co-funded by the European Commission under the Grant Agreement
  INSFO-RI-261552.
 
- Copyright (c) 2010-2011, Centre National de la Recherche Scientifique
+ Copyright (c) 2010-2013, Centre National de la Recherche Scientifique
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 
-import org.eclipse.jetty.plus.jaas.spi.AbstractLoginModule;
-import org.eclipse.jetty.plus.jaas.spi.UserInfo;
+import org.eclipse.jetty.jaas.spi.AbstractLoginModule;
+import org.eclipse.jetty.jaas.spi.UserInfo;
 import org.eclipse.jetty.util.security.Credential;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
