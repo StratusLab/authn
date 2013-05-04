@@ -78,7 +78,9 @@ grid certificates, and VOMS proxies.
       <dependency>
 	<groupId>eu.stratuslab.authn</groupId>
 	<artifactId>authn-ssl</artifactId>
-	<version>${project.version}</version>
+        <!-- revert to previous version to see if ssl EOF errors are avoided-->
+	<version>2.8</version>
+	<!-- <version>${project.version}</version> -->
       </dependency>
       <dependency>
 	<groupId>eu.stratuslab.authn</groupId>
