@@ -47,12 +47,16 @@
   <!-- provides SSL contexts that allow grid certificates and      -->
   <!-- proxies to be used.                                         -->
   <!-- =========================================================== -->
+    <!-- CA directory (/etc/grid-security/certificates) -->
+    <!-- CA namespace validation (EUGRIDPMA_AND_GLOBUS) --> 
+    <!-- update interval in ms (60000 = 10 min) -->
+    <!-- CRL checking policy (REQUIRE) -->
 <!-- REMOVE GRID SSL TO SEE IF IT IS THE CAUSE OF HANDSHAKE FAILURES
   <New id="sslContextFactory" class="eu.stratuslab.ssl.GridSslContextFactory">
-    <Arg></Arg> <!-- CA directory (/etc/grid-security/certificates) -->
-    <Arg></Arg> <!-- CA namespace validation (EUGRIDPMA_AND_GLOBUS) --> 
-    <Arg></Arg> <!-- update interval in ms (60000 = 10 min) -->
-    <Arg></Arg> <!-- CRL checking policy (REQUIRE) -->
+    <Arg></Arg> 
+    <Arg></Arg> 
+    <Arg></Arg> 
+    <Arg></Arg> 
   
     <Set name="KeyManagerPassword">jettycred</Set>
     
