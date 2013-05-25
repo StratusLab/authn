@@ -196,6 +196,7 @@
                     <exclude>lib/setuid/**/*</exclude>
                     <exclude>etc/jetty-setuid.xml</exclude>
 		    <exclude>etc/jetty.conf</exclude>
+		    <exclude>etc/jetty.xml</exclude>
                   </excludes>
 		</source>
 	      </sources>
