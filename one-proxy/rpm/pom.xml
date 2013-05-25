@@ -14,6 +14,7 @@
 
   <!-- NOTE: This project MUST have same version as proxy module. -->
   <properties>
+    <jetty.version>8.1.11.v20130520</jetty.version>
     <configuration.dir>/etc/stratuslab/authn</configuration.dir>
     <installation.dir>/opt/stratuslab/one-proxy</installation.dir>
  
@@ -249,6 +250,7 @@
 	      </sources>
 	    </mapping>
 
+<!--
 	    <mapping>
 	      <directory>${installation.dir}/start.d</directory>
 	      <filemode>644</filemode>
@@ -264,7 +266,7 @@
 		</source>
 	      </sources>
 	    </mapping>
-
+-->
 	    <mapping>
 	      <directory>${installation.dir}/lib/ext</directory>
 	      <filemode>644</filemode>
