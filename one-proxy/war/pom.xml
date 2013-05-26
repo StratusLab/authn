@@ -24,10 +24,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <!-- Brought in to get correct servlet dependency.-->
@@ -131,7 +128,7 @@
 	  <webAppConfig>
 	    <contextPath>/authn_proxy</contextPath>
 	    <securityHandler implementation="org.eclipse.jetty.security.ConstraintSecurityHandler">
-	      <loginService implementation="org.eclipse.jetty.plus.jaas.JAASLoginService">
+	      <loginService implementation="org.eclipse.jetty.jaas.JAASLoginService">
 		<name>StratusLab Password Realm</name>
 		<loginModuleName>stratuslab-pswd</loginModuleName>
 	      </loginService>
