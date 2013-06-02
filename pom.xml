@@ -31,6 +31,10 @@ grid certificates, and VOMS proxies.
     <module>authn-config</module>
   </modules>
 
+  <properties>
+    <jetty.version>7.6.11.v20130520</jetty.version>
+  </properties>
+
   <issueManagement>
     <system>GitHub Issues</system>
     <url>https://github.com/StratusLab/authn/issues</url>

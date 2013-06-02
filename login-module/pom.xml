@@ -13,9 +13,17 @@
   </parent>
 
   <dependencies>
+    <!-- Jetty 9 -->
+    <!--
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-jaas</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    -->
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-plus</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
