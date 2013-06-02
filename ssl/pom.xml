@@ -7,7 +7,7 @@
   <packaging>jar</packaging>
 
   <parent>
-    <groupId>eu.stratuslab.authn</groupId>
+    <groupId>eu.stratuslab.authn-j7</groupId>
     <artifactId>authn</artifactId>
     <version>13.05.0-SNAPSHOT</version>
   </parent>

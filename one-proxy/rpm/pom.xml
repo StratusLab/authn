@@ -7,7 +7,7 @@
   <packaging>pom</packaging>
 
   <parent>
-    <groupId>eu.stratuslab.authn</groupId>
+    <groupId>eu.stratuslab.authn-j7</groupId>
     <artifactId>authn-one-proxy-pom</artifactId>
     <version>13.05.0-SNAPSHOT</version>
   </parent>
@@ -24,11 +24,11 @@
 
   <dependencies>
     <dependency>
-      <groupId>eu.stratuslab.authn</groupId>
+      <groupId>eu.stratuslab.authn-j7</groupId>
       <artifactId>authn-ssl</artifactId>
     </dependency>
     <dependency>
-      <groupId>eu.stratuslab.authn</groupId>
+      <groupId>eu.stratuslab.authn-j7</groupId>
       <artifactId>authn-login-module</artifactId>
     </dependency>
     <dependency>
@@ -136,7 +136,7 @@
 	      <outputDirectory>${project.build.directory}/dependency/webapps</outputDirectory>
 	      <artifactItems>
 		<artifactItem>
-		  <groupId>eu.stratuslab.authn</groupId>
+		  <groupId>eu.stratuslab.authn-j7</groupId>
 		  <artifactId>authn-one-proxy-war</artifactId>
 		  <type>war</type>
 		</artifactItem>

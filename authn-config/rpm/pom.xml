@@ -7,7 +7,7 @@
   <packaging>pom</packaging>
 
   <parent>
-    <groupId>eu.stratuslab.authn</groupId>
+    <groupId>eu.stratuslab.authn-j7</groupId>
     <artifactId>authn-config-pom</artifactId>
     <version>13.05.0-SNAPSHOT</version>
   </parent>
