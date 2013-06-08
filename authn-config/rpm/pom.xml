@@ -107,6 +107,22 @@
               </sources>
             </mapping>
 
+            <mapping>
+              <directory>/etc/grid-security/certificates</directory>
+              <filemode>440</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+              <directoryIncluded>false</directoryIncluded>
+              <sources>
+                <source>
+                  <location>src/main/service-config</location>
+                  <includes>
+                    <include>.stratuslab-do-not-remove</include>
+                  </includes>
+                </source>
+              </sources>
+            </mapping>
+
           </mappings>
         </configuration>
 
