@@ -39,10 +39,9 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- authlib with dependencies (no authlib pom) -->
     <dependency>
       <groupId>eu.eu-emi.security</groupId>
-      <artifactId>canl-1.2.1-stratuslab</artifactId>
+      <artifactId>canl</artifactId>
     </dependency>
     <dependency>
       <groupId>org.bouncycastle</groupId>
