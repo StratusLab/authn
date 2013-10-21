@@ -20,7 +20,7 @@ grid certificates, and VOMS proxies.
   <parent>
     <groupId>eu.stratuslab</groupId>
     <artifactId>distribution</artifactId>
-    <version>13.10.0-SNAPSHOT</version>
+    <version>13.10.0</version>
   </parent>
 
   <modules>
@@ -52,7 +52,7 @@ grid certificates, and VOMS proxies.
       </snapshots>
       <id>POMReleases</id>
       <name>POM Releases</name>
-      <url>http://repo.stratuslab.eu:8081/content/repositories/releases</url>
+      <url>http://repo.stratuslab.eu:8081/content/repositories/centos-6.2-releases</url>
     </repository>
 
     <repository>
@@ -64,7 +64,7 @@ grid certificates, and VOMS proxies.
       </snapshots>
       <id>POMSnapshots</id>
       <name>POM Snapshots</name>
-      <url>http://repo.stratuslab.eu:8081/content/repositories/snapshots</url>
+      <url>http://repo.stratuslab.eu:8081/content/repositories/centos-6.2-snapshots</url>
     </repository>
 
   </repositories>
