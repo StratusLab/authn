@@ -20,7 +20,7 @@ grid certificates, and VOMS proxies.
   <parent>
     <groupId>eu.stratuslab</groupId>
     <artifactId>distribution</artifactId>
-    <version>13.10.0</version>
+    <version>13.10.0-SNAPSHOT</version>
   </parent>
 
   <modules>
