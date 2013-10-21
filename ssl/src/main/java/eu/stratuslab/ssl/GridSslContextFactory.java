@@ -58,10 +58,10 @@ public class GridSslContextFactory extends SslContextFactory {
 	public static final Long DEFAULT_UPDATE_INTERVAL = //
 	10L * 60L * 1000L; // 10min
 
-	private final String caDirectory;
-	private final NamespaceCheckingMode namespaceCheckingMode;
-	private final Long updateInterval;
-	private final CrlCheckingMode crlCheckingMode;
+	private String caDirectory;
+	private NamespaceCheckingMode namespaceCheckingMode;
+	private Long updateInterval;
+	private CrlCheckingMode crlCheckingMode;
 
 	public GridSslContextFactory(String caDirectory,
 			String namespaceCheckingMode, String updateInterval,
@@ -116,6 +116,14 @@ public class GridSslContextFactory extends SslContextFactory {
 		return trustManager;
 	}
 
+	public String getCADirectory() {
+		return caDirectory;
+	}
+
+	public void setCADirectory(String caDirectory) {
+		this.caDirectory = getCADirectory(caDirectory);
+	}
+
 	public static String getCADirectory(String name) {
 
 		String dir = DEFAULT_CA_DIRECTORY;
@@ -129,6 +137,14 @@ public class GridSslContextFactory extends SslContextFactory {
 					name);
 		}
 		return dir;
+	}
+	
+	public NamespaceCheckingMode getNamespaceCheckingMode() {
+		return namespaceCheckingMode;
+	}
+	
+	public void setNamespaceCheckingMode(String namespaceCheckingMode) {
+		this.namespaceCheckingMode = getNSCheckingMode(namespaceCheckingMode);
 	}
 
 	public static NamespaceCheckingMode getNSCheckingMode(String name) {
@@ -144,6 +160,14 @@ public class GridSslContextFactory extends SslContextFactory {
 
 		LOGGER.info("using {} for namespace checking mode", mode.toString());
 		return mode;
+	}
+	
+	public Long getUpdateInterval() {
+		return updateInterval;
+	}
+	
+	public void setUpdateInterval(String updateInterval) {
+		this.updateInterval = getUpdateInterval(updateInterval);
 	}
 
 	public static Long getUpdateInterval(String name) {
@@ -162,6 +186,14 @@ public class GridSslContextFactory extends SslContextFactory {
 		LOGGER.info("using update interval of {} ms", interval.toString());
 
 		return interval;
+	}
+	
+	public CrlCheckingMode getCrlCheckingMode() {
+		return crlCheckingMode;
+	}
+	
+	public void setCrlCheckingMode(String crlCheckingMode) {
+		this.crlCheckingMode = getCrlCheckingMode(crlCheckingMode);
 	}
 
 	public static CrlCheckingMode getCrlCheckingMode(String name) {
