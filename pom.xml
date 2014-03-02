@@ -3,7 +3,7 @@
 
   <groupId>eu.stratuslab.authn</groupId>
   <artifactId>authn</artifactId>
-  <version>14.02.0-SNAPSHOT</version>
+  <version>14.03.0-SNAPSHOT</version>
   <name>StratusLab Authentication Framework</name>
 
   <url>http://github.com/StratusLab/authn</url>
@@ -20,7 +20,7 @@ grid certificates, and VOMS proxies.
   <parent>
     <groupId>eu.stratuslab</groupId>
     <artifactId>distribution</artifactId>
-    <version>14.02.0-SNAPSHOT</version>
+    <version>14.03.0-SNAPSHOT</version>
   </parent>
 
   <modules>
