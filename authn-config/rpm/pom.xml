@@ -124,6 +124,15 @@
             </mapping>
 
           </mappings>
+
+	  <preinstallScriptlet>
+	    <script>
+if ! grep -q ^cloud /etc/group
+then
+  /usr/sbin/groupadd -g 9000 -f cloud
+fi
+	    </script>
+	  </preinstallScriptlet>
         </configuration>
 
         <executions>
