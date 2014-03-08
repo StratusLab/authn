@@ -3,7 +3,7 @@
 
   <groupId>eu.stratuslab.authn</groupId>
   <artifactId>authn</artifactId>
-  <version>14.03.0</version>
+  <version>14.03.1-SNAPSHOT</version>
   <name>StratusLab Authentication Framework</name>
 
   <url>http://github.com/StratusLab/authn</url>
@@ -39,7 +39,7 @@ grid certificates, and VOMS proxies.
   <scm>
     <connection>scm:git:ssh://git@github.com/StratusLab/authn.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/StratusLab/authn.git</developerConnection>
-    <tag>authn-14.03.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <repositories>
