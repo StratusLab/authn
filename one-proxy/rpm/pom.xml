@@ -172,6 +172,11 @@
 	  </requires>
 	  <mappings>
 
+            <mapping>
+              <directory>/var/log/stratuslab/one-proxy</directory>
+              <directoryIncluded>true</directoryIncluded>
+            </mapping>
+
 	    <mapping>
 	      <directory>${installation.dir}</directory>
 	      <filemode>644</filemode>
@@ -235,6 +240,7 @@
               </sources>
             </mapping>
 
+            <!-- TO BE REMOVED -->
 	    <mapping>
 	      <directory>${installation.dir}/etc</directory>
 	      <filemode>755</filemode>
@@ -332,6 +338,29 @@
 		</source>
 	      </sources>
 	    </mapping>
+
+            <mapping>
+              <directory>/etc/nginx/conf.d/stratuslab-locations</directory>
+              <directoryIncluded>false</directoryIncluded>
+              <configuration>noreplace</configuration>
+              <sources>
+                <source>
+                  <location>src/main/resources/conf.d</location>
+                </source>
+              </sources>
+            </mapping>
+
+            <mapping>
+              <directory>/usr/share/nginx/stratuslab</directory>
+              <directoryIncluded>false</directoryIncluded>
+              <username>root</username>
+              <groupname>root</groupname>
+              <sources>
+                <source>
+                  <location>src/main/html</location>
+                </source>
+              </sources>
+            </mapping>
 
 	  </mappings>
 	</configuration>
