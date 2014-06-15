@@ -206,6 +206,11 @@ fi
               <directoryIncluded>true</directoryIncluded>
             </mapping>
 
+            <mapping>
+              <directory>/var/lib/stratuslab/one-proxy</directory>
+              <directoryIncluded>true</directoryIncluded>
+            </mapping>
+
 	    <mapping>
 	      <directory>${installation.dir}</directory>
 	      <filemode>644</filemode>
