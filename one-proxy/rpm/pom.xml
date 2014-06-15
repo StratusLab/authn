@@ -213,7 +213,6 @@ fi
 
 	    <mapping>
 	      <directory>${installation.dir}</directory>
-	      <filemode>644</filemode>
 	      <directoryIncluded>false</directoryIncluded>
 	      <sources>
 		<source>
@@ -254,7 +253,6 @@ fi
 
             <mapping>
               <directory>/etc/default</directory>
-              <filemode>644</filemode>
               <directoryIncluded>false</directoryIncluded>
               <configuration>noreplace</configuration>
               <sources>
@@ -269,7 +267,6 @@ fi
 
 	    <mapping>
 	      <directory>${installation.dir}/resources</directory>
-	      <filemode>644</filemode>
 	      <directoryIncluded>false</directoryIncluded>
 	      <sources>
 		<source>
@@ -284,7 +281,6 @@ fi
 
 	    <mapping>
 	      <directory>${installation.dir}/start.d</directory>
-	      <filemode>644</filemode>
 	      <directoryIncluded>true</directoryIncluded>
 	      <sources>
 		<source>
@@ -298,7 +294,6 @@ fi
 
 	    <mapping>
 	      <directory>${installation.dir}/lib/ext</directory>
-	      <filemode>644</filemode>
 	      <directoryIncluded>false</directoryIncluded>
 	      <sources>
 		<source>
@@ -312,7 +307,6 @@ fi
 
 	    <mapping>
 	      <directory>${installation.dir}/stratuslab-webapps</directory>
-	      <filemode>644</filemode>
 	      <directoryIncluded>false</directoryIncluded>
 	      <sources>
 		<source>
@@ -326,7 +320,6 @@ fi
 
 	    <mapping>
 	      <directory>${installation.dir}</directory>
-	      <filemode>644</filemode>
               <configuration>true</configuration>
 	      <directoryIncluded>false</directoryIncluded>
 	      <sources>
@@ -343,6 +336,8 @@ fi
               <directory>/etc/nginx/conf.d/stratuslab-locations</directory>
               <directoryIncluded>false</directoryIncluded>
               <configuration>noreplace</configuration>
+              <username>root</username>
+              <groupname>root</groupname>
               <sources>
                 <source>
                   <location>src/main/resources/conf.d</location>
