@@ -158,7 +158,7 @@ shift
 ##################################################
 # Set the default user to run the daemon
 ##################################################
-JETTY_USER=slreg
+JETTY_USER=slauth
 
 ##################################################
 # Read any configuration files

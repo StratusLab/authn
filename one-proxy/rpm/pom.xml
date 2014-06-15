@@ -167,7 +167,28 @@
 	  <requires>
 	    <require>stratuslab-authn-config</require>          
 	    <require>java-1.7.0-openjdk</require>
+            <require>stratuslab-nginx-cfg</require>
 	  </requires>
+
+          <preinstallScriptlet>
+            <script>
+groupadd --force --system stratuslab
+
+/bin/egrep  -i "^slauth:" /etc/passwd
+if [ $? -ne 0 ]; then
+  adduser --system --home-dir /opt/stratuslab/one-proxy \
+          --no-user-group --gid stratuslab \
+          --comment 'StratusLab OpenNebula Proxy' \
+          slauth
+fi
+</script>
+          </preinstallScriptlet>
+
+          <defaultDirmode>755</defaultDirmode>
+          <defaultFilemode>644</defaultFilemode>
+          <defaultGroupname>stratuslab</defaultGroupname>
+          <defaultUsername>slauth</defaultUsername>
+
 	  <mappings>
 
             <mapping>
@@ -175,11 +196,19 @@
               <directoryIncluded>true</directoryIncluded>
             </mapping>
 
+            <mapping>
+              <directory>${installation.dir}</directory>
+              <directoryIncluded>true</directoryIncluded>
+            </mapping>
+
+            <mapping>
+              <directory>${installation.dir}/logs</directory>
+              <directoryIncluded>true</directoryIncluded>
+            </mapping>
+
 	    <mapping>
 	      <directory>${installation.dir}</directory>
 	      <filemode>644</filemode>
-	      <username>root</username>
-	      <groupname>root</groupname>
 	      <directoryIncluded>false</directoryIncluded>
 	      <sources>
 		<source>
@@ -207,8 +236,6 @@
 	    <mapping>
 	      <directory>/etc/rc.d/init.d/</directory>
 	      <filemode>755</filemode>
-	      <username>root</username>
-	      <groupname>root</groupname>
 	      <directoryIncluded>false</directoryIncluded>
 	      <sources>
 		<source>
@@ -223,8 +250,6 @@
             <mapping>
               <directory>/etc/default</directory>
               <filemode>644</filemode>
-              <username>root</username>
-              <groupname>root</groupname>
               <directoryIncluded>false</directoryIncluded>
               <configuration>noreplace</configuration>
               <sources>
@@ -240,8 +265,6 @@
 	    <mapping>
 	      <directory>${installation.dir}/resources</directory>
 	      <filemode>644</filemode>
-	      <username>root</username>
-	      <groupname>root</groupname>
 	      <directoryIncluded>false</directoryIncluded>
 	      <sources>
 		<source>
@@ -257,8 +280,6 @@
 	    <mapping>
 	      <directory>${installation.dir}/start.d</directory>
 	      <filemode>644</filemode>
-	      <username>root</username>
-	      <groupname>root</groupname>
 	      <directoryIncluded>true</directoryIncluded>
 	      <sources>
 		<source>
@@ -273,8 +294,6 @@
 	    <mapping>
 	      <directory>${installation.dir}/lib/ext</directory>
 	      <filemode>644</filemode>
-	      <username>root</username>
-	      <groupname>root</groupname>
 	      <directoryIncluded>false</directoryIncluded>
 	      <sources>
 		<source>
@@ -289,8 +308,6 @@
 	    <mapping>
 	      <directory>${installation.dir}/stratuslab-webapps</directory>
 	      <filemode>644</filemode>
-	      <username>root</username>
-	      <groupname>root</groupname>
 	      <directoryIncluded>false</directoryIncluded>
 	      <sources>
 		<source>
@@ -305,8 +322,6 @@
 	    <mapping>
 	      <directory>${installation.dir}</directory>
 	      <filemode>644</filemode>
-	      <username>root</username>
-	      <groupname>root</groupname>
               <configuration>true</configuration>
 	      <directoryIncluded>false</directoryIncluded>
 	      <sources>
