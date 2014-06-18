@@ -70,4 +70,19 @@ grid certificates, and VOMS proxies.
 
   </repositories>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>eu.stratuslab.authn</groupId>
+        <artifactId>authn-ssl</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>eu.stratuslab.authn</groupId>
+        <artifactId>authn-login-module</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
 </project>
