@@ -82,6 +82,11 @@ grid certificates, and VOMS proxies.
         <artifactId>authn-login-module</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>eu.stratuslab.authn</groupId>
+        <artifactId>authn-one-proxy-war</artifactId>
+        <version>${project.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
