@@ -185,6 +185,7 @@ fi
           </preinstallScriptlet>
           <postinstallScriptlet>
             <script>
+/sbin/service nginx reload || true
 /sbin/chkconfig --add one-proxy || true
 </script>
           </postinstallScriptlet>
@@ -194,6 +195,11 @@ fi
 /sbin/chkconfig --del one-proxy || true
 </script>
           </preremoveScriptlet>
+          <postremoveScriptlet>
+            <script>
+/sbin/service nginx reload || true
+</script>
+          </postremoveScriptlet>
 
           <defaultDirmode>755</defaultDirmode>
           <defaultFilemode>644</defaultFilemode>
